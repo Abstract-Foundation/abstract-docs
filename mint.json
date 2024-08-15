@@ -76,6 +76,7 @@
         {
           "group": "EVM Differences",
           "pages": [
+            "how-abstract-works/evm-differences/overview",
             "how-abstract-works/evm-differences/solidity-changes",
             "how-abstract-works/evm-differences/evm-instructions",
             "how-abstract-works/evm-differences/nonces",
