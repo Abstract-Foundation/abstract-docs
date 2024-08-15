@@ -24,7 +24,11 @@
   "navigation": [
     {
       "group": "",
-      "pages": ["introduction/overview", "introduction/connect-to-abstract"]
+      "pages": [
+        "introduction/overview",
+        "introduction/what-is-abstract",
+        "introduction/connect-to-abstract"
+      ]
     },
     {
       "group": "Build on Abstract",
