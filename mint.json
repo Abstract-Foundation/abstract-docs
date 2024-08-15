@@ -44,8 +44,8 @@
         {
           "group": "Applications",
           "pages": [
-            "build-on-abstract/applications/viem",
             "build-on-abstract/applications/ethers",
+            "build-on-abstract/applications/viem",
             "build-on-abstract/applications/thirdweb"
           ]
         }
