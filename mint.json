@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "Abstract",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
@@ -15,77 +15,107 @@
       "to": "#07C983"
     }
   },
-  "topbarLinks": [
-    {
-      "name": "Support",
-      "url": "mailto:hi@mintlify.com"
-    }
-  ],
-  "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+  "background": {
+    "style": "grid"
   },
-  "tabs": [
-    {
-      "name": "API Reference",
-      "url": "api-reference"
-    }
-  ],
-  "anchors": [
-    {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
-    }
-  ],
+  "topbarLinks": [],
+  "tabs": [],
+  "anchors": [],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "",
+      "pages": ["introduction/overview", "introduction/connect-to-abstract"]
+    },
+    {
+      "group": "Build on Abstract",
       "pages": [
-        "introduction",
-        "quickstart",
-        "development"
+        "build-on-abstract/getting-started",
+        {
+          "group": "Smart Contracts",
+          "pages": [
+            "build-on-abstract/smart-contracts/hardhat",
+            "build-on-abstract/smart-contracts/foundry"
+          ]
+        },
+        {
+          "group": "Applications",
+          "pages": [
+            "build-on-abstract/applications/viem",
+            "build-on-abstract/applications/ethers",
+            "build-on-abstract/applications/thirdweb"
+          ]
+        }
       ]
     },
     {
-      "group": "Essentials",
+      "group": "How Abstract Works",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "how-abstract-works/overview",
+        {
+          "group": "Concepts",
+          "pages": [
+            "how-abstract-works/concepts/layer-2s",
+            "how-abstract-works/concepts/zk-evms-and-zk-stack",
+            "how-abstract-works/concepts/transaction-batching",
+            "how-abstract-works/concepts/data-availability"
+          ]
+        },
+        {
+          "group": "Architecture",
+          "pages": [
+            "how-abstract-works/architecture/overview",
+            "how-abstract-works/architecture/components",
+            "how-abstract-works/architecture/sequencer",
+            "how-abstract-works/architecture/prover"
+          ]
+        },
+        {
+          "group": "EVM Differences",
+          "pages": [
+            "how-abstract-works/evm-differences/solidity-changes",
+            "how-abstract-works/evm-differences/evm-instructions",
+            "how-abstract-works/evm-differences/nonces",
+            "how-abstract-works/evm-differences/libraries",
+            "how-abstract-works/evm-differences/precompiles",
+            "how-abstract-works/evm-differences/contract-deployment",
+            "how-abstract-works/evm-differences/gas-fees-refunds"
+          ]
+        },
+        {
+          "group": "System Contracts",
+          "pages": [
+            "how-abstract-works/system-contracts/overview",
+            "how-abstract-works/system-contracts/bootloader",
+            "how-abstract-works/system-contracts/default-account",
+            "how-abstract-works/system-contracts/contract-deployer"
+          ]
+        },
+        {
+          "group": "Native Account Abstraction",
+          "pages": [
+            "how-abstract-works/native-account-abstraction/overview",
+            "how-abstract-works/native-account-abstraction/paymasters",
+            "how-abstract-works/native-account-abstraction/smart-contract-accounts"
+          ]
+        }
       ]
     },
     {
-      "group": "API Documentation",
+      "group": "Ecosystem",
       "pages": [
-        "api-reference/introduction"
+        "ecosystem/block-explorers",
+        "ecosystem/bridges",
+        "ecosystem/faucets"
       ]
     },
     {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
-      ]
+      "group": "Infrastructure",
+      "pages": ["infrastructure/nodes"]
     }
   ],
   "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "x": "https://x.com/abstractchain",
+    "discord": "https://discord.com/invite/abstractchain",
+    "github": "https://github.com/abstract-foundation"
   }
 }
