@@ -1,0 +1,56 @@
+---
+title: "Ethers"
+description: "Learn how to use zksync-ethers to build applications on Abstract"
+---
+
+To best utilize the features of Abstract, it is recommended to use 
+[zksync-ethers](https://sdk.zksync.io/js/ethers/why-zksync-ethers) library 
+alongside [ethers](https://docs.ethers.io/v6/). 
+
+<Accordion title="Prerequisites">
+  Ensure you have the following installed on your machine:
+  - [Node.js](https://nodejs.org/en/download/) v18.0.0 or later.
+</Accordion>
+
+## 1. Create a new project
+
+Create a new directory and change directory into it.
+
+```bash
+mkdir my-abstract-app && cd my-abstract-app
+```
+Initialize a new Node.js project.
+
+```bash
+npm init -y
+```
+
+Install the `zksync-ethers` and `ethers` libraries.
+
+```bash
+npm install zksync-ethers@6 ethers@6
+```
+
+## 2. Connect to Abstract
+
+```javascript
+import { Provider, Wallet } from "zksync-ethers";
+import { ethers } from "ethers";
+
+// Read data from a provider
+const provider = new Provider("https://api.testnet.abs.xyz");
+const blockNumber = await provider.getBlockNumber();
+
+// Submit transactions from a wallet
+const wallet = new Wallet(ethers.Wallet.createRandom().privateKey, provider);
+const tx = await wallet.sendTransaction({
+  to: wallet.getAddress(),
+});
+```
+
+## 3. Build your application
+
+Learn more about the features of `zksync-ethers` in the official documentation:
+
+- [zksync-ethers features](https://sdk.zksync.io/js/ethers/guides/features)
+- [ethers documentation](https://docs.ethers.io/v6/)
