@@ -1,0 +1,67 @@
+---
+title: "Thirdweb"
+description: "Learn how to use thirdweb to build applications on Abstract"
+---
+
+## 1. Create a new project
+
+Create a new React or React Native based project using thirdweb.
+
+```bash
+npx thirdweb create app --legacy-peer-deps
+```
+
+Select your preferences when prompted by the CLI, or use the recommended setup below.
+
+<Accordion title="Recommended application setup">
+  We recommend selecting the following options when prompted by the thirdweb CLI:
+
+```bash
+✔ What type of project do you want to create? › App
+✔ What is your project named? … abstract-thirdweb
+✔ What framework do you want to use? › Next.js
+```
+</Accordion>
+
+Change directory into the newly created project:
+
+```bash
+cd abstract-thirdweb
+```
+
+## 2. Set up Thirdweb API key
+
+On the [thirdweb dashboard](https://thirdweb.com/dashboard), create your 
+account (or sign in), and click **Settings** to reach the 
+[API keys](https://thirdweb.com/dashboard/settings/api-keys) page.
+
+Create an API key with localhost included in the allowed domains, then copy your client ID.
+
+Create a `.env` file and add your client ID as an environment variable:
+
+```bash
+NEXT_PUBLIC_TEMPLATE_CLIENT_ID=your-client-id-here
+```
+
+Start the development server with the command below and navigate to [`http://localhost:3000`](http://localhost:3000) in your browser to view the application.
+
+```bash
+npm run dev
+```
+
+## 3. Connect the app to Abstract
+
+Import `abstractTestnet` from the `thirdweb/chains` package:
+
+```javascript
+import { abstractTestnet } from "thirdweb/chains";
+```
+
+Use the `abstractTestnet` import as the value for the `chain` property wherever required.
+
+```javascript
+<ConnectButton
+  client={client}
+  chain={abstractTestnet}
+/>
+```
