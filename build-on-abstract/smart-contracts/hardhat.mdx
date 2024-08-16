@@ -63,7 +63,10 @@ import "@matterlabs/hardhat-zksync";
 const config: HardhatUserConfig = {
   zksolc: {
     version: "latest",
-    settings: {},
+    settings: {
+      // This is the current name of the "isSystem" flag
+      enableEraVMExtensions: false,  // Note: NonceHolder and the ContractDeployer system contracts can only be called with a special isSystem flag as true
+    },
   },
   defaultNetwork: "abstractTestnet",
   networks: {
@@ -134,7 +137,7 @@ You should now see the compiled smart contracts in the generated `artifacts-zk` 
     npx hardhat vars set DEPLOYER_PRIVATE_KEY
     ```
 
-    Enter the wallet of a new wallet you created for this step.
+    Enter the private key of a new wallet you created for this step.
 
     ```bash
     ✔ Enter value: · ****************************************************************

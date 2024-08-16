@@ -1,4 +1,189 @@
 ---
 title: "Foundry"
-description: "Learn how to use Hardhat to build and deploy smart contracts on Abstract."
+description: "Learn how to use Foundry to build and deploy smart contracts on Abstract."
 ---
+
+To use Foundry to build smart contracts on Abstract, you need to use the [foundry-zksync](https://github.com/matter-labs/foundry-zksync) fork.
+
+## 1. Install the foundry-zksync fork
+
+<Note>
+This installation overrides any existing forge and cast binaries in `~/.foundry`. 
+To revert to the standard foundry installation, follow the [Foundry installation guide](https://book.getfoundry.sh/getting-started/installation#using-foundryup).
+You can swap between the two installations at any time.
+</Note>
+
+<Steps>
+  <Step title="Clone the repository">
+  From any directory, clone the `foundry-zksync` repository.
+
+  ```bash
+  git clone https://github.com/matter-labs/foundry-zksync.git
+  ```
+  </Step>
+  <Step title="Run the installer">
+  Change directory into the `foundry-zksync` directory.
+
+  ```bash
+  cd foundry-zksync
+  ```
+
+  Run the installer:
+
+  ```bash
+  ./install-foundry-zksync
+  ```
+
+  <Accordion title="Common installation issues" icon="circle-exclamation">
+    
+    <AccordionGroup>
+        <Accordion title="Could not detect shell">
+        To add the `foundry` binary to your PATH, run the following command:
+
+        ```
+        export PATH="$PATH:/Users/<your-username-here>/.foundry/bin"
+        ```
+
+        Replace `<your-username-here>` with the correct path to your home directory.
+
+        </Accordion>
+
+        <Accordion title="Library not loaded: libusb" >
+         The [libusb](https://libusb.info/) library may need to be installed manually on MacOS.
+
+         Run the following command to install the library:
+
+         ```bash
+            brew install libusb
+        ```
+        </Accordion>
+
+    </AccordionGroup>
+  </Accordion>
+
+A successful installation will output the following message:
+
+```bash
+Forge version 0.0.2 is successfully installed.
+```
+
+  </Step>
+  <Step title="Verify installation">
+
+    A helpful command to check if the installation was successful is:
+
+    ```bash
+    forge build --help | grep -A 20 "ZKSync configuration:"
+    ```
+
+    If successful, it will output `20` lines of the available 
+    options included in the `foundry-zksync` fork.
+
+  </Step>
+</Steps>
+
+## 2. Create a new project
+
+First, change directory *out* of the `foundry-zksync` directory.
+
+```bash
+cd ..
+```
+
+Create a new project with Forge and change directory into the project.
+
+```bash
+forge init my-abstract-project && cd my-abstract-project
+```
+
+## 3. Modify Foundry configuration
+
+Update your `forge.toml` file to include the following options:
+
+```toml
+[profile.default]
+src = 'src'
+libs = ['lib']
+fallback_oz = true
+is_system = false # Note: NonceHolder and the ContractDeployer system contracts can only be called with a special isSystem flag as true
+mode = "3"
+```
+
+### 4. Write a smart contract
+
+Modify the `src/Counter.sol` file to include the following smart contract:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract Counter {
+    uint256 public number;
+
+    function setNumber(uint256 newNumber) public {
+        number = newNumber;
+    }
+
+    function increment() public {
+        number++;
+    }
+}
+```
+
+## 5. Compile the smart contract
+
+Use the [zksolc compiler](https://docs.zksync.io/zk-stack/components/compiler/toolchain/solidity)
+(installed in the above steps) to compile smart contracts for Abstract:
+
+```bash
+forge build --zksync
+```
+
+You should now see the compiled smart contracts in the generated `zkout` directory.
+
+## 6. Deploy the smart contract
+
+<Steps>
+  <Step title="Get testnet funds" icon="wallet">
+    Deploying smart contracts requires testnet ETH.
+
+    Claim testnet funds via a [faucet](/ecosystem/faucets), or 
+    [bridge](/ecosystem/bridges) ETH from Sepolia to the Abstract testnet.
+
+  </Step>
+
+  <Step title="Add your private key" icon="key">
+    Create a new [wallet keystore](https://book.getfoundry.sh/reference/cast/cast-wallet-import).
+
+    ```bash
+    cast wallet import myKeystore --interactive
+    ```
+
+    Enter your wallet&rsquo;s private key when prompted & provide a password to encrypt it.
+
+    <Warning>We recommend not to use a private key associated with real funds. Create a new wallet for this step.</Warning>
+  </Step>
+
+  <Step title="Deploy your smart contract" icon="rocket">
+
+  Run the following command to deploy your smart contracts:
+
+  ```bash
+  forge create src/Counter.sol:Counter --account myKeystore --rpc-url https://api.testnet.abs.xyz --chain 11124 --zksync
+  ```
+
+  Ensure `myKeystore` is the name of the keystore file you created in the previous step.
+
+  If successful, your output should look similar to the following:
+
+  ```bash
+  Deployer: 0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d
+  Deployed to: 0x1590522E5758a7A8DD00f212fe487AE94fE69dcf
+  Transaction hash: 0xa7e2ecf1611fc01221678ac2c8919fe9c338b2aad9ac1ff4ae6f0d1711a62cf0
+  ```
+
+  </Step>
+  <Step title="Verify smart contract on the block explorer" icon="check">
+  Contract verification is not supported with Foundry yet.
+  </Step>
+</Steps>
