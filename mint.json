@@ -24,11 +24,7 @@
   "navigation": [
     {
       "group": "",
-      "pages": [
-        "introduction/overview",
-        "introduction/what-is-abstract",
-        "introduction/connect-to-abstract"
-      ]
+      "pages": ["overview", "what-is-abstract", "connect-to-abstract"]
     },
     {
       "group": "Build on Abstract",
@@ -122,5 +118,63 @@
     "x": "https://x.com/abstractchain",
     "discord": "https://discord.com/invite/abstractchain",
     "github": "https://github.com/abstract-foundation"
-  }
+  },
+  "redirects": [
+    {
+      "source": "/getting_started",
+      "destination": "/build-on-abstract/getting-started"
+    },
+    {
+      "source": "/network_info/testnet",
+      "destination": "/connect-to-abstract"
+    },
+    {
+      "source": "/network_info/mainnet",
+      "destination": "/connect-to-abstract"
+    },
+    {
+      "source": "/tools_integrations/block_explorer",
+      "destination": "/ecosystem/block-explorers"
+    },
+    {
+      "source": "/tools_integrations/bridge",
+      "destination": "/ecosystem/bridges"
+    },
+    {
+      "source": "/tools_integrations/faucets",
+      "destination": "/ecosystem/faucets"
+    },
+    {
+      "source": "/wallet_setup/setting_up",
+      "destination": "/connect-to-abstract"
+    },
+    {
+      "source": "/wallet_setup/funding",
+      "destination": "/connect-to-abstract"
+    },
+    {
+      "source": "/tooling/hardhat",
+      "destination": "/build-on-abstract/smart-contracts/hardhat"
+    },
+    {
+      "source": "/tooling/foundry",
+      "destination": "/build-on-abstract/smart-contracts/foundry"
+    },
+    {
+      "source": "/tooling/zksync_cli",
+      "destination": "/build-on-abstract/getting-started"
+    },
+    {
+      "source": "/your_first_contract/setup",
+      "destination": "/build-on-abstract/getting-started"
+    },
+    {
+      "source": "/your_first_contract/writing",
+      "destination": "/build-on-abstract/getting-started"
+    },
+    {
+      "source": "/your_first_contract/deploying",
+      "destination": "/build-on-abstract/getting-started"
+    }
+  ]
 }
