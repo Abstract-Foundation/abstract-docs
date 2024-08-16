@@ -112,7 +112,16 @@
     },
     {
       "group": "Infrastructure",
-      "pages": ["infrastructure/nodes"]
+      "pages": [
+        {
+          "group": "Nodes",
+          "pages": [
+            "infrastructure/nodes/introduction",
+            "infrastructure/nodes/components",
+            "infrastructure/nodes/running-a-node"
+          ]
+        }
+      ]
     }
   ],
   "footerSocials": {
@@ -176,6 +185,18 @@
     {
       "source": "/your_first_contract/deploying",
       "destination": "/build-on-abstract/getting-started"
+    },
+    {
+      "source": "/node/introduction",
+      "destination": "infrastructure/nodes/introduction"
+    },
+    {
+      "source": "/node/components",
+      "destination": "infrastructure/nodes/components"
+    },
+    {
+      "source": "/node/node_running",
+      "destination": "infrastructure/nodes/running-a-node"
     }
   ]
 }
