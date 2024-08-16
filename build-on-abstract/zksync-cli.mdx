@@ -1,0 +1,44 @@
+---
+title: "ZKsync CLI"
+description: "Learn how to use the ZKsync CLI to interact with Abstract or a local Abstract node"
+---
+
+As Abstract is built on the [ZK Stack](https://docs.zksync.io/zk-stack), you can use the
+[ZKsync CLI](https://docs.zksync.io/build/zksync-cli) to interact with Abstract or run a local Abstract node.
+The ZKsync CLI helps simplify the setup, development, testing and deployment of contracts on Abstract.
+
+<Accordion title="Prerequisites">
+  Ensure you have the following installed on your machine:
+  - [Node.js](https://nodejs.org/en/download/) v18.0.0 or later.
+  - [Docker](https://docs.docker.com/get-docker/) for running a local Abstract node.
+</Accordion>
+
+## Install ZKsync CLI
+
+To install the ZKsync CLI, run the following command:
+
+```bash
+npm install -g zksync-cli
+```
+
+## Available Commands
+
+Run any of the below commands with the `zksync-cli` prefix:
+
+```bash
+# For example, to run a local node:
+zksync-cli dev start
+```
+
+| Command           | Description                                                                              |
+|-------------------|------------------------------------------------------------------------------------------|
+| `dev`             | Start a local development environment with Abstract and Ethereum nodes.                  |
+| `create`          | Scaffold new projects using templates for frontend, contracts, and scripting.            |
+| `contract`        | Read and write data to Abstract contracts without building UI.                           |
+| `transaction`     | Fetch and display detailed information about a specific transaction.                     |
+| `wallet`          | Manage Abstract wallet assets, including transfers and balance checks.                   |
+| `bridge`          | Perform deposits and withdrawals between Ethereum and Abstract.                          |
+| `config chains`   | Add or edit custom chains for flexible testing and development.                          |
+
+
+Learn more on the official [ZKsync CLI documentation](https://docs.zksync.io/build/zksync-cli)

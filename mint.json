@@ -44,7 +44,8 @@
             "build-on-abstract/applications/viem",
             "build-on-abstract/applications/thirdweb"
           ]
-        }
+        },
+        "build-on-abstract/zksync-cli"
       ]
     },
     {
@@ -162,7 +163,7 @@
     },
     {
       "source": "/tooling/zksync_cli",
-      "destination": "/build-on-abstract/getting-started"
+      "destination": "/build-on-abstract/zksync-cli"
     },
     {
       "source": "/your_first_contract/setup",
