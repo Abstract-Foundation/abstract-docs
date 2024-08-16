@@ -1,32 +1,32 @@
-# Mintlify Starter Kit
+<div align="center">
+    <img src="./images/logo.png" width="128px" alt="abstract logo"/>
+    <br />
+    <h1>Abstract Docs</h1>
+    <p align="center">Documentation for Abstract located at <a href="https://docs.abs.xyz/" target="_blank">docs.abs.xyz</a>.</p>
+</div>
 
-Click on `Use this template` to copy the Mintlify starter kit. The starter kit contains examples including
+## Local Development
 
-- Guide pages
-- Navigation
-- Customizations
-- API Reference pages
-- Use of popular components
+This documentation is built using [Mintlify](https://mintlify.com/).
 
-### Development
+To run the docs locally, follow the steps below:
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the documentation changes locally. To install, use the following command
+1. [Clone](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) the repository.
 
-```
-npm i -g mintlify
-```
+2. Install the dependencies:
 
-Run the following command at the root of your documentation (where mint.json is)
+   ```bash
+   npm install -g mintlify
+   ```
 
-```
-mintlify dev
-```
+3. Start the development server:
 
-### Publishing Changes
+   ```bash
+   mintlify dev
+   ```
 
-Install our Github App to auto propagate changes from your repo to your deployment. Changes will be deployed to production automatically after pushing to the default branch. Find the link to install on your dashboard. 
+4. Open the browser and navigate to `http://localhost:3000`.
 
-#### Troubleshooting
+## License
 
-- Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
-- Page loads as a 404 - Make sure you are running in a folder with `mint.json`
+This project is licensed under the MIT License.
