@@ -41,7 +41,7 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
     The bootloader then calls the following functions on account deployed at the `tx.from` address:
   
     1. `validateTransaction`: Determine whether or not to execute the transaction. 
-    Typically, some kind of [signature validation](./signature-validation) is performed in this step to restrict who can use the account.
+    Typically, some kind of checks are performed in this step to restrict who can use the account.
     2. `executeTransaction`: Execute the transaction if validation passed.
     3. Either `payForTransaction` or `prepareForPayment`: Pay the gas fee or request a paymaster to pay the gas fee for this transaction.
   

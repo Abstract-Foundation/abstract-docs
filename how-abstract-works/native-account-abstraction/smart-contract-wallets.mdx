@@ -23,8 +23,7 @@ for an example implementation.
 ### validateTransaction
 
 This function is called to determine whether or not the transaction should be executed (i.e. it validates the transaction).
-Typically, you would perform some kind of [signature validation](./signature-validation) in this step
-to restrict who can use the account. This function must:
+Typically, you would perform some kind of check in this step to restrict who can use the account. This function must:
 
 1. Increment the nonce for the account. See [handling nonces](./handling-nonces) for more information.
 2. Return `magic = ACCOUNT_VALIDATION_SUCCESS_MAGIC` if the transaction is valid and should be executed.
