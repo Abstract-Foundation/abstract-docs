@@ -3,4 +3,91 @@ title: "Signature Validation"
 description: "Learn the best practices for signature validation when building smart contract accounts on Abstract."
 ---
   
-EIP-1271
+Since smart contract accounts don&rsquo;t have a way to validate signatures like an EOA,
+it is also recommended that you implement [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271)
+for your smart contract accounts.
+This EIP provides a standardized way for smart contracts to verify whether a signature
+is valid for a given message.
+
+## EIP-1271 Specification
+
+EIP-1271 specifies a single function, `isValidSignature`, that can contain any arbitrary logic
+to validate a given signature and largely depends on how you have implemented your smart contract account.
+
+```solidity
+contract ERC1271 {
+
+  // bytes4(keccak256("isValidSignature(bytes32,bytes)")
+  bytes4 constant internal MAGICVALUE = 0x1626ba7e;
+
+  /**
+   * @dev Should return whether the signature provided is valid for the provided hash
+   * @param _hash      Hash of the data to be signed
+   * @param _signature Signature byte array associated with _hash
+   *
+   * MUST return the bytes4 magic value 0x1626ba7e when function passes.
+   * MUST NOT modify state (using STATICCALL for solc < 0.5, view modifier for solc > 0.5)
+   * MUST allow external calls
+   */ 
+  function isValidSignature(
+    bytes32 _hash, 
+    bytes memory _signature)
+    public
+    view 
+    returns (bytes4 magicValue);
+}
+```
+
+### OpenZeppelin Implementation
+
+OpenZeppelin provides a way to verify signatures for different account implementations that 
+you can use in your smart contract account.
+
+Install the OpenZeppelin contracts library:
+
+```bash
+npm install @openzeppelin/contracts
+```
+
+Implement the `isValidSignature` function in your smart contract account:
+
+```solidity
+import {IAccount, ACCOUNT_VALIDATION_SUCCESS_MAGIC} from "./interfaces/IAccount.sol";
+import { SignatureChecker } from "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
+
+contract MyAccount is IAccount {
+    using SignatureChecker for address;
+
+    function isValidSignature(
+        address _address,
+        bytes32 _hash,
+        bytes memory _signature
+    ) public pure returns (bool) {
+        return _address.isValidSignatureNow(_hash, _signature);
+    }
+}
+```
+
+## Verifying Signatures
+
+On the client, you can use [zksync-ethers](/build-on-abstract/applications/ethers) to
+verify signatures for your smart contract account using either:
+
+- `isMessageSignatureCorrect` for verifying a message signature.
+- `isTypedDataSignatureCorrect` for verifying a typed data signature.
+
+```typescript
+export async function isMessageSignatureCorrect(address: string, message: ethers.Bytes | string, signature: SignatureLike): Promise<boolean>;
+
+export async function isTypedDataSignatureCorrect(
+  address: string,
+  domain: TypedDataDomain,
+  types: Record<string, Array<TypedDataField>>,
+  value: Record<string, any>,
+  signature: SignatureLike
+): Promise<boolean>;
+```
+
+Both of these methods return true or false depending on whether the message signature is correct.
+Currently, these methods only support verifying ECDSA signatures, but will soon also 
+support EIP-1271 signature verification.
