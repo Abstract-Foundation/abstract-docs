@@ -1,0 +1,144 @@
+---
+title: "Paymasters"
+description: "Learn how paymasters are built following the IPaymaster standard on Abstract."
+---
+
+Paymasters are smart contracts that pay for the gas fees of transactions on behalf of other accounts.
+
+On Abstract, all accounts are smart contracts that implement the 
+[IPaymaster](#ipaymaster-interface) interface. As outlined in the [transaction flow](./transaction-flow.mdx),
+after the [smart contract wallet](./smart-contract-wallets.mdx) validates and executes the transaction,
+it can optionally call `prepareForPaymaster` to delegate the payment of the gas fees to a paymaster set in the transaction.
+
+## IAccount Interface
+
+The `IPaymaster` interface defines the mandatory functions that a paymaster must implement to be
+compatible with Abstract. [View source code ↗](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/interfaces/IPaymaster.sol).
+
+### validateAndPayForPaymasterTransaction
+
+This function is called to perform 2 actions:
+
+1. Validate (determine whether or not to sponsor the gas fees for) the transaction.
+2. Pay the gas fee to the bootloader for the transaction. This method must send at least `tx.gasprice * tx.gasLimit`
+to the bootloader. [Learn more about gas fees and gas refunds](/how-abstract-works/evm-differences/gas-fees.mdx).
+
+To validate (i.e. sponsor the gas fee for) a transaction, this function should 
+return `magic = PAYMASTER_VALIDATION_SUCCESS_MAGIC`.
+Optionally, you can also provide `context` that is provided to the `postTransaction` function
+called after the transaction is executed.
+
+```solidity
+function validateAndPayForPaymasterTransaction(
+    bytes32 _txHash,
+    bytes32 _suggestedSignedHash,
+    Transaction calldata _transaction
+) external payable returns (bytes4 magic, bytes memory context);
+```
+
+### postTransaction
+
+This function is optional and is called after the transaction is executed.
+There is no guarantee this method will be called if the transaction fails with `out of gas` error.
+
+```solidity
+function postTransaction(
+    bytes calldata _context,
+    Transaction calldata _transaction,
+    bytes32 _txHash,
+    bytes32 _suggestedSignedHash,
+    ExecutionResult _txResult,
+    uint256 _maxRefundedGas
+) external payable;
+```
+
+## Sending Transactions with a Paymaster
+
+Use [EIP-712](https://eips.ethereum.org/EIPS/eip-712) formatted transactions to submit transactions from a smart contract wallet.
+You must specify:
+
+1. The `from` field as the address of the deployed smart contract wallet.
+2. Provide a `customData` object containing a `customSignature` that not empty.
+
+For example, if you are using [zksync-ethers](/build-on-abstract/applications/ethers.mdx):
+
+```typescript
+import { Provider, Wallet } from "zksync-ethers";
+import { getApprovalBasedPaymasterInput, getGeneralPaymasterInput, getPaymasterParams } from "zksync-ethers/build/paymaster-utils";
+
+// Address of the contract to interact with
+const CONTRACT_ADDRESS = "YOUR-PAYMASTER-CONTRACT-ADDRESS";
+
+// An example of a script to interact with the contract
+export default async function () {
+  const provider = new Provider("https://explorer.testnet.abs.xyz");
+  const wallet = new Wallet(privateKey ?? process.env.WALLET_PRIVATE_KEY!, provider);
+  const type = "General"; // We're using a general flow in this example
+
+  // Create the object: You can use the helper functions that are imported!
+  const paymasterParams = getPaymasterParams(
+    CONTRACT_ADDRESS,
+    {
+      type,
+      innerInput: getGeneralPaymasterInput({
+        type,
+        innerInput: "0x", // Any additional info to send to the paymaster. We leave it empty here.
+      })
+    }
+  );
+
+  // Submit tx, as an example, send a message to another wallet.
+  const tx = await wallet.sendTransaction({
+    to: "0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d" // Example, send message to some other wallet
+    data: "0x1337" // Example, some arbitrary data
+    customData: {
+      paymasterParams, // Provide the paymaster params object here!
+    }
+  })
+
+  const res = await tx.wait();
+}
+```
+
+## Paymaster Flows
+
+We have built two example flows for paymasters you can use as a reference to build your own paymaster:
+
+1. [General Paymaster Flow](#general-paymaster-flow): Showcases a minimal paymaster that sponsors all transactions.
+2. [Approval-Based Paymaster Flow](#approval-based-paymaster-flow): Showcases how users can pay for gas fees with an ERC-20 token.
+
+<CardGroup cols={2}>
+<Card
+  title="GeneralPaymaster.sol Implementation"
+  icon="code"
+  href="https://github.com/matter-labs/zksync-contract-templates/blob/main/templates/hardhat/solidity/contracts/paymasters/GeneralPaymaster.sol"
+>
+    View the source code for an example general paymaster flow implementation.
+</Card>
+<Card
+  title="ApprovalPaymaster.sol Implementation"
+  icon="code"
+  href="https://github.com/matter-labs/zksync-contract-templates/blob/main/templates/hardhat/solidity/contracts/paymasters/ApprovalPaymaster.sol"
+>
+    View the source code for an example approval-based paymaster flow implementation.
+</Card>
+</CardGroup>
+
+## Smart Contract References
+
+<CardGroup cols={2}>
+  <Card
+    title="IAccount interface"
+    icon="code"
+    href="https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/interfaces/IPaymaster.sol"
+  >
+    View the source code for the IAccount interface. 
+  </Card>
+  <Card
+    title="TransactionHelper library"
+    icon="code"
+    href="https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/libraries/TransactionHelper.sol"
+  >
+    View the source code for the TransactionHelper library.
+  </Card>
+</CardGroup>

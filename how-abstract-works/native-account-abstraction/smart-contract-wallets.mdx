@@ -14,7 +14,7 @@ This contract acts as you would expect an EOA to act, with the added benefit of 
 
 ## IAccount Interface
 
-The IAccount interface defines the mandatory functions that a smart contract account must implement to be
+The `IAccount` interface defines the mandatory functions that a smart contract account must implement to be
 compatible with Abstract. [View source code ↗](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/interfaces/IAccount.sol).
 
 See the [DefaultAccount contract](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/DefaultAccount.sol)
@@ -27,7 +27,7 @@ Typically, you would perform some kind of [signature validation](./signature-val
 to restrict who can use the account. This function must:
 
 1. Increment the nonce for the account. See [handling nonces](./handling-nonces.mdx) for more information.
-2. Return `ACCOUNT_VALIDATION_SUCCESS_MAGIC` if the transaction is valid and should be executed.
+2. Return `magic = ACCOUNT_VALIDATION_SUCCESS_MAGIC` if the transaction is valid and should be executed.
 3. Should only be called by the bootloader contract (e.g. using an `onlyBootloader` modifier).
 
 ```solidity
