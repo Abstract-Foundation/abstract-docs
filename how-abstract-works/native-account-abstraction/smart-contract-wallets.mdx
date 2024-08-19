@@ -112,7 +112,7 @@ for deploying smart contract wallets: `createAccount` and `create2Account`.
 Differentiate deploying an account contract from deploying a regular contract by providing either of these function names
 when initializing a contract factory.
 
-For example, if you are using [zksync-ethers](/build-on-abstract/applications/ethers.mdx):
+<Accordion title="View example zksync-ethers script">
 
 ```typescript
 import { ContractFactory } from "zksync-ethers";
@@ -126,6 +126,7 @@ const contractFactory = new ContractFactory(
 const aa = await contractFactory.deploy();
 await aa.deployed();
 ```
+</Accordion>
 
 ## Sending Transactions from a Smart Contract Wallet
 
@@ -163,7 +164,6 @@ const serializedTx = serializeEip712({
 const sentTx = await new Provider("https://api.testnet.abs.xyz").broadcastTransaction(serializedTx);
 const resp = await sentTx.wait();
 ```
-
 </Accordion>
 
 ## DefaultAccount Contract
