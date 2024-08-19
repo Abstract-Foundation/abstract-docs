@@ -53,9 +53,9 @@ i.e. there is no parallel system like Ethereum implements.
 Native account abstraction means:
 
 - All accounts implement an [IAccount](how-abstract-works/native-account-abstraction/smart-contract-accounts)
-standard interface, defining the methods that each smart contract account must implement as a minimum.
+standard interface that defines the methods that each smart contract account must implement (at a minimum).
 
-- Users can still use EOA wallets such as [MetaMask](https://metamask.io/), however, they are "converted" to the 
+- Users can still use EOA wallets such as [MetaMask](https://metamask.io/), however, these accounts are "converted" to the 
 [DefaultAccount](/how-abstract-works/native-account-abstraction/smart-contract-accounts),
 (which implements `IAccount`) during the transaction lifecycle.
 
@@ -68,19 +68,19 @@ is a smart contract wallet that follows the same standard interface and transact
 
 ## Start building with Native Account Abstraction
 
-Learn how to create a new smart contract project, compile your contracts, and deploy them to Abstract.
+Learn more about native account abstraction by seeing how smart contract wallets and paymasters are built:
 
 <CardGroup cols={2}>
   <Card
-    title="Hardhat: Get Started"
-    icon="code"
-    href="/how-abstract-works/native-account-abstraction/smart-contract-accounts"
+    title="Smart Contract Wallets"
+    icon="file-contract"
+    href="/how-abstract-works/native-account-abstraction/smart-contract-wallets"
   >
-    Learn how smart contract accounts on Abstract work and build a smart contract wallet.
+    Learn how smart contract wallets on Abstract work and build a smart contract wallet.
     </Card>
   <Card
-    title="Foundry: Get Started"
-    icon="code"
+    title="Paymasters"
+    icon="sack-dollar"
     href="/how-abstract-works/native-account-abstraction/paymasters"
   >
     Learn how to build a paymaster and sponsor gas fees for other accounts on Abstract.

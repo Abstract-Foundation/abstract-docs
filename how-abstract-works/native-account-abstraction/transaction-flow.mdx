@@ -1,0 +1,57 @@
+---
+title: "Transaction Flow"
+description: "Learn how Abstract processes transactions step-by-step using native account abstraction."
+---
+
+_Note: This page outlines the flow of transactions on Abstract, not including how they are batched, 
+sequenced and verified on Ethereum. For a higher-level overview of how transactions are finalized, see 
+[Transaction Lifecycle](/how-abstract-works/architecture/transaction-lifecycle)._
+
+Since all accounts on Abstract are smart contracts, all transactions go through the same flow:
+
+<Steps>
+  <Step title="Submitting transactions">
+    Transactions are submitted to the network via [JSON-RPC](https://ethereum.org/en/developers/docs/apis/json-rpc/)
+    and arrive in the transaction mempool. Since it is up to the smart contract account to determine how to validate transactions,
+    the `from` field can be set to a smart contract address in this step and submitted to the network.
+  </Step>
+
+  <Step title="Bootloader processing">
+    The [bootloader](/how-abstract-works/system-contracts/bootloader) reads transactions from the mempool
+    and processes them in batches.
+
+    Before each transaction starts, the system queries the [NonceHolder](/how-abstract-works/system-contracts/nonceholder) system contract
+    to check whether the provided nonce has already been used or not. If it has not been used, the process continues. 
+    Learn more on [handling nonces](./handling-nonces.mdx).
+    
+    For each transaction, the bootloader reads the `tx.from` field and checks if there is any contract code deployed at that address.
+    If there is no contract code, it assumes the account is an EOA and converts it to a 
+    [DefaultAccount](/how-abstract-works/native-account-abstraction/smart-contract-accounts).
+
+    [Learn more about the bootloader](/how-abstract-works/system-contracts/bootloader).
+    
+</Step>
+
+<Step title="Smart contract account validation & execution">
+    The bootloader then calls the following functions on account deployed at the `tx.from` address:
+  
+    1. `validateTransaction`: Determine whether or not to execute the transaction. 
+    Typically, some kind of [signature validation](./signature-validation.mdx) is performed in this step to restrict who can use the account.
+    2. `executeTransaction`: Execute the transaction if validation passed.
+    3. Either `payForTransaction` or `prepareForPayment`: Pay the gas fee or request a paymaster to pay the gas fee for this transaction.
+  
+    The `msg.sender` is set as the bootloader&rsquo;s formal contract address for these function calls.
+
+    [Learn more about smart contract wallets](./smart-contract-wallets.mdx).
+  </Step>
+
+<Step title="Paymasters (optional)">
+    If a paymaster is set, the bootloader call the following [paymaster](./paymasters.mdx) functions:
+        1. `validateAndPayForPaymasterTransaction`: Determine whether or not to pay for the transaction, and if so, pay the calculated gas fee for the transaction.
+        2. `postTransaction`: Optionally run some logic after the transaction has been executed.
+
+    Again, the `msg.sender` is set as the bootloader&rsquo;s formal contract address for these function calls.
+
+    [Learn more about paymasters](./paymasters.mdx).
+  </Step>
+</Steps>

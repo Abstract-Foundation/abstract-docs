@@ -94,7 +94,8 @@
           "group": "Native Account Abstraction",
           "pages": [
             "how-abstract-works/native-account-abstraction/overview",
-            "how-abstract-works/native-account-abstraction/smart-contract-accounts",
+            "how-abstract-works/native-account-abstraction/transaction-flow",
+            "how-abstract-works/native-account-abstraction/smart-contract-wallets",
             "how-abstract-works/native-account-abstraction/paymasters",
             "how-abstract-works/native-account-abstraction/handling-nonces",
             "how-abstract-works/native-account-abstraction/signature-validation"
