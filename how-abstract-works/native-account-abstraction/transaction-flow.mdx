@@ -28,8 +28,13 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
     If there is no contract code, it assumes the account is an EOA and converts it to a 
     [DefaultAccount](/how-abstract-works/native-account-abstraction/smart-contract-accounts).
 
-    [Learn more about the bootloader](/how-abstract-works/system-contracts/bootloader).
-    
+    <Card
+      title="Bootloader system contract"
+      icon="boot"
+      href="/how-abstract-works/system-contracts/bootloader"
+    >
+        Learn more about the bootloader system contract and it&rsquo;s role in processing transactions.
+    </Card>
 </Step>
 
 <Step title="Smart contract account validation & execution">
@@ -40,9 +45,15 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
     2. `executeTransaction`: Execute the transaction if validation passed.
     3. Either `payForTransaction` or `prepareForPayment`: Pay the gas fee or request a paymaster to pay the gas fee for this transaction.
   
-    The `msg.sender` is set as the bootloader&rsquo;s formal contract address for these function calls.
+    The `msg.sender` is set as the bootloader&rsquo;s contract address for these function calls.
 
-    [Learn more about smart contract wallets](./smart-contract-wallets.mdx).
+    <Card
+      title="Smart contract wallets"
+      icon="wallet"
+      href="/how-abstract-works/native-account-abstraction/smart-contract-wallets"
+    >
+        Learn more about how smart contract wallets work and how to build one.
+    </Card>
   </Step>
 
 <Step title="Paymasters (optional)">
@@ -50,8 +61,14 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
         1. `validateAndPayForPaymasterTransaction`: Determine whether or not to pay for the transaction, and if so, pay the calculated gas fee for the transaction.
         2. `postTransaction`: Optionally run some logic after the transaction has been executed.
 
-    Again, the `msg.sender` is set as the bootloader&rsquo;s formal contract address for these function calls.
+    The `msg.sender` is set as the bootloader&rsquo;s contract address for these function calls.
 
-    [Learn more about paymasters](./paymasters.mdx).
+    <Card
+      title="Paymasters"
+      icon="sack-dollar"
+      href="/how-abstract-works/native-account-abstraction/smart-contract-wallets"
+    >
+        Learn more about how paymasters work and how to build one.
+    </Card>
   </Step>
 </Steps>
