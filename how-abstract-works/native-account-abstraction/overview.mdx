@@ -1,0 +1,88 @@
+---
+title: "Overview"
+description: "Learn how native account abstraction works on Abstract."
+---
+
+## What Are Accounts?
+
+On Ethereum, there are two types of [accounts](https://ethereum.org/en/developers/docs/accounts/):
+
+1. **Externally Owned Accounts (EOAs)**: Controlled by private keys that can sign transactions.
+2. **Smart Contract Accounts**: Controlled by the code of a [smart contract](https://ethereum.org/en/developers/docs/smart-contracts/).
+
+By default, Ethereum expects transactions to be signed by the private key of an **EOA**, and expects
+the EOA to pay the [gas fees](https://ethereum.org/en/developers/docs/gas/) of their own transactions,
+whereas **smart contracts** cannot initiate transactions; they can only be called by EOAs.
+
+This approach has proven to be restrictive as it is an all-or-nothing approach
+to account security where the private key holder has full control over the account.
+For this reason, Ethereum introduced the concept of [account abstraction](#what-is-account-abstraction),
+by adding a second, separate system to run in parallel to the existing protocol to handle smart contract transactions.
+
+
+## What is Account Abstraction?
+
+Account abstraction allows smart contracts to initiate transactions (instead of just EOAs).
+
+This adds support for **smart contract wallets** that unlock many benefits for users, such as:
+
+- Recovery mechanisms if the private key is lost.
+- Spending limits, session keys, and other security features.
+- Flexibility in gas payment options, such as gas sponsorship.
+- Transaction batching for better UX such as when using ERC-20 tokens.
+- Alternative signature validation methods & support for different [ECC](https://en.wikipedia.org/wiki/Elliptic-curve_cryptography) algorithms.
+
+These features are essential to provide a consumer-friendly experience for users interacting onchain.
+
+However, since account abstraction was an afterthought on Ethereum, support for smart contract wallets is second-class,
+requiring additional complexity for developers to implement into their applications. 
+
+In addition, users often aren&rsquo;t able to bring their smart contract wallets 
+cross-application due to the lack of support for connecting smart contract wallets.
+
+For these reasons, Abstract implements [native account abstraction](#what-is-native-account-abstraction)
+in the protocol, providing first-class support for smart contract wallets.
+
+
+## What is Native Account Abstraction?
+
+Native account abstraction means **all accounts on Abstract are smart contract accounts** and all
+transactions go through the same [transaction lifecycle](/how-abstract-works/architecture/transaction-lifecycle),
+i.e. there is no parallel system like Ethereum implements.
+
+Native account abstraction means:
+
+- All accounts implement an [IAccount](how-abstract-works/native-account-abstraction/smart-contract-accounts)
+standard interface, defining the methods that each smart contract account must implement as a minimum.
+
+- Users can still use EOA wallets such as [MetaMask](https://metamask.io/), however, they are "converted" to the 
+[DefaultAccount](/how-abstract-works/native-account-abstraction/smart-contract-accounts),
+(which implements `IAccount`) during the transaction lifecycle.
+
+- All accounts have native support for [paymasters](/how-abstract-works/native-account-abstraction/paymasters),
+meaning any account can sponsor the gas fees of another account&rsquo;s transaction, or pay gas fees in another ERC-20 token instead of ETH.
+
+Native account abstraction makes building and supporting both smart contract wallets & paymasters much easier,
+as the protocol understands these concepts natively. Every account (including EOAs) 
+is a smart contract wallet that follows the same standard interface and transaction lifecycle.
+
+## Start building with Native Account Abstraction
+
+Learn how to create a new smart contract project, compile your contracts, and deploy them to Abstract.
+
+<CardGroup cols={2}>
+  <Card
+    title="Hardhat: Get Started"
+    icon="code"
+    href="/how-abstract-works/native-account-abstraction/smart-contract-accounts"
+  >
+    Learn how smart contract accounts on Abstract work and build a smart contract wallet.
+    </Card>
+  <Card
+    title="Foundry: Get Started"
+    icon="code"
+    href="/how-abstract-works/native-account-abstraction/paymasters"
+  >
+    Learn how to build a paymaster and sponsor gas fees for other accounts on Abstract.
+  </Card>
+</CardGroup>

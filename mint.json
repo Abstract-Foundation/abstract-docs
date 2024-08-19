@@ -65,9 +65,7 @@
           "group": "Architecture",
           "pages": [
             "how-abstract-works/architecture/overview",
-            "how-abstract-works/architecture/components",
-            "how-abstract-works/architecture/sequencer",
-            "how-abstract-works/architecture/prover"
+            "how-abstract-works/architecture/transaction-lifecycle"
           ]
         },
         {
@@ -96,8 +94,10 @@
           "group": "Native Account Abstraction",
           "pages": [
             "how-abstract-works/native-account-abstraction/overview",
+            "how-abstract-works/native-account-abstraction/smart-contract-accounts",
             "how-abstract-works/native-account-abstraction/paymasters",
-            "how-abstract-works/native-account-abstraction/smart-contract-accounts"
+            "how-abstract-works/native-account-abstraction/handling-nonces",
+            "how-abstract-works/native-account-abstraction/signature-validation"
           ]
         }
       ]
