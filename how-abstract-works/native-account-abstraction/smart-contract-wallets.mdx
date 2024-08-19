@@ -135,7 +135,7 @@ You must specify:
 1. The `from` field as the address of the deployed smart contract wallet.
 2. Provide a `customData` object containing a `customSignature` that not empty.
 
-For example, if you are using [zksync-ethers](/build-on-abstract/applications/ethers.mdx):
+<Accordion title="View example zksync-ethers script">
 
 ```typescript
 import { VoidSigner } from "ethers";
@@ -163,6 +163,8 @@ const serializedTx = serializeEip712({
 const sentTx = await new Provider("https://api.testnet.abs.xyz").broadcastTransaction(serializedTx);
 const resp = await sentTx.wait();
 ```
+
+</Accordion>
 
 ## DefaultAccount Contract
 
