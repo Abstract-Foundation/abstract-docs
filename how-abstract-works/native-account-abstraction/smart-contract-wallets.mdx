@@ -74,6 +74,7 @@ function executeTransactionFromOutside(
 ### payForTransaction
 
 This function is called to pay the bootloader for the gas fee of the transaction.
+It should only be called by the bootloader contract (e.g. using an `onlyBootloader` modifier).
 
 For convenience, there is a `_transaction.payToTheBootloader()` function that can be used
 to pay the bootloader for the gas fee.
@@ -90,6 +91,7 @@ function payForTransaction(
 
 Alternatively to `payForTransaction`, if the transaction has a paymaster set,
 you can use `prepareForPaymaster` to ask the paymaster to sponsor the gas fee for the transaction.
+It should only be called by the bootloader contract (e.g. using an `onlyBootloader` modifier).
 
 For convenience, there is a `_transaction.processPaymasterInput()` function that can be used to prepare the 
 transaction for the paymaster.
@@ -164,11 +166,12 @@ const resp = await sentTx.wait();
 
 ## DefaultAccount Contract
 
-The DefaultAccount contract is a system contract that acts as an EOA for Abstract. 
+The DefaultAccount contract is a system contract that mimicks the behaviour of an EOA. More specifically, 
+the bytecode of the contract is set by default for all addresses for which no other bytecodes are deployed.
 
 <Card
   title="DefaultAccount system contract"
-  icon="account"
+  icon="code"
   href="/how-abstract-works/system-contracts/default-account"
 >
     Learn more about the DefaultAccount system contract and how it works.
