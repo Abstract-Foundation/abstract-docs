@@ -6,8 +6,8 @@ description: "Learn how paymasters are built following the IPaymaster standard o
 Paymasters are smart contracts that pay for the gas fees of transactions on behalf of other accounts.
 
 On Abstract, all accounts are smart contracts that implement the 
-[IPaymaster](#ipaymaster-interface) interface. As outlined in the [transaction flow](./transaction-flow.mdx),
-after the [smart contract wallet](./smart-contract-wallets.mdx) validates and executes the transaction,
+[IPaymaster](#ipaymaster-interface) interface. As outlined in the [transaction flow](./transaction-flow),
+after the [smart contract wallet](./smart-contract-wallets) validates and executes the transaction,
 it can optionally call `prepareForPaymaster` to delegate the payment of the gas fees to a paymaster set in the transaction.
 
 ## IAccount Interface
@@ -21,7 +21,7 @@ This function is called to perform 2 actions:
 
 1. Validate (determine whether or not to sponsor the gas fees for) the transaction.
 2. Pay the gas fee to the bootloader for the transaction. This method must send at least `tx.gasprice * tx.gasLimit`
-to the bootloader. [Learn more about gas fees and gas refunds](/how-abstract-works/evm-differences/gas-fees.mdx).
+to the bootloader. [Learn more about gas fees and gas refunds](/how-abstract-works/evm-differences/gas-fees).
 
 To validate (i.e. sponsor the gas fee for) a transaction, this function should 
 return `magic = PAYMASTER_VALIDATION_SUCCESS_MAGIC`.

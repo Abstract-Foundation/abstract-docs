@@ -22,7 +22,7 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
 
     Before each transaction starts, the system queries the [NonceHolder](/how-abstract-works/system-contracts/nonceholder) system contract
     to check whether the provided nonce has already been used or not. If it has not been used, the process continues. 
-    Learn more on [handling nonces](./handling-nonces.mdx).
+    Learn more on [handling nonces](./handling-nonces).
     
     For each transaction, the bootloader reads the `tx.from` field and checks if there is any contract code deployed at that address.
     If there is no contract code, it assumes the account is an EOA and converts it to a 
@@ -41,7 +41,7 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
     The bootloader then calls the following functions on account deployed at the `tx.from` address:
   
     1. `validateTransaction`: Determine whether or not to execute the transaction. 
-    Typically, some kind of [signature validation](./signature-validation.mdx) is performed in this step to restrict who can use the account.
+    Typically, some kind of [signature validation](./signature-validation) is performed in this step to restrict who can use the account.
     2. `executeTransaction`: Execute the transaction if validation passed.
     3. Either `payForTransaction` or `prepareForPayment`: Pay the gas fee or request a paymaster to pay the gas fee for this transaction.
   
@@ -57,7 +57,7 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
   </Step>
 
 <Step title="Paymasters (optional)">
-    If a paymaster is set, the bootloader call the following [paymaster](./paymasters.mdx) functions:
+    If a paymaster is set, the bootloader call the following [paymaster](./paymasters) functions:
         1. `validateAndPayForPaymasterTransaction`: Determine whether or not to pay for the transaction, and if so, pay the calculated gas fee for the transaction.
         2. `postTransaction`: Optionally run some logic after the transaction has been executed.
 
