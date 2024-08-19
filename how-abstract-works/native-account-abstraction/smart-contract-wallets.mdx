@@ -3,7 +3,199 @@ title: "Smart Contract Wallets"
 description: "Learn how smart contract wallets are built following the IAccount standard on Abstract."
 ---
 
+On Abstract, all accounts are smart contracts that implement the 
+[IAccount](#iaccount-interface) interface. As outlined in the [transaction flow](./transaction-flow.mdx),
+the bootloader calls the functions of the smart contract account deployed at the `tx.from` address for
+each transaction that it processes.
+
+Abstract maintains compatibility with popular EOA wallets from the Ethereum ecosystem (e.g. MetaMask) by 
+converting them to the [DefaultAccount](#defaultaccount) system contract during the transaction flow.
+This contract acts as you would expect an EOA to act, with the added benefit of supporting paymasters.
 
 ## IAccount Interface
 
-##
+The IAccount interface defines the mandatory functions that a smart contract account must implement to be
+compatible with Abstract. [View source code ↗](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/interfaces/IAccount.sol).
+
+See the [DefaultAccount contract](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/DefaultAccount.sol)
+for an example implementation.
+
+### validateTransaction
+
+This function is called to determine whether or not the transaction should be executed (i.e. it validates the transaction).
+Typically, you would perform some kind of [signature validation](./signature-validation.mdx) in this step
+to restrict who can use the account. This function must:
+
+1. Increment the nonce for the account. See [handling nonces](./handling-nonces.mdx) for more information.
+2. Return `ACCOUNT_VALIDATION_SUCCESS_MAGIC` if the transaction is valid and should be executed.
+3. Should only be called by the bootloader contract (e.g. using an `onlyBootloader` modifier).
+
+```solidity
+function validateTransaction(
+    bytes32 _txHash,
+    bytes32 _suggestedSignedHash,
+    Transaction calldata _transaction
+) external payable returns (bytes4 magic);
+```
+
+### executeTransaction
+
+This function is called if the validation step 
+returned the `ACCOUNT_VALIDATION_SUCCESS_MAGIC` value. Consider:
+
+1. Using the [EfficientCall](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/libraries/EfficientCall.sol)
+library for executing transactions efficiently using zkEVM-specific features.
+2. Consider that the transaction may involve a contract deployment, in which case you should 
+use the [ContractDeployer](/how-abstract-works/system-contracts/contractdeployer)
+system contract with the `isSystemCall` flag set to true.
+3. Should only be called by the bootloader contract (e.g. using an `onlyBootloader` modifier).
+
+
+```solidity
+function executeTransaction(
+    bytes32 _txHash,
+    bytes32 _suggestedSignedHash,
+    Transaction calldata _transaction
+) external payable;
+```
+
+
+### executeTransactionFromOutside
+
+This function should be used to initiate a transaction from the smart contract wallet by an external call.
+Accounts can implement this method to initiate a transaction on behalf of the account via L1 -> L2 communication.
+
+```solidity
+function executeTransactionFromOutside(
+    Transaction calldata _transaction
+) external payable;
+```
+
+### payForTransaction
+
+This function is called to pay the bootloader for the gas fee of the transaction.
+
+For convenience, there is a `_transaction.payToTheBootloader()` function that can be used
+to pay the bootloader for the gas fee.
+
+```solidity
+function payForTransaction(
+    bytes32 _txHash,
+    bytes32 _suggestedSignedHash,
+    Transaction calldata _transaction
+) external payable;
+```
+
+### prepareForPaymaster
+
+Alternatively to `payForTransaction`, if the transaction has a paymaster set,
+you can use `prepareForPaymaster` to ask the paymaster to sponsor the gas fee for the transaction.
+
+For convenience, there is a `_transaction.processPaymasterInput()` function that can be used to prepare the 
+transaction for the paymaster.
+
+```solidity
+function prepareForPaymaster(
+    bytes32 _txHash,
+    bytes32 _possibleSignedHash,
+    Transaction calldata _transaction
+) external payable;
+```
+
+## Deploying a Smart Contract Wallet
+
+The [ContractDeployer](/how-abstract-works/system-contracts/contractdeployer) system contract has separate functions
+for deploying smart contract wallets: `createAccount` and `create2Account`.
+
+Differentiate deploying an account contract from deploying a regular contract by providing either of these function names
+when initializing a contract factory.
+
+For example, if you are using [zksync-ethers](/build-on-abstract/applications/ethers.mdx):
+
+```typescript
+import { ContractFactory } from "zksync-ethers";
+
+const contractFactory = new ContractFactory(
+    abi, 
+    bytecode, 
+    initiator, 
+    "createAccount" // Provide the fourth argument as "createAccount" or "create2Account"
+);
+const aa = await contractFactory.deploy();
+await aa.deployed();
+```
+
+## Sending Transactions from a Smart Contract Wallet
+
+Use [EIP-712](https://eips.ethereum.org/EIPS/eip-712) formatted transactions to submit transactions from a smart contract wallet.
+You must specify:
+
+1. The `from` field as the address of the deployed smart contract wallet.
+2. Provide a `customData` object containing a `customSignature` that not empty.
+
+For example, if you are using [zksync-ethers](/build-on-abstract/applications/ethers.mdx):
+
+```typescript
+import { VoidSigner } from "ethers";
+import { Provider, utils } from "zksync-ethers";
+import { serializeEip712 } from "zksync-ethers/build/utils";
+
+// Here we are just creating a transaction object that we want to send to the network.
+// This is just an example to populate fields like gas estimation, nonce calculation, etc.
+const transactionGenerator = new VoidSigner(getWallet().address, getProvider());
+const transactionFields = await transactionGenerator.populateTransaction({
+  to: "0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d", // As an example, send money to another wallet
+})
+
+// Now: Serialize an EIP-712 transaction
+const serializedTx = serializeEip712({
+  ...transactionFields, 
+  nonce: 0,
+  from: "YOUR-SMART-CONTRACT-WALLET-CONTRACT-ADDRESS", // Your smart contract wallet address goes here 
+  customData: {
+    customSignature: "0x1337" // Your custom signature goes here
+  },
+});
+
+// Broadcast the transaction to the network via JSON-RPC
+const sentTx = await new Provider("https://api.testnet.abs.xyz").broadcastTransaction(serializedTx);
+const resp = await sentTx.wait();
+```
+
+## DefaultAccount Contract
+
+The DefaultAccount contract is a system contract that acts as an EOA for Abstract. 
+
+<Card
+  title="DefaultAccount system contract"
+  icon="account"
+  href="/how-abstract-works/system-contracts/default-account"
+>
+    Learn more about the DefaultAccount system contract and how it works.
+</Card>
+
+## Smart Contract References
+
+<CardGroup cols={3}>
+  <Card
+    title="IAccount interface"
+    icon="code"
+    href="https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/interfaces/IAccount.sol"
+  >
+    View the source code for the IAccount interface. 
+  </Card>
+  <Card
+    title="DefaultAccount contract"
+    icon="code"
+    href="https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/DefaultAccount.sol"
+  >
+    View the source code for the DefaultAccount contract.
+  </Card>
+  <Card
+    title="TransactionHelper library"
+    icon="code"
+    href="https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/libraries/TransactionHelper.sol"
+  >
+    View the source code for the TransactionHelper library.
+  </Card>
+</CardGroup>
