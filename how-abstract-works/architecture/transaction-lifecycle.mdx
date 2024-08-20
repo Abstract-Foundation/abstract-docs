@@ -45,11 +45,11 @@ on our [block explorers](/ecosystem/block-explorers):
   <Step title="Ethereum (validating)">
     A ZK proof that validates the batches is generated and submitted to the 
     Ethereum smart contract for verification by calling the
-    `verifyBatches` function on the L1 smart contract. 
+    `proveBatches` function on the L1 smart contract. 
 
-    This process involves both the [prover](/how-abstract-works/architecture/components/prover) responsible for 
+    This process involves both the [prover](/how-abstract-works/architecture/components/prover-and-verifier) responsible for 
     generating the proof off-chain in the form of a [ZK-SNARK](https://ethereum.org/en/developers/docs/scaling/zk-rollups/#validity-proofs)
-    & submitting it to the L1 smart contract and the [verifier](/how-abstract-works/architecture/components/verifier)
+    & submitting it to the L1 smart contract and the [verifier](/how-abstract-works/architecture/components/prover-and-verifier)
     to confirm the validity of the proof on-chain.
     
     [Example transaction ↗](https://sepolia.etherscan.io/tx/0x3a30e04284fa52c002e6d7ff3b61e6d3b09d4c56c740162140687edb6405e38c)
@@ -57,7 +57,7 @@ on our [block explorers](/ecosystem/block-explorers):
   
   <Step title="Ethereum (executing)">
     Shortly after validation is complete, the state is finalized and the Merkle tree with L2 logs is saved
-    by calling the `executeBatches` function on the L1 smart contract.
+    by calling the `executeBatches` function on the L1 smart contract. [Learn more about state commitments](https://ethereum.org/en/developers/docs/scaling/zk-rollups/#state-commitments).
     
     [Example transaction ↗](https://sepolia.etherscan.io/tx/0x16891b5227e7ee040aab79e2b8d74289ea6b9b65c83680d533f03508758576e6)
   </Step>
