@@ -2,3 +2,58 @@
 title: "Bridges"
 description: "Learn how to bridge assets between Abstract and Ethereum."
 ---
+
+A bridge is a tool that allows users to move assets such as ETH from Ethereum to Abstract and vice versa.
+Under the hood, bridging works by having two smart contracts deployed:
+
+1. A smart contract deployed to Ethereum (L1).
+2. A smart contract deployed to Abstract (L2).
+
+These smart contracts communicate with each other to facilitate the deposit and withdrawal of assets between the two chains.
+
+## Native Bridge
+
+Abstract has a native bridge to move assets between Ethereum and
+Abstract for free (excluding gas fees) that supports bridging both ETH and ERC-20 tokens.
+
+Deposits from L1 to L2 take around ~15 minutes, whereas
+withdrawals from L2 to L1 currently take up to 24 hours due to the
+built-in [withdrawal delay](https://docs.zksync.io/build/resources/withdrawal-delay#withdrawal-delay).
+
+<Card
+  title="Abstract Native Bridge"
+  icon="bridge"
+  href="https://portal.testnet.abs.xyz/bridge/"
+>
+  Visit the native bridge to move assets between Ethereum and Abstract for free.
+</Card>
+
+## Third Party Bridges
+
+In addition to the native bridge, users can also utilize third-party bridges
+to move assets between Ethereum and Abstract.
+These bridges offer alternative routes and may come with different features, fees, and processing times.
+
+### Relay
+
+Relay provides near-instant transfers between Ethereum and Abstract for a small fee.
+
+It works by connecting users with relayers that act on users&rsquo; behalfs across chains in exchange for a small fee.
+
+<CardGroup cols={2}>
+  <Card
+    title="Relay Bridge"
+    icon="bridge"
+    href="https://testnets.relay.link/abstract"
+  >
+    Visit the Relay bridge to move assets between Ethereum and Abstract
+    instantly for a fee.
+  </Card>
+  <Card
+    title="Relay documentation"
+    icon="file-contract"
+    href="https://docs.relay.link/what-is-relay"
+  >
+    Learn more about how Relay works under the hood
+  </Card>
+</CardGroup>
