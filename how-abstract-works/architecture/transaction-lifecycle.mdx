@@ -21,30 +21,44 @@ on our [block explorers](/ecosystem/block-explorers):
     provided back to the user about the execution of their transaction (i.e. if their transaction succeeded or not). 
 
     After execution, the sequencer both forwards the block to the prover and creates a 
-    batch containing transactions from multiple blocks. [Example batch ↗](https://explorer.testnet.abs.xyz/batch/3678).
+    batch containing transactions from multiple blocks. 
+    
+    [Example batch ↗](https://explorer.testnet.abs.xyz/batch/3678).
     </Step>
     
     <Step title="Ethereum (sending)">
-    Multiple batches are committed to the Ethereum blockchain in a single transaction
+    Multiple batches are committed to the Ethereum blockchain in a 
+    single transaction
     in the form of an optimized data submission that only details the changes 
     in blockchain state; called a 
     **<Tooltip tip="State diffs offer a more cost-effective approach to transactions than full 
     transaction data. By omitting signatures and publishing only the final state when multiple 
     transactions alter the same slots.">state diff</Tooltip>**.
 
-    This is achieved by calling the `commitBatches` function on the L1 smart contract. 
-    [Example transaction ↗](https://sepolia.etherscan.io/tx/0xe6b786435793f9d66f907dd6c28eac709463e83e617a10f9afc64749719b85e5).
+    This step is one of the roles of the [sequencer](/how-abstract-works/architecture/components/sequencer);
+    calling the `commitBatches` function on the L1 smart contract and ensuring their [data availability](https://ethereum.org/en/developers/docs/data-availability/).
     The batches are stored on L1 using [blobs](https://info.etherscan.com/what-is-a-blob/) following the [EIP-4844](https://www.eip4844.com/) standard.
-  </Step>
+    
+    [Example transaction ↗](https://sepolia.etherscan.io/tx/0xe6b786435793f9d66f907dd6c28eac709463e83e617a10f9afc64749719b85e5)
+    </Step>
   
   <Step title="Ethereum (validating)">
-    A ZK proof that validates the batches is generated and submitted to the Ethereum smart contract for verification by calling the
-    `verifyBatches` function on the L1 smart contract. [Example transaction ↗](https://sepolia.etherscan.io/tx/0x3a30e04284fa52c002e6d7ff3b61e6d3b09d4c56c740162140687edb6405e38c).
+    A ZK proof that validates the batches is generated and submitted to the 
+    Ethereum smart contract for verification by calling the
+    `verifyBatches` function on the L1 smart contract. 
+
+    This process involves both the [prover](/how-abstract-works/architecture/components/prover) responsible for 
+    generating the proof off-chain in the form of a [ZK-SNARK](https://ethereum.org/en/developers/docs/scaling/zk-rollups/#validity-proofs)
+    & submitting it to the L1 smart contract and the [verifier](/how-abstract-works/architecture/components/verifier)
+    to confirm the validity of the proof on-chain.
+    
+    [Example transaction ↗](https://sepolia.etherscan.io/tx/0x3a30e04284fa52c002e6d7ff3b61e6d3b09d4c56c740162140687edb6405e38c)
   </Step>
   
   <Step title="Ethereum (executing)">
-    Finalize the state and save Merkle tree with L2 logs shortly 
-    after validation by calling the `executeBatches` function on the L1 smart contract.
-    [Example transaction ↗](https://sepolia.etherscan.io/tx/0x16891b5227e7ee040aab79e2b8d74289ea6b9b65c83680d533f03508758576e6).
+    Shortly after validation is complete, the state is finalized and the Merkle tree with L2 logs is saved
+    by calling the `executeBatches` function on the L1 smart contract.
+    
+    [Example transaction ↗](https://sepolia.etherscan.io/tx/0x16891b5227e7ee040aab79e2b8d74289ea6b9b65c83680d533f03508758576e6)
   </Step>
 </Steps>
