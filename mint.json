@@ -62,7 +62,7 @@
               "pages": [
                 "how-abstract-works/architecture/components/sequencer",
                 "how-abstract-works/architecture/components/prover-and-verifier",
-                "how-abstract-works/architecture/components/bridge"
+                "how-abstract-works/architecture/components/l1-rollup-contracts"
               ]
             }
           ]

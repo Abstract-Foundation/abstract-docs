@@ -1,0 +1,26 @@
+---
+title: "L1 Rollup Contracts"
+description: "Learn more about the smart contracts deployed on L1 that enable Abstract to inherit the security properties of Ethereum."
+---
+
+An essential part of Abstract as a [ZK rollup](/how-abstract-works/architecture/layer-2s#what-is-a-zk-rollup)
+is the smart contracts deployed to Ethereum (L1) that store and verify information about the
+state of the L2. 
+
+By having these smart contracts deployed and performing these essential
+roles on the L1, Abstract inherits the security properties of Ethereum.
+
+These smart contracts work together to:
+
+- Store the state diffs published from the L2 using [blobs](https://info.etherscan.com/what-is-a-blob/).
+- Receive and verify the validity proofs posted by the L2.
+- Facilitate communication between L1 and L2 to enable 
+cross-chain messaging and bridging.
+
+<Card
+  title="View all L1 Rollup Contracts"
+  icon="file-contract"
+  href="https://docs.zksync.io/zk-stack/components/smart-contracts#diamond"
+>
+  View the full list of smart contracts deployed on L1 that Abstract uses on the ZK stack documentation.
+</Card>
