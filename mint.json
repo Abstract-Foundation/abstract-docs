@@ -53,19 +53,20 @@
       "pages": [
         "how-abstract-works/overview",
         {
-          "group": "Concepts",
-          "pages": [
-            "how-abstract-works/concepts/layer-2s",
-            "how-abstract-works/concepts/zk-evms-and-zk-stack",
-            "how-abstract-works/concepts/transaction-batching",
-            "how-abstract-works/concepts/data-availability"
-          ]
-        },
-        {
           "group": "Architecture",
           "pages": [
-            "how-abstract-works/architecture/overview",
-            "how-abstract-works/architecture/transaction-lifecycle"
+            "how-abstract-works/architecture/layer-2s",
+            "how-abstract-works/architecture/transaction-lifecycle",
+            "how-abstract-works/architecture/data-availability",
+            {
+              "group": "Components",
+              "pages": [
+                "how-abstract-works/architecture/components/sequencer",
+                "how-abstract-works/architecture/components/prover",
+                "how-abstract-works/architecture/components/verifier",
+                "how-abstract-works/architecture/components/bridge"
+              ]
+            }
           ]
         },
         {
