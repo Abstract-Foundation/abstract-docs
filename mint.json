@@ -61,7 +61,7 @@
               "group": "Components",
               "pages": [
                 "how-abstract-works/architecture/components/sequencer",
-                "how-abstract-works/architecture/components/prover",
+                "how-abstract-works/architecture/components/prover-and-verifier",
                 "how-abstract-works/architecture/components/verifier",
                 "how-abstract-works/architecture/components/bridge"
               ]

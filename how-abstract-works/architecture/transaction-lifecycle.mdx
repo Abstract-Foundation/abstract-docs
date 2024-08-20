@@ -36,7 +36,7 @@ on our [block explorers](/ecosystem/block-explorers):
     transactions alter the same slots.">state diff</Tooltip>**.
 
     This step is one of the roles of the [sequencer](/how-abstract-works/architecture/components/sequencer);
-    calling the `commitBatches` function on the L1 smart contract and ensuring their [data availability](https://ethereum.org/en/developers/docs/data-availability/).
+    calling the `commitBatches` function on the [L1 smart contract](/how-abstract-works/architecture/l1-rollup-contracts) and ensuring their [data availability](https://ethereum.org/en/developers/docs/data-availability/).
     The batches are stored on L1 using [blobs](https://info.etherscan.com/what-is-a-blob/) following the [EIP-4844](https://www.eip4844.com/) standard.
     
     [Example transaction ↗](https://sepolia.etherscan.io/tx/0xe6b786435793f9d66f907dd6c28eac709463e83e617a10f9afc64749719b85e5)
@@ -45,11 +45,11 @@ on our [block explorers](/ecosystem/block-explorers):
   <Step title="Ethereum (validating)">
     A ZK proof that validates the batches is generated and submitted to the 
     Ethereum smart contract for verification by calling the
-    `proveBatches` function on the L1 smart contract. 
+    `proveBatches` function on the [L1 smart contract](/how-abstract-works/architecture/l1-rollup-contracts). 
 
     This process involves both the [prover](/how-abstract-works/architecture/components/prover-and-verifier) responsible for 
     generating the proof off-chain in the form of a [ZK-SNARK](https://ethereum.org/en/developers/docs/scaling/zk-rollups/#validity-proofs)
-    & submitting it to the L1 smart contract and the [verifier](/how-abstract-works/architecture/components/prover-and-verifier)
+    & submitting it to the [L1 smart contract](/how-abstract-works/architecture/l1-rollup-contracts) and the [verifier](/how-abstract-works/architecture/components/prover-and-verifier)
     to confirm the validity of the proof on-chain.
     
     [Example transaction ↗](https://sepolia.etherscan.io/tx/0x3a30e04284fa52c002e6d7ff3b61e6d3b09d4c56c740162140687edb6405e38c)

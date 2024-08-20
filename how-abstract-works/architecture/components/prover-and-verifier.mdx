@@ -1,0 +1,126 @@
+---
+title: "Prover & Verifier"
+description: "Learn more about the prover component of Abstract."
+---
+
+The batches of transactions submitted to Ethereum by the [sequencer](/how-abstract-works/architecture/sequencer)
+are not necessarily valid (i.e. they have not been proven to be correct) until a ZK proof is generated
+and verified by the [L1 smart contract](/how-abstract-works/architecture/l1-rollup-contracts).
+
+ZK proofs are used in a two-step process to ensure the correctness of batches:
+
+1. **[Proof generation](#proof-generation)**: An **off-chain** prover generates a ZK proof that a batch of transactions is valid.
+2. **[Proof verification](#proof-verification)**: The proof is submitted to the [L1 smart contract](/how-abstract-works/architecture/l1-rollup-contracts) and verified by the **on-chain** verifier.
+
+Since the proof verification is performed on Ethereum, Abstract inherits the security guarantees of the Ethereum L1.
+
+## Proof Generation
+
+<Steps>
+  <Step title="Witness Generation">
+    A **witness** is the cryptography term representing the knowledge 
+    that the prover wishes to demonstrate is true. 
+    
+    In the context of Abstract, the witness is the data that the prover claims  
+    a transaction is valid. It does this without disclosing any transaction details.
+  
+    Witnesses are collected in batches and processed together.
+
+    <Card
+      title="Witness Generator Source Code"
+      icon="github"
+      href="https://github.com/matter-labs/zksync-era/tree/main/prover/crates/bin/witness_generator"
+    >
+        View the source code on GitHub for the witness generator.
+    </Card>
+  </Step>
+
+  <Step title="Circuit Execution">
+    
+    Circuits are executed by the prover and the verifier, where the prover uses 
+    the witness to generate a proof, and the verifier checks this proof against the 
+    circuit to confirm its validity.
+    [View the full list of circuits on the ZK Stack documentation](https://docs.zksync.io/zk-stack/components/prover/circuits).
+
+    The goal of these circuits is to ensure the correct execution of the VM, 
+    covering every opcode, storage interaction, and the integration of precompiled contracts. 
+
+    The ZK-proving circuit iterates over the entire transaction batch, 
+    verifying the sequence of updates that result in a final state root after the last transaction is executed.
+
+    Abstract uses [Boojum](https://docs.zksync.io/zk-stack/components/prover/boojum-gadgets)
+    to prove and verify the circuit functionality, along with operating the backend components necessary for circuit construction.
+
+    <CardGroup cols={2}>
+        <Card
+          title="zkEVM Circuits Source Code"
+          icon="github"
+          href="https://github.com/matter-labs/era-zkevm_circuits"
+        >
+            View the source code on GitHub for the zkEVM circuits.
+        </Card>
+        <Card
+          title="Boojum Source Code"
+          icon="github"
+          href="https://github.com/matter-labs/zksync-crypto/tree/main/crates/boojum"
+        >
+            View the source code on GitHub for the zkEVM circuits.
+        </Card>
+    </CardGroup>
+  </Step>
+
+  <Step title="Proof Compression">
+    The circuit outputs a 
+    [ZK-STARK](https://ethereum.org/en/developers/docs/scaling/zk-rollups/#validity-proofs),
+    a type of validity proof that is relatively large and therefore would be more costly 
+    to post on Ethereum to be verified.
+
+    For this reason, a final compression step is to generate a succint validity proof
+    called a [ZK-SNARK](https://ethereum.org/en/developers/docs/scaling/zk-rollups/#validity-proofs)
+    that can be [verified](#proof-verification) quickly and cheaply on Ethereum.
+
+    <Card
+      title="Compressor Source Code"
+      icon="github"
+      href="https://github.com/matter-labs/zksync-era/tree/main/prover/crates/bin/proof_fri_compressor"
+    >
+        View the source code on GitHub for the FRI compressor.
+    </Card>
+  </Step>
+</Steps>
+
+
+## Proof Verification
+
+The final ZK-SNARK generated from the proof generation phase is 
+submitted with the `proveBatches` function call to the 
+[L1 smart contract](/how-abstract-works/architecture/l1-rollup-contracts) as outlined in the 
+[transaction lifecycle](/how-abstract-works/architecture/transaction-lifecycle) section.
+
+The ZK proof is then verified by the verifier smart contract on Ethereum by calling 
+it&rsquo;s `verify` function and providing the proof as an argument.
+
+```solidity
+// Returns a boolean value indicating whether the zk-SNARK proof is valid.
+function verify(
+    uint256[] calldata _publicInputs,
+    uint256[] calldata _proof,
+    uint256[] calldata _recursiveAggregationInput
+) external view returns (bool);
+```
+<CardGroup cols={2}>
+  <Card
+    title="IVerifier Interface Source Code"
+    icon="github"
+    href="https://github.com/matter-labs/era-contracts/blob/main/l1-contracts/contracts/state-transition/chain-interfaces/IVerifier.sol"
+  >
+    View the source code for the IVerifier interface
+  </Card>
+  <Card
+    title="Verifier Source Code"
+    icon="github"
+    href="https://github.com/matter-labs/era-contracts/blob/main/l1-contracts/contracts/state-transition/Verifier.sol"
+  >
+    View the source code for the Verifier implementation smart contract
+  </Card>
+</CardGroup>
