@@ -4,7 +4,7 @@ description: "Learn how smart contract wallets are built following the IAccount 
 ---
 
 On Abstract, all accounts are smart contracts that implement the 
-[IAccount](#iaccount-interface) interface. As outlined in the [transaction flow](./transaction-flow),
+[IAccount](#iaccount-interface) interface. As outlined in the [transaction flow](/how-abstract-works/native-account-abstraction/transaction-flow.mdx),
 the bootloader calls the functions of the smart contract account deployed at the `tx.from` address for
 each transaction that it processes.
 
@@ -25,7 +25,7 @@ for an example implementation.
 This function is called to determine whether or not the transaction should be executed (i.e. it validates the transaction).
 Typically, you would perform some kind of check in this step to restrict who can use the account. This function must:
 
-1. Increment the nonce for the account. See [handling nonces](./handling-nonces) for more information.
+1. Increment the nonce for the account. See [handling nonces](/how-abstract-works/native-account-abstraction/handling-nonces) for more information.
 2. Return `magic = ACCOUNT_VALIDATION_SUCCESS_MAGIC` if the transaction is valid and should be executed.
 3. Should only be called by the bootloader contract (e.g. using an `onlyBootloader` modifier).
 

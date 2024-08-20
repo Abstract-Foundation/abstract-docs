@@ -57,7 +57,6 @@
           "pages": [
             "how-abstract-works/architecture/layer-2s",
             "how-abstract-works/architecture/transaction-lifecycle",
-            "how-abstract-works/architecture/data-availability",
             {
               "group": "Components",
               "pages": [

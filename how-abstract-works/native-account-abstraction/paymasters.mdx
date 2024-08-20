@@ -6,8 +6,8 @@ description: "Learn how paymasters are built following the IPaymaster standard o
 Paymasters are smart contracts that pay for the gas fees of transactions on behalf of other accounts.
 
 On Abstract, all accounts are smart contracts that implement the 
-[IPaymaster](#ipaymaster-interface) interface. As outlined in the [transaction flow](./transaction-flow),
-after the [smart contract wallet](./smart-contract-wallets) validates and executes the transaction,
+[IPaymaster](#ipaymaster-interface) interface. As outlined in the [transaction flow](/how-abstract-works/native-account-abstraction/transaction-flow),
+after the [smart contract wallet](/how-abstract-works/native-account-abstraction/smart-contract-wallets) validates and executes the transaction,
 it can optionally call `prepareForPaymaster` to delegate the payment of the gas fees to a paymaster set in the transaction.
 
 ## IAccount Interface
