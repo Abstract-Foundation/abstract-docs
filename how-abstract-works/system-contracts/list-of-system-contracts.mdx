@@ -1,0 +1,286 @@
+---
+title: "List of System Contracts"
+description: "Explore all of the system contracts that Abstract implements."
+---
+
+## AccountCodeStorage
+
+The `AccountCodeStorage` contract is responsible for storing the code hashes of accounts for retrieval
+whenever the VM calls accesses an `address`.
+
+The address is looked up in the `AccountCodeStorage` contract. If the associated value is non-zero (i.e. the address has code stored), this code hash
+is used by the VM for the account.
+
+<Card
+  title="View the source code for AccountCodeStorage"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/AccountCodeStorage.sol"
+  icon="github"
+>
+  View the AccountCodeStorage source code on Github.
+</Card>
+
+## BootloaderUtilities
+
+Learn more about the bootloader and this system contract in the
+[bootloader](/how-abstract-works/system-contracts/bootloader) section.
+
+<Card
+  title="View the source code for BootloaderUtilities"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/BootloaderUtilities.sol"
+  icon="github"
+>
+  View the BootloaderUtilities source code on Github.
+</Card>
+
+## ComplexUpgrader
+
+This contract is used to perform complex multi-step upgrades on the L2.
+It contains a single function, `upgrade`, which executes an upgrade of the L2
+by delegating calls to another contract.
+
+<Card
+  title="View the source code for ComplexUpgrader"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/ComplexUpgrader.sol"
+  icon="github"
+>
+  View the ComplexUpgrader source code on Github.
+</Card>
+
+## Compressor
+
+This contract is used to compress the data that is published to the L1, specifically, it:
+
+- Compresses the published bytecodes.
+- Compresses the state diffs (and validate state diff compression).
+
+<Card
+  title="View the source code for Compressor"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/Compressor.sol"
+  icon="github"
+>
+  View the Compressor source code on Github.
+</Card>
+
+## Constants
+
+This contract contains helpful constant values that are used throughout the system
+and can be used in your own smart contracts. It includes:
+
+- Addresses for all system contracts
+- Values for other system constants such as `MAX_NUMBER_OF_BLOBS`, `CREATE2_PREFIX`, etc.
+
+<Card
+  title="View the source code for Constants"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/Constants.sol"
+  icon="github"
+>
+  View the Constants source code on Github.
+</Card>
+
+## ContractDeployer
+
+This contract is responsible for deploying smart contracts on Abstract as well as
+generating the address of the deployed contract.
+
+Before deployment, it ensures the code hash of the smart contract is known using the
+[KnownCodesStorage](#knowncodesstorage) system contract.
+
+See the [contract deployment](/how-abstract-works/evm-differences/contract-deployment) section
+for more details.
+
+<Card
+  title="View the source code for ContractDeployer"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/ContractDeployer.sol"
+  icon="github"
+>
+  View the ContractDeployer source code on Github.
+</Card>
+
+## Create2Factory
+
+This contract can be used for deterministic contract deployment, i.e.
+deploying a smart contract with the ability to predict the address of the deployed contract.
+
+It contains two functions, `create2` and `create2Account`, which both
+call a third function, `_relayCall` that relays the calldata to the
+[ContractDeployer](#contractdeployer) contract.
+
+<Card
+  title="View the source code for Create2Factory"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/Create2Factory.sol"
+  icon="github"
+>
+  View the Create2Factory source code on Github.
+</Card>
+
+## DefaultAccount
+
+This contract is built to simulate the behaviour of an EOA (Externally Owned Account) on the L2.
+It is intended to act the same as an EOA would on Ethereum, enabling Abstract to support EOA wallets,
+despite all accounts on Abstract being smart contracts.
+
+As outlined in the [transaction flow](/how-abstract-works/native-account-abstraction/transaction-flow) section,
+the `DefaultAccount` contract is used when the sender of a transaction is looked up and
+no code is found for the address; indicating that the address of the sender is an EOA as opposed to
+a [smart contract wallet](/how-abstract-works/native-account-abstraction/smart-contract-wallets).
+
+<Card
+  title="View the source code for DefaultAccount"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/DefaultAccount.sol"
+  icon="github"
+>
+  View the DefaultAccount source code on Github.
+</Card>
+
+## EmptyContract
+
+Some contracts need no other code other than to return a success value.
+An example of such address is the `0` address. In addition, the
+[bootloader](/how-abstract-works/system-contracts/bootloader) also needs to be
+callable so that the users could transfer ETH to it.
+
+For these contracts, we insert the EmptyContract code upon genesis.
+It is essentially a noop code, which does nothing and returns `success=1`.
+
+<Card
+  title="View the source code for EmptyContract"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/EmptyContract.sol"
+  icon="github"
+>
+  View the EmptyContract source code on Github.
+</Card>
+
+## EventWriter
+
+This contract is responsible for [emitting events](https://docs.soliditylang.org/en/latest/contracts.html#events).
+
+It is not required to interact with this smart contract, the
+standard Solidity `emit` keyword can be used to emit events.
+
+<Card
+  title="View the source code for EventWriter"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/EventWriter.yul"
+  icon="github"
+>
+  View the EventWriter source code on Github.
+</Card>
+
+## ImmutableSimulator
+
+This contract simulates the behavior of immutable variables in Solidity. It exists so that
+smart contracts with the same Solidity code but different constructor parameters have the same bytecode.
+
+It is not required to interact with this smart contract directly,
+it is used indirectly via the compiler simulations for the immutable variables in Solidity.
+
+<Card
+  title="View the source code for ImmutableSimulator"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/ImmutableSimulator.sol"
+  icon="github"
+>
+  View the ImmutableSimulator source code on Github.
+</Card>
+
+## KnownCodesStorage
+
+Since Abstract stores the code hashes of smart contracts and not the code itself
+(see [AccountCodeStorage](#accountcodestorage)), the system must ensure that
+it knows and stores the code hash of all smart contracts that are deployed.
+
+The [ContractDeployer](#contractdeployer) checks this `KnownCodesStorage` contract to see if the
+code hash of a smart contract is known before deploying it. If it is not known,
+the contract will not be deployed and revert with an error `The code hash is not known`.
+
+<Accordion title={`Why am i getting "the code hash is not known" error?`}>
+  Likely, you are trying to deploy a smart contract without using the 
+  [ContractDeployer](#contractdeployer) sytstem contract.
+
+See the [contract deployment section](/how-abstract-works/evm-differences/contract-deployment) for more details.
+
+</Accordion>
+
+<Card
+  title="View the source code for KnownCodesStorage"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/KnownCodesStorage.sol"
+  icon="github"
+>
+  View the KnownCodesStorage source code on Github.
+</Card>
+
+## L1Messenger
+
+This contract is used for sending messages from Abstract to Ethereum.
+
+Learn more about what data is sent in the [transaction lifecycle](/how-abstract-works/architecture/transaction-lifecycle) section.
+
+<Card
+  title="View the source code for L1Messenger"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/L1Messenger.sol"
+  icon="github"
+>
+  View the L1Messenger source code on Github.
+</Card>
+
+## L2BaseToken
+
+This contract holds the balances of ETH for all accounts on the L2 and updates them
+whenever other system contracts such as the [Bootloader](/how-abstract-works/system-contracts/bootloader),
+[ContractDeployer](#contractdeployer), or [MsgValueSimulator](#msgvaluesimulator) perform
+balance changes while simulating the `msg.value` behaviour of Ethereum.
+
+This is because the L2 does not have a set "native" token unlike Ethereum,
+so functions such as `transferFromTo`, `balanceOf`, `mint`, `withdraw`, etc. are
+implemented in this contract as if it were an ERC-20.
+
+While you don&rsquo;t need to interact with this contract directly, it does impact
+the support for `.send` and `.transfer` functions in Solidity.
+Learn more on the
+[Solidity changes](/how-abstract-works/evm-differences/solidity-changes) page.
+
+<Card
+  title="View the source code for L2BaseToken"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/L2BaseToken.sol"
+  icon="github"
+>
+  View the L2BaseToken source code on Github.
+</Card>
+
+## MsgValueSimulator
+
+<Card
+  title="View the source code for MsgValueSimulator"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/MsgValueSimulator.sol"
+  icon="github"
+>
+  View the MsgValueSimulator source code on Github.
+</Card>
+
+## NonceHolder
+
+<Card
+  title="View the source code for NonceHolder"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/NonceHolder.sol"
+  icon="github"
+>
+  View the NonceHolder source code on Github.
+</Card>
+
+## PubdataChunkPublisher
+
+<Card
+  title="View the source code for PubdataChunkPublisher"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/PubdataChunkPublisher.sol"
+  icon="github"
+>
+  View the PubdataChunkPublisher source code on Github.
+</Card>
+
+## SystemContext
+
+<Card
+  title="View the source code for SystemContext"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/SystemContext.sol"
+  icon="github"
+>
+  View the SystemContext source code on Github.
+</Card>

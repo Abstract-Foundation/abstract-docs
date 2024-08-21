@@ -77,7 +77,14 @@
             "how-abstract-works/native-account-abstraction/signature-validation"
           ]
         },
-
+        {
+          "group": "System Contracts",
+          "pages": [
+            "how-abstract-works/system-contracts/overview",
+            "how-abstract-works/system-contracts/bootloader",
+            "how-abstract-works/system-contracts/list-of-system-contracts"
+          ]
+        },
         {
           "group": "EVM Differences",
           "pages": [
@@ -89,14 +96,6 @@
             "how-abstract-works/evm-differences/precompiles",
             "how-abstract-works/evm-differences/contract-deployment",
             "how-abstract-works/evm-differences/gas-fees-refunds"
-          ]
-        },
-        {
-          "group": "System Contracts",
-          "pages": [
-            "how-abstract-works/system-contracts/overview",
-            "how-abstract-works/system-contracts/bootloader",
-            "how-abstract-works/system-contracts/list-of-system-contracts"
           ]
         }
       ]
