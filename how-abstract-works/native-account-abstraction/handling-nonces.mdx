@@ -4,11 +4,12 @@ description: "Learn the best practices for handling nonces when building smart c
 ---
 
 As outlined in the [tranasction flow](/transaction-flow), a call to `validateNonceUsage`
-is made to the [NonceHolder](/how-abstract-works/system-contracts/nonceholder) system contract 
-before each transaction starts to check whether the provided nonce 
+is made to the [NonceHolder](/how-abstract-works/system-contracts/list-of-system-contracts#nonceholder) system contract
+before each transaction starts to check whether the provided nonce
 of a transaction has already been used or not.
 
 The bootloader enforces the nonce:
+
 1. Has not already been used before transaction validation begins.
 2. Must be used (typically incremented) during validation.
 
@@ -21,7 +22,7 @@ To mark a nonce as used there are two options:
 1. Increment the `minNonce`: All nonces less than `minNonce` will become used.
 2. Set a non-zero value under the nonce via `setValueUnderNonce`.
 
-A convenience method, `incrementMinNonceIfEquals` is exposed 
+A convenience method, `incrementMinNonceIfEquals` is exposed
 from the `NonceHolder` system contract. For example, inside of your [smart contract wallet](/how-abstract-works/native-account-abstraction/smart-contract-wallets),
 you use it to increment the `minNonce` of your account:
 
@@ -37,7 +38,7 @@ function validateTransaction(
     bytes32,
     Transaction calldata _transaction
 ) external payable onlyBootloader returns (bytes4 magic) {
-    
+
     // Increment nonce during validation
     SystemContractsCaller.systemCallWithPropagatedRevert(
         uint32(gasleft()),
@@ -50,6 +51,6 @@ function validateTransaction(
     );
 
     // ... rest of validation logic here
-    
+
 }
 ```

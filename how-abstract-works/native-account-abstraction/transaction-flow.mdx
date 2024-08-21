@@ -3,8 +3,8 @@ title: "Transaction Flow"
 description: "Learn how Abstract processes transactions step-by-step using native account abstraction."
 ---
 
-_Note: This page outlines the flow of transactions on Abstract, not including how they are batched, 
-sequenced and verified on Ethereum. For a higher-level overview of how transactions are finalized, see 
+_Note: This page outlines the flow of transactions on Abstract, not including how they are batched,
+sequenced and verified on Ethereum. For a higher-level overview of how transactions are finalized, see
 [Transaction Lifecycle](/how-abstract-works/architecture/transaction-lifecycle)._
 
 Since all accounts on Abstract are smart contracts, all transactions go through the same flow:
@@ -20,12 +20,12 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
     The [bootloader](/how-abstract-works/system-contracts/bootloader) reads transactions from the mempool
     and processes them in batches.
 
-    Before each transaction starts, the system queries the [NonceHolder](/how-abstract-works/system-contracts/nonceholder) system contract
-    to check whether the provided nonce has already been used or not. If it has not been used, the process continues. 
+    Before each transaction starts, the system queries the [NonceHolder](/how-abstract-works/system-contracts/list-of-system-contracts#nonceholder) system contract
+    to check whether the provided nonce has already been used or not. If it has not been used, the process continues.
     Learn more on [handling nonces](/how-abstract-works/native-account-abstraction/handling-nonces).
-    
+
     For each transaction, the bootloader reads the `tx.from` field and checks if there is any contract code deployed at that address.
-    If there is no contract code, it assumes the account is an EOA and converts it to a 
+    If there is no contract code, it assumes the account is an EOA and converts it to a
     [DefaultAccount](/how-abstract-works/native-account-abstraction/smart-contract-accounts).
 
     <Card
@@ -35,6 +35,7 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
     >
         Learn more about the bootloader system contract and it&rsquo;s role in processing transactions.
     </Card>
+
 </Step>
 
 <Step title="Smart contract account validation & execution">
@@ -54,6 +55,7 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
     >
         Learn more about how smart contract wallets work and how to build one.
     </Card>
+
   </Step>
 
 <Step title="Paymasters (optional)">
@@ -70,5 +72,6 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
     >
         Learn more about how paymasters work and how to build one.
     </Card>
+
   </Step>
 </Steps>
