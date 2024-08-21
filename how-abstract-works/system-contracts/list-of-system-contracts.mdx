@@ -247,6 +247,14 @@ Learn more on the
 
 ## MsgValueSimulator
 
+This contract calls the [L2BaseToken](#l2basetoken) contract&rsquo;s `transferFromTo` function to
+simulate the `msg.value` behaviour of Ethereum.
+
+While you don&rsquo;t need to interact with this contract directly, it does impact
+the support for `.send` and `.transfer` functions in Solidity.
+Learn more on the
+[Solidity changes](/how-abstract-works/evm-differences/solidity-changes) page.
+
 <Card
   title="View the source code for MsgValueSimulator"
   href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/MsgValueSimulator.sol"
@@ -256,6 +264,16 @@ Learn more on the
 </Card>
 
 ## NonceHolder
+
+This contract stores the nonce for each account on the L2. More specifically, stores both
+the deployment nonce for each account and the transaction nonce for each account.
+
+Before each transaction starts, the bootloader uses the `NonceHolder` to ensure
+that the provided nonce for the transaction has not already been used by the sender.
+During the [transaction validation](/how-abstract-works/native-account-abstraction/handling-nonces#considering-nonces-in-your-smart-contract-account),
+it also enforces that the nonce _is_ set as used before the transaction execution begins.
+
+See more details in the [handling nonces](/how-abstract-works/native-account-abstraction/handling-nonces) section.
 
 <Card
   title="View the source code for NonceHolder"
@@ -267,6 +285,10 @@ Learn more on the
 
 ## PubdataChunkPublisher
 
+This contract is responsible for creating [EIP-4844 blobs](https://www.eip4844.com/) and
+publishing them to Ethereum. Learn more in the
+[transaction lifecycle](/how-abstract-works/architecture/transaction-lifecycle) section.
+
 <Card
   title="View the source code for PubdataChunkPublisher"
   href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/PubdataChunkPublisher.sol"
@@ -276,6 +298,12 @@ Learn more on the
 </Card>
 
 ## SystemContext
+
+This contract is used to store and provide various system parameters not included in the VM by default,
+such as block-scoped, transaction-scoped, or system-wide parameters.
+
+For example, variables such as `chainId`, `gasPrice`, `baseFee`, as well as system functions
+such as `setL2Block` and `setNewBatch` are stored in this contract.
 
 <Card
   title="View the source code for SystemContext"
