@@ -42,3 +42,12 @@ them all through the flow outlined in the
 
 3. At the end of each batch, the bootloader informs the [L1Messenger system contract](/how-abstract-works/system-contracts/l1messenger)
    for it to begin sending data to Ethereum about the transactions that were processed.
+
+## BootloaderUtilities System Contract
+
+In addition to the bootloader itself, there is an additional
+[BootloaderUtilities system contract](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/BootloaderUtilities.sol)
+that provides utility functions for the bootloader to use.
+
+This separation is simply because the bootloader itself is written in [Yul](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/bootloader/bootloader.yul)
+whereas the utility functions are written in Solidity.
