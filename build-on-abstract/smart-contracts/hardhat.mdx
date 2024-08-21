@@ -6,14 +6,14 @@ description: "Learn how to use Hardhat to build and deploy smart contracts on Ab
 <Accordion title="Prerequisites">
   Ensure you have the following installed on your machine:
 
-  - [Node.js](https://nodejs.org/en/download/) v18.0.0 or later.
-  - If you are on Windows, we strongly recommend using [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/about) to follow this guide.
+- [Node.js](https://nodejs.org/en/download/) v18.0.0 or later.
+- If you are on Windows, we strongly recommend using [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/about) to follow this guide.
 
 </Accordion>
 
 ## 1. Create a new project
 
-Inside an empty directory, initialize a new Hardhat project using 
+Inside an empty directory, initialize a new Hardhat project using
 the [Hardhat CLI](https://hardhat.org/getting-started/):
 
 Create a new directory and navigate into it:
@@ -21,6 +21,7 @@ Create a new directory and navigate into it:
 ```bash
 mkdir my-abstract-project && cd my-abstract-project
 ```
+
 Initialize a new Hardhat project:
 
 ```bash
@@ -38,18 +39,26 @@ Select your preferences when prompted by the CLI, or use the recommended setup b
 ✔ Do you want to add a .gitignore? (Y/n) · y
 ✔ Do you ... install ... dependencies with npm ... · y
 ```
+
 </Accordion>
 
 ## 2. Install the required Hardhat extension
 
 Abstract smart contracts use [different bytecode](/how-abstract-works/evm-differences/overview)
-than the Ethereum Virtual Machine (EVM). 
+than the Ethereum Virtual Machine (EVM).
 
-To compile smart contracts for Abstract, install the 
+To compile smart contracts for Abstract, install the
 [hardhat-zksync](https://docs.zksync.io/build/tooling/hardhat/hardhat-zksync) extension.
 
 ```bash
 npm install -D @matterlabs/hardhat-zksync
+```
+
+To interact with [system contracts](/how-abstract-works/system-contracts/overview) install the
+[zksync-contracts](https://docs.zksync.io/build/tooling/hardhat/hardhat-zksync#zksync-contracts) package:
+
+```bash
+npm install @matterlabs/zksync-contracts
 ```
 
 ### 3. Modify the Hardhat configuration
@@ -65,7 +74,7 @@ const config: HardhatUserConfig = {
     version: "latest",
     settings: {
       // This is the current name of the "isSystem" flag
-      enableEraVMExtensions: false,  // Note: NonceHolder and the ContractDeployer system contracts can only be called with a special isSystem flag as true
+      enableEraVMExtensions: false, // Note: NonceHolder and the ContractDeployer system contracts can only be called with a special isSystem flag as true
     },
   },
   defaultNetwork: "abstractTestnet",
@@ -74,18 +83,22 @@ const config: HardhatUserConfig = {
       url: "https://api.testnet.abs.xyz",
       ethNetwork: "sepolia",
       zksync: true,
-      verifyURL: 'https://api-explorer-verify.testnet.abs.xyz/contract_verification',
+      verifyURL:
+        "https://api-explorer-verify.testnet.abs.xyz/contract_verification",
     },
   },
   solidity: {
     version: "0.8.24",
   },
 };
- 
+
 export default config;
 ```
 
-<Tip>For local development, the [zksync-cli](/build-on-abstract/zksync-cli) can run local nodes and more.</Tip>
+<Tip>
+  For local development, the [zksync-cli](/build-on-abstract/zksync-cli) can run
+  local nodes and more.
+</Tip>
 
 ## 4. Write a smart contract
 
@@ -121,12 +134,11 @@ You should now see the compiled smart contracts in the generated `artifacts-zk` 
 
 ## 6. Deploy the smart contract
 
-
 <Steps>
   <Step title="Get testnet funds" icon="wallet">
     Deploying smart contracts requires testnet ETH.
 
-    Claim testnet funds via a [faucet](/ecosystem/faucets), or 
+    Claim testnet funds via a [faucet](/ecosystem/faucets), or
     [bridge](/ecosystem/bridges) ETH from Sepolia to the Abstract testnet.
 
   </Step>
@@ -146,6 +158,7 @@ You should now see the compiled smart contracts in the generated `artifacts-zk` 
     ```
 
     <Warning>Do NOT use a private key associated with real funds. Create a new wallet for this step.</Warning>
+
   </Step>
 
   <Step title="Write the deployment script" icon="code">    
@@ -162,23 +175,23 @@ You should now see the compiled smart contracts in the generated `artifacts-zk` 
     import { HardhatRuntimeEnvironment } from "hardhat/types";
     import { Deployer } from "@matterlabs/hardhat-zksync";
     import { vars } from "hardhat/config";
-    
+
     // An example of a deploy script that will deploy and call a simple contract.
     export default async function (hre: HardhatRuntimeEnvironment) {
       console.log(`Running deploy script`);
-    
+
       // Initialize the wallet using your private key.
       const wallet = new Wallet(vars.get("DEPLOYER_PRIVATE_KEY"));
-    
+
       // Create deployer object and load the artifact of the contract we want to deploy.
       const deployer = new Deployer(hre, wallet);
       // Load contract
       const artifact = await deployer.loadArtifact("HelloAbstract");
-    
+
       // Deploy this contract. The returned object will be of a `Contract` type,
       // similar to the ones in `ethers`.
       const tokenContract = await deployer.deploy(artifact);
-    
+
       console.log(
         `${
           artifact.contractName
@@ -186,42 +199,43 @@ You should now see the compiled smart contracts in the generated `artifacts-zk` 
       );
     }
     ```
+
   </Step>
   <Step title="Deploy your smart contract" icon="rocket">
 
-  Run the following command to deploy your smart contracts:
+Run the following command to deploy your smart contracts:
 
-  ```bash
-  npx hardhat deploy-zksync --script deploy.ts
-  ```
+```bash
+npx hardhat deploy-zksync --script deploy.ts
+```
 
-  If successful, your output should look similar to the following:
+If successful, your output should look similar to the following:
 
-  ```bash
-  Running deploy script
-  HelloAbstract was deployed to YOUR_CONTRACT_ADDRESS
-  ```
+```bash
+Running deploy script
+HelloAbstract was deployed to YOUR_CONTRACT_ADDRESS
+```
 
   </Step>
   <Step title="Verify smart contract on the block explorer" icon="check">
   Verifying your smart contract is helpful for others to view the code and 
   interact with it from a [block explorer](/ecosystem/block-explorers).
 
-  To verify your smart contract, run the following command:
+To verify your smart contract, run the following command:
 
-  ```bash
-  npx hardhat verify --network abstractTestnet YOUR_CONTRACT_ADDRESS
-  ```
+```bash
+npx hardhat verify --network abstractTestnet YOUR_CONTRACT_ADDRESS
+```
 
-  **Note**: Replace `YOUR_CONTRACT_ADDRESS` with the address of your deployed smart contract.
+**Note**: Replace `YOUR_CONTRACT_ADDRESS` with the address of your deployed smart contract.
 
-  If successful, your output should look similar to the following:
+If successful, your output should look similar to the following:
 
-  ```bash
-  npx hardhat verify --network abstractTestnet YOUR_CONTRACT_ADDRESS
-  Your verification ID is: 123
-  Contract successfully verified on ZKsync block explorer!
-  ```
+```bash
+npx hardhat verify --network abstractTestnet YOUR_CONTRACT_ADDRESS
+Your verification ID is: 123
+Contract successfully verified on ZKsync block explorer!
+```
 
   </Step>
 </Steps>
