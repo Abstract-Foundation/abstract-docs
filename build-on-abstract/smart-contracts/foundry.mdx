@@ -3,36 +3,45 @@ title: "Foundry"
 description: "Learn how to use Foundry to build and deploy smart contracts on Abstract."
 ---
 
-To use Foundry to build smart contracts on Abstract, you need to use the [foundry-zksync](https://github.com/matter-labs/foundry-zksync) fork.
+To use Foundry to build smart contracts on Abstract, use the [foundry-zksync](https://github.com/matter-labs/foundry-zksync) fork.
+
+<Warning>
+  Note that the Foundry fork is currently in the alpha stage and has [limited
+  support](https://github.com/matter-labs/foundry-zksync?tab=readme-ov-file#limitations);
+  we recommend using [Hardhat](/build-on-abstract/smart-contracts/hardhat).
+</Warning>
 
 ## 1. Install the foundry-zksync fork
 
 <Note>
-This installation overrides any existing forge and cast binaries in `~/.foundry`. 
-To revert to the standard foundry installation, follow the [Foundry installation guide](https://book.getfoundry.sh/getting-started/installation#using-foundryup).
-You can swap between the two installations at any time.
+  This installation overrides any existing forge and cast binaries in
+  `~/.foundry`. To revert to the standard foundry installation, follow the
+  [Foundry installation
+  guide](https://book.getfoundry.sh/getting-started/installation#using-foundryup).
+  You can swap between the two installations at any time.
 </Note>
 
 <Steps>
   <Step title="Clone the repository">
   From any directory, clone the `foundry-zksync` repository.
 
-  ```bash
-  git clone https://github.com/matter-labs/foundry-zksync.git
-  ```
+```bash
+git clone https://github.com/matter-labs/foundry-zksync.git
+```
+
   </Step>
   <Step title="Run the installer">
   Change directory into the `foundry-zksync` directory.
 
-  ```bash
-  cd foundry-zksync
-  ```
+```bash
+cd foundry-zksync
+```
 
-  Run the installer:
+Run the installer:
 
-  ```bash
-  ./install-foundry-zksync
-  ```
+```bash
+./install-foundry-zksync
+```
 
   <Accordion title="Common installation issues" icon="circle-exclamation">
     
@@ -59,6 +68,7 @@ You can swap between the two installations at any time.
         </Accordion>
 
     </AccordionGroup>
+
   </Accordion>
 
 A successful installation will output the following message:
@@ -76,7 +86,7 @@ Forge version 0.0.2 is successfully installed.
     forge build --help | grep -A 20 "ZKSync configuration:"
     ```
 
-    If successful, it will output `20` lines of the available 
+    If successful, it will output `20` lines of the available
     options included in the `foundry-zksync` fork.
 
   </Step>
@@ -84,7 +94,7 @@ Forge version 0.0.2 is successfully installed.
 
 ## 2. Create a new project
 
-First, change directory *out* of the `foundry-zksync` directory.
+First, change directory _out_ of the `foundry-zksync` directory.
 
 ```bash
 cd ..
@@ -143,13 +153,16 @@ You should now see the compiled smart contracts in the generated `zkout` directo
 
 ## 6. Deploy the smart contract
 
-<Tip>For local development, the [zksync-cli](/build-on-abstract/zksync-cli) can run local nodes and more.</Tip>
+<Tip>
+  For local development, the [zksync-cli](/build-on-abstract/zksync-cli) can run
+  local nodes and more.
+</Tip>
 
 <Steps>
   <Step title="Get testnet funds" icon="wallet">
     Deploying smart contracts requires testnet ETH.
 
-    Claim testnet funds via a [faucet](/ecosystem/faucets), or 
+    Claim testnet funds via a [faucet](/ecosystem/faucets), or
     [bridge](/ecosystem/bridges) ETH from Sepolia to the Abstract testnet.
 
   </Step>
@@ -164,25 +177,26 @@ You should now see the compiled smart contracts in the generated `zkout` directo
     Enter your wallet&rsquo;s private key when prompted & provide a password to encrypt it.
 
     <Warning>We recommend not to use a private key associated with real funds. Create a new wallet for this step.</Warning>
+
   </Step>
 
   <Step title="Deploy your smart contract" icon="rocket">
 
-  Run the following command to deploy your smart contracts:
+Run the following command to deploy your smart contracts:
 
-  ```bash
-  forge create src/Counter.sol:Counter --account myKeystore --rpc-url https://api.testnet.abs.xyz --chain 11124 --zksync
-  ```
+```bash
+forge create src/Counter.sol:Counter --account myKeystore --rpc-url https://api.testnet.abs.xyz --chain 11124 --zksync
+```
 
-  Ensure `myKeystore` is the name of the keystore file you created in the previous step.
+Ensure `myKeystore` is the name of the keystore file you created in the previous step.
 
-  If successful, your output should look similar to the following:
+If successful, your output should look similar to the following:
 
-  ```bash
-  Deployer: 0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d
-  Deployed to: 0x1590522E5758a7A8DD00f212fe487AE94fE69dcf
-  Transaction hash: 0xa7e2ecf1611fc01221678ac2c8919fe9c338b2aad9ac1ff4ae6f0d1711a62cf0
-  ```
+```bash
+Deployer: 0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d
+Deployed to: 0x1590522E5758a7A8DD00f212fe487AE94fE69dcf
+Transaction hash: 0xa7e2ecf1611fc01221678ac2c8919fe9c338b2aad9ac1ff4ae6f0d1711a62cf0
+```
 
   </Step>
   <Step title="Verify smart contract on the block explorer" icon="check">
