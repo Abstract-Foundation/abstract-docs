@@ -17,6 +17,7 @@ The bootloader enforces the nonce:
 
 {/* If you submit a nonce that is greater than the next expected nonce, the transaction will not be executed until each preceding nonce has been used. */}
 
+As mentioned above, you must "use" the nonce in the validation step.
 To mark a nonce as used there are two options:
 
 1. Increment the `minNonce`: All nonces less than `minNonce` will become used.
@@ -25,6 +26,10 @@ To mark a nonce as used there are two options:
 A convenience method, `incrementMinNonceIfEquals` is exposed
 from the `NonceHolder` system contract. For example, inside of your [smart contract wallet](/how-abstract-works/native-account-abstraction/smart-contract-wallets),
 you use it to increment the `minNonce` of your account:
+
+In order to use the [NonceHolder](/how-abstract-works/system-contracts/list-of-system-contracts#nonceholder) system contract,
+the `isSystem` flag must be set to `true` in the transaction, which can be done by using the `SystemContractsCaller` library shown below.
+[Learn more about using system contracts](/how-abstract-works/system-contracts/using-system-contracts#the-issystem-flag).
 
 ```solidity
 // Required imports

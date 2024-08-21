@@ -1,1 +1,142 @@
-https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/libraries
+---
+title: "Using System Contracts"
+description: "Undersand how to best use system contracts on Abstract."
+---
+
+When building smart contracts on Abstract, you often need to interact directly with **system contracts**
+to perform operations, such as:
+
+- Deploying smart contracts with the [ContractDeployer](/how-abstract-works/system-contracts/list-of-system-contracts#contractdeployer).
+- Paying gas fees to the [Bootloader](/how-abstract-works/system-contracts/bootloader).
+- Using nonces via the [NonceHolder](/how-abstract-works/system-contracts/list-of-system-contracts#nonceholder).
+
+## Installing system contracts
+
+To use system contracts into your smart contracts, install the
+[@matterlabs/zksync-contracts](https://www.npmjs.com/package/@matterlabs/zksync-contracts) package.
+
+```bash
+npm install @matterlabs/zksync-contracts
+```
+
+Then, import the system contracts into your smart contract:
+
+```solidity
+// Example imports:
+import "@matterlabs/zksync-contracts/l2/system-contracts/interfaces/IAccount.sol";
+import { TransactionHelper } from "@matterlabs/zksync-contracts/l2/system-contracts/libraries/TransactionHelper.sol";
+import { BOOTLOADER_FORMAL_ADDRESS } from "@matterlabs/zksync-contracts/l2/system-contracts/Constants.sol";
+```
+
+## Available System Contract Helper Libraries
+
+A set of libraries also exist alongside the system contracts to help you interact with them more easily.
+
+| Name                                                                                                                                               | Description                                                                                               |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| [EfficientCall.sol](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/libraries/EfficientCall.sol)                 | Perform ultra-efficient calls using zkEVM-specific features.                                              |
+| [RLPEncoder.sol](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/libraries/RLPEncoder.sol)                       | Recursive-length prefix (RLP) encoding functionality.                                                     |
+| [SystemContractHelper.sol](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/libraries/SystemContractHelper.sol)   | Library used for accessing zkEVM-specific opcodes, needed for the development of system contracts.        |
+| [SystemContractsCaller.sol](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/libraries/SystemContractsCaller.sol) | Allows calling contracts with the `isSystem` flag. It is needed to call ContractDeployer and NonceHolder. |
+| [TransactionHelper.sol](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/libraries/TransactionHelper.sol)         | Used to help custom smart contract accounts to work with common methods for the Transaction type.         |
+| [UnsafeBytesCalldata.sol](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/libraries/UnsafeBytesCalldata.sol)     | Provides a set of functions that help read data from calldata bytes.                                      |
+| [Utils.sol](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/libraries/Utils.sol)                                 | Common utilities used in Abstract system contracts.                                                       |
+
+<Card
+  title="System contract libraries source code"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/libraries"
+  icon="github"
+>
+  View all the source code for the system contract libraries.
+</Card>
+
+## The isSystem Flag
+
+Each transaction can contain an `isSystem` flag that indicates whether the transaction
+intends to use a system contract&rsquo;s functionality. Specifically, this flag needs to be true
+when interacting with the [ContractDeployer](/how-abstract-works/system-contracts/list-of-system-contracts#contractdeployer)
+or the [NonceHolder](/how-abstract-works/system-contracts/list-of-system-contracts#nonceholder) system contracts.
+
+To make a call with this flag, use the [SystemContractsCaller](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/libraries/SystemContractsCaller.sol)
+library, which exposes functions like `systemCall`, `systemCallWithPropagatedRevert`, and `systemCallWithReturndata`.
+
+<Accordion title="Example transaction using the isSystem flag">
+
+```solidity
+import {SystemContractsCaller} from "@matterlabs/zksync-contracts/l2/system-contracts/libraries/SystemContractsCaller.sol";
+import {NONCE_HOLDER_SYSTEM_CONTRACT, INonceHolder} from "@matterlabs/zksync-contracts/l2/system-contracts/Constants.sol";
+import {TransactionHelper} from "@matterlabs/zksync-contracts/l2/system-contracts/libraries/TransactionHelper.sol";
+
+function validateTransaction(
+    bytes32,
+    bytes32,
+    Transaction calldata _transaction
+) external payable onlyBootloader returns (bytes4 magic) {
+
+    // Increment nonce during validation
+    SystemContractsCaller.systemCallWithPropagatedRevert(
+        uint32(gasleft()),
+        address(NONCE_HOLDER_SYSTEM_CONTRACT),
+        0,
+        abi.encodeCall(
+            INonceHolder.incrementMinNonceIfEquals,
+            (_transaction.nonce)
+        )
+    );
+
+    // ... rest of validation logic here
+
+}
+```
+
+</Accordion>
+
+### Configuring Hardhat & Foundry to use isSystem
+
+You can also enable the `isSystem` flag for your smart contract development environment.
+
+#### Hardhat
+
+Add `enableEraVMExtensions: true` within the `settings` object of the `zksolc` object in the `hardhat.config.js` file.
+
+<Accordion title="View Hardhat configuration">
+```typescript
+import { HardhatUserConfig } from "hardhat/config";
+import "@matterlabs/hardhat-zksync";
+
+const config: HardhatUserConfig = {
+zksolc: {
+version: "latest",
+settings: {
+// This is the current name of the "isSystem" flag
+enableEraVMExtensions: false, // Note: NonceHolder and the ContractDeployer system contracts can only be called with a special isSystem flag as true
+},
+},
+defaultNetwork: "abstractTestnet",
+networks: {
+abstractTestnet: {
+url: "https://api.testnet.abs.xyz",
+ethNetwork: "sepolia",
+zksync: true,
+verifyURL: 'https://api-explorer-verify.testnet.abs.xyz/contract_verification',
+},
+},
+solidity: {
+version: "0.8.24",
+},
+};
+
+export default config;
+```
+</Accordion>
+
+#### Foundry
+
+Add the `is_system = true` flag to the `foundry.toml` configuration file.
+
+<Accordion title="View Foundry configuration">
+  ```toml [profile.default] src = 'src' libs = ['lib'] fallback_oz = true
+  is_system = false # Note: NonceHolder and the ContractDeployer system
+  contracts can only be called with a special isSystem flag as true mode = "3"
+  ```
+</Accordion>
