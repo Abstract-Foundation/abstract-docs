@@ -1,0 +1,30 @@
+---
+title: "Overview"
+description: "Learn how Abstract implements system contracts with special privileges to support some EVM opcodes."
+---
+
+Abstract has a set of smart contracts with
+special privileges that were deployed in the <Tooltip tip="The first block of the blockchain">Genesis block</Tooltip>
+called **system contracts**. These system contracts are built to provide support
+for [EVM opcodes](https://www.evm.codes/) that are not natively supported by the ZK-EVM that Abstract uses.
+
+These system contracts are located in a special kernel space
+_(i.e. in the address space in range `[0..2^16-1]`)_, and
+they can only be changed via a system upgrade through Ethereum.
+
+<CardGroup cols={2}>
+  <Card
+    title="View all system contract addresses"
+    icon="github"
+    href="https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/Constants.sol"
+  >
+    View the file containing the addresses of all system contracts.
+  </Card>
+  <Card
+    title="View the source code for system contracts"
+    icon="github"
+    href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts"
+  >
+    View the source code for each system contract.
+  </Card>
+</CardGroup>
