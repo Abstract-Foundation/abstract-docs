@@ -21,8 +21,8 @@ with the `factory_deps` field containing the bytecode of the smart contract bein
 <Steps>
   <Step title="Bootloader processes transaction">
     The [bootloader](/how-abstract-works/system-contracts/bootloader) receives
-    an [EIP-712](https://eips.ethereum.org/EIPS/eip-712) transaction that specifies
-    a contract deployment tranasction. This transaction must:
+    an [EIP-712](https://eips.ethereum.org/EIPS/eip-712) transaction that defines
+    a contract deployment. This transaction must:
 
     1. Call the `create` or `create2` function on the `ContractDeployer` system contract.
     2. Provide a salt, the formatted hash of the contract bytecode, and the constructor calldata as arguments.
@@ -56,26 +56,30 @@ with the `factory_deps` field containing the bytecode of the smart contract bein
     </Tip>
 
   </Step>
-  <Step title="Marking contract as known on the KnownCodesStorage system contract">
-    The bootloader informs the
+  <Step title="Marking contract as known and publishing compressed bytedata">
+    Under the hood, the bootloader informs the
     [KnownCodesStorage](/how-abstract-works/system-contracts//list-of-system-contracts#knowncodesstorage) system contract
-    about the contract code hash by calling it&rsquo;s `markFactoryDeps` function.
+    about the contract code hash.
+    This is required for all contract deployments on Abstract.
 
-    Within `markFactoryDeps`, the `KnownCodesStorage` system contract calls the
+    The `KnownCodesStorage` then calls the
+    [Compressor](/how-abstract-works/system-contracts/list-of-system-contracts#compressor), which subsequently calls the
     [L1Messenger](/how-abstract-works/system-contracts/list-of-system-contracts#l1messenger)
-    system contract, which then publishes the hash of the contract bytecode to
+    system contract to publish the hash of the compressed contract bytecode to
     Ethereum (assuming this same contract code hash has not been published before).
 
   </Step>
   <Step title="Smart contract account execution">
     Once the bootloader finishes calling the other system contracts to ensure the contract code hash is known,
-    it continues executing the transaction, which then begins the 
-    [tranasction flow](/how-abstract-works/native-account-abstraction/transaction-flow).
+    and the contract code is published to Ethereum,
+    it continues executing the transaction as described in the 
+    [tranasction flow](/how-abstract-works/native-account-abstraction/transaction-flow) section.
 
-    This invokes the contract deployer account&rsquo;s `validateTransaction` and `executeTransaction` functions; which
+    This flow includes invoking the contract deployer account&rsquo;s `validateTransaction` and `executeTransaction` functions; which
     will determine whether to deploy the contract and how to execute the deployment tranasction respectively.
 
-    Learn more about these functions on the [smart contract wallets](/how-abstract-works/native-account-abstraction/smart-contract-wallets) section.
+    Learn more about these functions on the [smart contract wallets](/how-abstract-works/native-account-abstraction/smart-contract-wallets) section, or
+    view an example implementation in the [DefaultAccount](/how-abstract-works/system-contracts/list-of-system-contracts#defaultaccount).
 
   </Step>
 </Steps>
