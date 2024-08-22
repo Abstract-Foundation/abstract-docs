@@ -1,1 +1,123 @@
-https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/precompiles
+---
+title: "Precompiles"
+description: "Learn how Abstract differs from Ethereum's precompiled smart contracts."
+---
+
+On Ethereum, [precompiled smart contracts](https://www.evm.codes/)
+are contracts embedded into the EVM at predetermined addresses
+that typically perform computationally expensive operations
+that are not already included in EVM opcodes.
+
+Abstract has support for these EVM precompiles and more, however some
+have different behaviour than on Ethereum.
+
+## CodeOracle
+
+Emulates EVM&rsquo;s [extcodecopy](https://www.evm.codes/#3c?fork=cancun) opcode.
+
+<Card
+  title="CodeOracle source code"
+  icon="github"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/precompiles/CodeOracle.yul"
+>
+  View the source code for the CodeOracle precompile on GitHub.
+</Card>
+
+## SHA256
+
+Emulates the EVM&rsquo;s [sha256](https://www.evm.codes/precompiled#0x02?fork=cancun) precompile.
+
+<Card
+  title="SHA256 source code"
+  icon="github"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/precompiles/SHA256.yul"
+>
+  View the source code for the SHA256 precompile on GitHub.
+</Card>
+
+## KECCAK256
+
+Emulates the EVM&rsquo;s [keccak256](https://www.evm.codes/#20?fork=cancun) opcode.
+
+<Card
+  title="KECCAK256 source code"
+  icon="github"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/precompiles/KECCAK256.yul"
+>
+  View the source code for the KECCAK256 precompile on GitHub.
+</Card>
+
+## Elliptic Curve Precompiles
+
+Precompiled smart contracts for elliptic curve operations are required to perform zkSNARK verification.
+
+### EcAdd
+
+Precompile for computing elliptic curve point addition.
+The points are represented in affine form, given by a pair of coordinates (x,y).
+
+Emulates the EVM&rsquo;s [ecadd](https://www.evm.codes/precompiled#0x06?fork=cancun) precompile.
+
+<Card
+  title="EcAdd source code"
+  icon="github"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/precompiles/EcAdd.yul"
+>
+  View the source code for the EcAdd precompile on GitHub.
+</Card>
+
+### EcMul
+
+Precompile for computing elliptic curve point scalar multiplication.
+The points are represented in homogeneous projective coordinates, given by the coordinates (x,y,z).
+
+Emulates the EVM&rsquo;s [ecmul](https://www.evm.codes/precompiled#0x07?fork=cancun) precompile.
+
+<Card
+  title="EcMul source code"
+  icon="github"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/precompiles/EcMul.yul"
+>
+  View the source code for the EcMul precompile on GitHub.
+</Card>
+
+### EcPairing
+
+Precompile for computing bilinear pairings on elliptic curve groups.
+
+Emulates the EVM&rsquo;s [ecpairing](https://www.evm.codes/precompiled#0x08?fork=cancun) precompile.
+
+<Card
+  title="EcPairing source code"
+  icon="github"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/precompiles/EcPairing.yul"
+>
+  View the source code for the EcPairing precompile on GitHub.
+</Card>
+
+### Ecrecover
+
+Emulates the EVM&rsquo;s [ecrecover](https://www.evm.codes/precompiled#0x01?fork=cancun) precompile.
+
+<Card
+  title="Ecrecover source code"
+  icon="github"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/precompiles/Ecrecover.yul"
+>
+  View the source code for the Ecrecover precompile on GitHub.
+</Card>
+
+### P256Verify (secp256r1 / RIP-7212)
+
+The contract that emulates [RIP-7212&rsquo;s](https://github.com/ethereum/RIPs/blob/master/RIPS/rip-7212.md) P256VERIFY precompile.
+
+Enabling Adding a precompiled contract which is similar to [ecrecover](#ecrecover)
+to provide signature verifications using the “secp256r1” elliptic curve.
+
+<Card
+  title="P256Verify source code"
+  icon="github"
+  href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/precompiles/P256Verify.yul"
+>
+  View the source code for the P256Verify precompile on GitHub.
+</Card>
