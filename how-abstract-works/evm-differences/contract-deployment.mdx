@@ -1,0 +1,89 @@
+---
+title: "Contract Deployment"
+description: "Learn the best practices for deploying smart contracts on Abstract."
+---
+
+Smart contract deployment works differently on Abstract than Ethereum.
+Specifically, the code hash for each smart contract needs to be published on the
+[KnownCodesStorage](/how-abstract-works/system-contracts/list-of-system-contracts#knowncodesstorage)
+system contract before it can be deployed.
+
+In addition, if a subsequent
+contract deployment uses the same code hash (i.e. the contract code is the same),
+the contract deployment will be substantially cheaper as the
+code hash does not need to be published to Ethereum again.
+
+For this reason, contract deployments on Abstract **must** be performed using EIP-712 transactions,
+with the `factory_deps` field containing the bytecode of the smart contract being deployed.
+
+## Contract Deployment Flow
+
+<Steps>
+  <Step title="Bootloader processes transaction">
+    The [bootloader](/how-abstract-works/system-contracts/bootloader) receives
+    an [EIP-712](https://eips.ethereum.org/EIPS/eip-712) transaction that specifies
+    a contract deployment tranasction. This transaction must:
+
+    1. Call the `create` or `create2` function on the `ContractDeployer` system contract.
+    2. Provide a salt, the formatted hash of the contract bytecode, and the constructor calldata as arguments.
+    3. Inside the `factory_deps` field of the transaction, include the bytecode of the smart contract being deployed
+    as well as the bytecodes of any other contracts that this contract can deploy (such as if it is a factory contract).
+
+    <Accordion title="See the create function signature">
+
+      ```solidity
+      /// @notice Deploys a contract with similar address derivation rules to the EVM's `CREATE` opcode.
+      /// @param _bytecodeHash The correctly formatted hash of the bytecode.
+      /// @param _input The constructor calldata
+      /// @dev This method also accepts nonce as one of its parameters.
+      /// It is not used anywhere and it needed simply for the consistency for the compiler
+      /// Note: this method may be callable only in system mode,
+      /// that is checked in the `createAccount` by `onlySystemCall` modifier.
+      function create(
+          bytes32 _salt,
+          bytes32 _bytecodeHash,
+          bytes calldata _input
+      ) external payable override returns (address) {
+        // ...
+      }
+    ```
+
+    </Accordion>
+
+    <Tip>
+        If you are deploying from a client _(i.e. not within a smart contract)_, use the [zksync-ethers](https://sdk.zksync.io/js/ethers/api/v6/contract/contract-factory)
+        or [hardhat-zksync](/build-on-abstract/smart-contracts/hardhat) library to easily create EIP-712 deploy transactions.
+    </Tip>
+
+  </Step>
+  <Step title="Marking contract as known on the KnownCodesStorage system contract">
+    The bootloader informs the
+    [KnownCodesStorage](/how-abstract-works/system-contracts//list-of-system-contracts#knowncodesstorage) system contract
+    about the contract code hash by calling it&rsquo;s `markFactoryDeps` function.
+
+    Within `markFactoryDeps`, the `KnownCodesStorage` system contract calls the
+    [L1Messenger](/how-abstract-works/system-contracts/list-of-system-contracts#l1messenger)
+    system contract, which then publishes the hash of the contract bytecode to
+    Ethereum (assuming this same contract code hash has not been published before).
+
+  </Step>
+  <Step title="Smart contract account execution">
+    Once the bootloader finishes calling the other system contracts to ensure the contract code hash is known,
+    it continues executing the transaction, which then begins the 
+    [tranasction flow](/how-abstract-works/native-account-abstraction/transaction-flow).
+
+    This invokes the contract deployer account&rsquo;s `validateTransaction` and `executeTransaction` functions; which
+    will determine whether to deploy the contract and how to execute the deployment tranasction respectively.
+
+    Learn more about these functions on the [smart contract wallets](/how-abstract-works/native-account-abstraction/smart-contract-wallets) section.
+
+  </Step>
+</Steps>
+
+<Card
+  title="Further Reading: ZKsync Documentation"
+  icon="file-contract"
+  href="https://docs.zksync.io/build/developer-reference/ethereum-differences/contract-deployment"
+>
+  Learn more about contract deployment details on the ZKsync documentation.
+</Card>
