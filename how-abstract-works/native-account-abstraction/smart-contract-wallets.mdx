@@ -4,13 +4,21 @@ description: "Learn how smart contract wallets are built following the IAccount 
 ---
 
 On Abstract, all accounts are smart contracts that implement the
-[IAccount](#iaccount-interface) interface. As outlined in the [transaction flow](/how-abstract-works/native-account-abstraction/transaction-flow.mdx),
+[IAccount](#iaccount-interface) interface. As outlined in the [transaction flow](/how-abstract-works/native-account-abstraction/transaction-flow),
 the bootloader calls the functions of the smart contract account deployed at the `tx.from` address for
 each transaction that it processes.
 
 Abstract maintains compatibility with popular EOA wallets from the Ethereum ecosystem (e.g. MetaMask) by
 converting them to the [DefaultAccount](/how-abstract-works/native-account-abstraction/smart-contract-wallets#defaultaccount-contract) system contract during the transaction flow.
 This contract acts as you would expect an EOA to act, with the added benefit of supporting paymasters.
+
+## IAccount Interface
+
+The `IAccount` interface defines the mandatory functions that a smart contract account must implement to be
+compatible with Abstract. [View source code ↗](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/interfaces/IAccount.sol).
+
+See the [DefaultAccount contract](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/DefaultAccount.sol)
+for an example implementation.
 
 <Card
   title="Using system contracts"
@@ -21,14 +29,6 @@ This contract acts as you would expect an EOA to act, with the added benefit of 
   your smart contracts to import libraries, contracts and interfaces such as
   `IAccount`.
 </Card>
-
-## IAccount Interface
-
-The `IAccount` interface defines the mandatory functions that a smart contract account must implement to be
-compatible with Abstract. [View source code ↗](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/interfaces/IAccount.sol).
-
-See the [DefaultAccount contract](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/DefaultAccount.sol)
-for an example implementation.
 
 ### validateTransaction
 
@@ -142,7 +142,7 @@ Use [EIP-712](https://eips.ethereum.org/EIPS/eip-712) formatted transactions to 
 You must specify:
 
 1. The `from` field as the address of the deployed smart contract wallet.
-2. Provide a `customData` object containing a `customSignature` that not empty.
+2. Provide a `customData` object containing a `customSignature` that is not an empty string.
 
 <Accordion title="View example zksync-ethers script">
 
@@ -179,8 +179,8 @@ const resp = await sentTx.wait();
 
 ## DefaultAccount Contract
 
-The DefaultAccount contract is a system contract that mimicks the behaviour of an EOA. More specifically,
-the bytecode of the contract is set by default for all addresses for which no other bytecodes are deployed.
+The DefaultAccount contract is a system contract that mimicks the behaviour of an EOA.
+The bytecode of the contract is set by default for all addresses for which no other bytecodes are deployed.
 
 <Card
   title="DefaultAccount system contract"

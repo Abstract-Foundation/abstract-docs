@@ -10,14 +10,14 @@ features and optimize your smart contracts for deployment on Abstract.
 
 Abstract has different gas logic than Ethereum, mainly:
 
-1. The price for transaction execution fluctuates as it depends on the price of Ethereum gas price.
+1. The price for transaction execution fluctuates as it depends on the price of L1 gas price.
 2. The price for opcode execution is different on Abstract than Ethereum.
 
 ### Use `call` instead of `.send` or `.transfer`
 
-Each opcode in the EVM has an associated gas cost. The `send` and `transfer` functions have a 2300 gas stipend.
+Each opcode in the EVM has an associated gas cost. The `send` and `transfer` functions have a `2300` gas stipend.
 
-However, if the address you call is a smart contract (which all accounts on Abstract are),
+If the address you call is a smart contract (which all accounts on Abstract are),
 the recipient contract may have some custom logic that requires more than 2300 gas to execute upon receiving the funds,
 causing the call to fail.
 
@@ -40,7 +40,7 @@ Some additional changes may be required in your contract. [Learn more in this se
 ### Consider `gasPerPubdataByte`
 
 [EIP-712](https://eips.ethereum.org/EIPS/eip-712) transactions have a `gasPerPubdataByte`
-field that can be set to control the amount of gas that is charged for eaach byte of data sent to L1
+field that can be set to control the amount of gas that is charged for each byte of data sent to L1
 (see [transaction lifecycle](/how-abstract-works/architecture/transaction-lifecycle)). [Learn more ↗](https://docs.zksync.io/build/developer-reference/era-contracts/pubdata-post-4844).
 
 When calculating how much gas is remaining using `gasleft()`, consider that the

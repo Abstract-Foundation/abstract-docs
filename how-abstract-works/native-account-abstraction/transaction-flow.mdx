@@ -25,7 +25,7 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
     Learn more on [handling nonces](/how-abstract-works/native-account-abstraction/handling-nonces).
 
     For each transaction, the bootloader reads the `tx.from` field and checks if there is any contract code deployed at that address.
-    If there is no contract code, it assumes the account is an EOA and converts it to a
+    If there is no contract code, it assumes the sender account is an EOA and converts it to a
     [DefaultAccount](/how-abstract-works/native-account-abstraction/smart-contract-wallets#defaultaccount-contract).
 
     <Card
@@ -39,12 +39,12 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
 </Step>
 
 <Step title="Smart contract account validation & execution">
-    The bootloader then calls the following functions on account deployed at the `tx.from` address:
+    The bootloader then calls the following functions on the account deployed at the `tx.from` address:
   
     1. `validateTransaction`: Determine whether or not to execute the transaction. 
     Typically, some kind of checks are performed in this step to restrict who can use the account.
     2. `executeTransaction`: Execute the transaction if validation passed.
-    3. Either `payForTransaction` or `prepareForPayment`: Pay the gas fee or request a paymaster to pay the gas fee for this transaction.
+    3. Either `payForTransaction` or `prepareForPaymaster`: Pay the gas fee or request a paymaster to pay the gas fee for this transaction.
   
     The `msg.sender` is set as the bootloader&rsquo;s contract address for these function calls.
 
@@ -59,7 +59,7 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
   </Step>
 
 <Step title="Paymasters (optional)">
-    If a paymaster is set, the bootloader call the following [paymaster](/how-abstract-works/native-account-abstraction/paymasters) functions:
+    If a paymaster is set, the bootloader calls the following [paymaster](/how-abstract-works/native-account-abstraction/paymasters) functions:
         1. `validateAndPayForPaymasterTransaction`: Determine whether or not to pay for the transaction, and if so, pay the calculated gas fee for the transaction.
         2. `postTransaction`: Optionally run some logic after the transaction has been executed.
 
@@ -68,7 +68,7 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
     <Card
       title="Paymasters"
       icon="sack-dollar"
-      href="/how-abstract-works/native-account-abstraction/smart-contract-wallets"
+      href="/how-abstract-works/native-account-abstraction/paymasters"
     >
         Learn more about how paymasters work and how to build one.
     </Card>

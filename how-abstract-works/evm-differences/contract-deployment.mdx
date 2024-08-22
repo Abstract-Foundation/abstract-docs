@@ -13,7 +13,7 @@ contract deployment uses the same code hash (i.e. the contract code is the same)
 the contract deployment will be substantially cheaper as the
 code hash does not need to be published to Ethereum again.
 
-For this reason, contract deployments on Abstract **must** be performed using EIP-712 transactions,
+For this reason, contract deployments on Abstract **must** be performed using [EIP-712](https://eips.ethereum.org/EIPS/eip-712) transactions,
 with the `factory_deps` field containing the bytecode of the smart contract being deployed.
 
 ## Contract Deployment Flow
@@ -66,7 +66,7 @@ with the `factory_deps` field containing the bytecode of the smart contract bein
     [Compressor](/how-abstract-works/system-contracts/list-of-system-contracts#compressor), which subsequently calls the
     [L1Messenger](/how-abstract-works/system-contracts/list-of-system-contracts#l1messenger)
     system contract to publish the hash of the compressed contract bytecode to
-    Ethereum (assuming this same contract code hash has not been published before).
+    Ethereum (assuming this contract code has not been deployed before).
 
   </Step>
   <Step title="Smart contract account execution">
