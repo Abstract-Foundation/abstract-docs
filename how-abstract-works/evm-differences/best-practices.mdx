@@ -1,0 +1,58 @@
+---
+title: "Best Practices"
+description: "Learn the best practices for building smart contracts on Abstract."
+---
+
+This page outlines the best practices to follow in order to best utilize Abstract's
+features and optimize your smart contracts for deployment on Abstract.
+
+## Do not rely on EVM gas logic
+
+Abstract has different gas logic than Ethereum, mainly:
+
+1. The price for transaction execution fluctuates as it depends on the price of Ethereum gas price.
+2. The price for opcode execution is different on Abstract than Ethereum.
+
+### Use `call` instead of `.send` or `.transfer`
+
+Each opcode in the EVM has an associated gas cost. The `send` and `transfer` functions have a 2300 gas stipend.
+
+However, if the address you call is a smart contract (which all accounts on Abstract are),
+the recipient contract may have some custom logic that requires more than 2300 gas to execute upon receiving the funds,
+causing the call to fail.
+
+For this reason, it is strongly recommended to use `call` instead of `.send` or `.transfer` when sending funds to a smart contract.
+
+```solidity
+// Before:
+payable(addr).send(x)
+payable(addr).transfer(x)
+
+// After:
+(bool success, ) = addr.call{value: x}("");
+require(success, "Transfer failed.");
+```
+
+**Important:** Using `call` does not
+provide the same level of protection against [reentrancy attacks](https://blog.openzeppelin.com/reentrancy-after-istanbul).
+Some additional changes may be required in your contract. [Learn more in this security report ↗](https://consensys.io/diligence/blog/2019/09/stop-using-soliditys-transfer-now/).
+
+### Consider `gasPerPubdataByte`
+
+[EIP-712](https://eips.ethereum.org/EIPS/eip-712) transactions have a `gasPerPubdataByte`
+field that can be set to control the amount of gas that is charged for eaach byte of data sent to L1
+(see [transaction lifecycle](/how-abstract-works/architecture/transaction-lifecycle)). [Learn more ↗](https://docs.zksync.io/build/developer-reference/era-contracts/pubdata-post-4844).
+
+When calculating how much gas is remaining using `gasleft()`, consider that the
+`gasPerPubdataByte` also needs to be accounted for.
+
+While the [system contracts](/how-abstract-works/system-contracts/overview)
+currently have control over this value, this may become decentralized
+in the future; therefore it&rsquo;s important to consider that the
+operator can choose any value up to the upper bound submitted in the signed transaction.
+
+## Address recovery with `ecrecover`
+
+Review the recommendations in the [signature validation](/how-abstract-works/native-account-abstraction/signature-validation)
+section when recovering the address from a signature, as the sender of a transaction may not use [ECDSA](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm)
+(i.e. it is not an EOA).
