@@ -1,0 +1,28 @@
+---
+title: "Nonces"
+description: "Learn how Abstract differs from Ethereum's nonces."
+---
+
+Unlike Ethereum, where each account has a single nonce that increments every transaction,
+accounts on Abstract maintain two different nonces:
+
+1. **Transaction nonce**: Used for transaction validation.
+2. **Deployment nonce**: Incremented when a contract is deployed.
+
+In addition, nonces are not restricted to increment once per transaction
+like on Ethereum due to Abstract&rsquo;s [native account abstraction](/how-abstract-works/native-account-abstraction/overview).
+
+<Card
+  title="Handling Nonces in Smart Contract Wallets"
+  icon="file-contract"
+  href="/how-abstract-works/native-account-abstraction/handling-nonces"
+>
+  Learn how to build smart contract wallets that interact with the NonceHolder
+  system contract.
+</Card>
+
+There are also other minor differences between Abstract and Ethereum nonce management:
+
+- Newly created contracts begin with a deployment nonce value of `0` (as opposed to `1`).
+- On Abstract, the deployment nonce is only incremented if the deployment succeeds
+  (as opposed to Ethereum, where the nonce is incremented regardless of the deployment outcome).
