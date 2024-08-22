@@ -9,7 +9,7 @@ the [transaction lifecycle](/how-abstract-works/architecture/transaction-lifecyc
 section, Abstract posts state diffs _(as well as compressed contract bytecode)_ to Ethereum
 in the form of [blobs](https://www.eip4844.com/).
 
-In addition to the gas fees paid to Ethereum, their are costs associated with generating
+In addition to the cost of posting blobs, their are costs associated with generating
 ZK proofs for batches and committing & verifying these proofs on Ethereum. To fairly distribute
 these costs among L2 transactions, gas fees on Abstract are charged proportionally
 to how close a transaction brought a batch to being **sealed** (i.e. full).
@@ -24,34 +24,33 @@ to how close a transaction brought a batch to being **sealed** (i.e. full).
 
 ## Gas Fees & Refunds
 
-You may notice that a portion of gas fees are **refunded** transactions on Abstract. This
+You may notice that a portion of gas fees are **refunded** for transactions on Abstract. This
 is because accounts don&rsquo;t have access to the `block.baseFee` context variable,
 so have no way to know the exact fee to pay for a transaction.
 
-Instead, the following steps are taken to refund users for any excess funds spent on a transaction:
+Instead, the following steps occur to refund accounts for any excess funds spent on a transaction:
 
 <Steps>
 
 <Step title="Block overhead fee deduction">
-  Upfront, the payment for the overhead for the block&rsquo;s processing is
-  deducted.
+  Upfront, the block&rsquo;s processing overhead cost is deducted.
 </Step>
 
 <Step title="Gas price calculation">
   The gas price for the transaction is then calculated according to the
-  [EIP1559](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md)
+  [EIP-1559](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md)
   rules.
 </Step>
 
 <Step title="Gas price calculation">
   The **maximum** amount of gas (gas limit) for the transaction is deducted from
-  the account by the account typically sending `tx.maxFeePerErg * tx.ergsLimit`.
-  The transaction is then executed (see [transaction
+  the account by having the account typically send `tx.maxFeePerErg *
+  tx.ergsLimit`. The transaction is then executed (see [transaction
   flow](/how-abstract-works/native-account-abstraction/transaction-flow)).
 </Step>
 
 <Step title="Gas refund">
-    Since the account may have overpaid for the transaction, the bootloader
-    **refunds** the account any excess funds spent to the account.
+    Since the account may have overpaid for the transaction (as they are sending the maximum fee possible), the bootloader
+    **refunds** the account any excess funds that were not spent on the transaction.
 </Step>
 </Steps>
