@@ -90,13 +90,13 @@
           "group": "EVM Differences",
           "pages": [
             "how-abstract-works/evm-differences/overview",
-            "how-abstract-works/evm-differences/solidity-changes",
-            "how-abstract-works/evm-differences/evm-instructions",
-            "how-abstract-works/evm-differences/nonces",
-            "how-abstract-works/evm-differences/libraries",
-            "how-abstract-works/evm-differences/precompiles",
+            "how-abstract-works/evm-differences/best-practices",
             "how-abstract-works/evm-differences/contract-deployment",
-            "how-abstract-works/evm-differences/gas-fees-refunds"
+            "how-abstract-works/evm-differences/evm-opcodes",
+            "how-abstract-works/evm-differences/precompiles",
+            "how-abstract-works/evm-differences/gas-fees",
+            "how-abstract-works/evm-differences/nonces",
+            "how-abstract-works/evm-differences/libraries"
           ]
         }
       ]

@@ -1,0 +1,82 @@
+---
+title: "Overview"
+description: "Learn the differences between Abstract and Ethereum."
+---
+
+While Abstract is EVM compatible and you can use familiar development
+tools from the Ethereum ecosystem, the bytecode that Abstract&rsquo;s VM
+(the [ZKsync VM](https://docs.zksync.io/build/developer-reference/era-vm)) understands
+is different than what Ethereum&rsquo;s [EVM](https://ethereum.org/en/developers/docs/evm/) understands.
+
+These differences exist to both optimize the VM to work perform efficiently with ZK proofs
+and to provide more powerful ways for developers to build consumer-facing applications.
+
+When building smart contracts on Abstract, it&rsquo;s helpful to understand what the differences
+are between Abstract and Ethereum, and how best to leverage these differences to
+create the best user experience for your users.
+
+## Recommended Best Practices
+
+<CardGroup cols={2}>
+  <Card
+    title="Recommended best practices"
+    icon="shield-heart"
+    href="/how-abstract-works/evm-differences/best-practices"
+  >
+    Recommended changes to make to your smart contracts when deploying on
+    Abstract.
+  </Card>
+  <Card
+    title="Contract deployment"
+    icon="rocket"
+    href="/how-abstract-works/evm-differences/contract-deployment"
+  >
+    See how contract deployment differs on Abstract compared to Ethereum.
+  </Card>
+</CardGroup>
+
+## Differences in EVM Instructions
+
+<CardGroup cols={2}>
+  <Card
+    title="EVM opcodes"
+    icon="binary"
+    href="/how-abstract-works/evm-differences/evm-opcodes"
+  >
+    See what opcodes are supported natively or supplemented with system
+    contracts.
+  </Card>
+  <Card
+    title="EVM precompiles"
+    icon="not-equal"
+    href="/how-abstract-works/evm-differences/precompiles"
+  >
+    See what precompiled smart contracts are supported by Abstract.
+  </Card>
+</CardGroup>
+
+## TODO
+
+<CardGroup cols={3}>
+  <Card
+    title="Gas fees"
+    icon="gas-pump"
+    href="/how-abstract-works/evm-differences/best-practices"
+  >
+    Learn how gas fees and gas refunds work with the bootloader on Abstract.
+  </Card>
+  <Card
+    title="Nonces"
+    icon="up"
+    href="/how-abstract-works/evm-differences/contract-deployment"
+  >
+    Explore how nonces are stored on Abstract&rsquo;s smart contract accounts.
+  </Card>
+  <Card
+    title="Libraries"
+    icon="file-import"
+    href="/how-abstract-works/evm-differences/contract-deployment"
+  >
+    Learn how the compiler handles libraries on Abstract.
+  </Card>
+</CardGroup>
