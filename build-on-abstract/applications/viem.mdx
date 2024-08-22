@@ -1,11 +1,13 @@
 ---
 title: "Viem"
-description: "Learn how to use viem to build applications on Abstract."
+description: "Learn how to use the Viem library to build applications on Abstract."
 ---
 
 <Accordion title="Prerequisites">
   Ensure you have the following installed on your machine:
-  - [Node.js](https://nodejs.org/en/download/) v18.0.0 or later.
+
+- [Node.js](https://nodejs.org/en/download/) v18.0.0 or later.
+
 </Accordion>
 
 ## 1. Create a new project
@@ -15,13 +17,14 @@ Create a new directory and change directory into it.
 ```bash
 mkdir my-abstract-app && cd my-abstract-app
 ```
+
 Initialize a new Node.js project.
 
 ```bash
 npm init -y
 ```
 
-Install the `viem library`.
+Install the `viem` package.
 
 ```bash
 npm install viem
@@ -33,13 +36,13 @@ Configure your [client](https://viem.sh/docs/clients/intro) by setting `abstract
 as the [chain](https://viem.sh/docs/chains/introduction) property.
 
 ```javascript
-import { createPublicClient, http } from 'viem'
-import { abstractTestnet } from 'viem/chains'
- 
-const client = createPublicClient({ 
-  chain: abstractTestnet, 
-  transport: http(), 
-}) 
+import { createPublicClient, http } from "viem";
+import { abstractTestnet } from "viem/chains";
+
+const client = createPublicClient({
+  chain: abstractTestnet,
+  transport: http(),
+});
 ```
 
-Learn more on the official [viem documentation](https://viem.sh/docs/).
+Learn more on the official [viem documentation](https://viem.sh/docs/introduction).

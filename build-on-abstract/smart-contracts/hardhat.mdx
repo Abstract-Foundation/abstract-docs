@@ -13,9 +13,9 @@ description: "Learn how to use Hardhat to build and deploy smart contracts on Ab
 
 <Tip>
   **Starting a new project?** Consider using the [ZKsync CLI
-  `create`](/build-on-abstract/zksync-cli) command to initialize a Hardhat new
-  project with all the necessary dependencies & configurations along with smart
-  contracts and scripts.
+  `create`](/build-on-abstract/zksync-cli) command to initialize a new Hardhat
+  project with all the necessary dependencies & configurations setup, along with
+  some example smart contracts and scripts to get started with.
 </Tip>
 
 ## 1. Create a new project
@@ -29,7 +29,7 @@ Create a new directory and navigate into it:
 mkdir my-abstract-project && cd my-abstract-project
 ```
 
-Initialize a new Hardhat project:
+Initialize a new Hardhat project within the directory:
 
 ```bash
 npx hardhat init
@@ -104,7 +104,8 @@ export default config;
 
 <Tip>
   For local development, the [zksync-cli](/build-on-abstract/zksync-cli) can run
-  local nodes and more.
+  local Abstract nodes which can also be configured as a network in the Hardhat
+  configuration file.
 </Tip>
 
 ## 4. Write a smart contract
@@ -115,7 +116,7 @@ Rename the existing `contracts/Lock.sol` file to `contracts/HelloAbstract.sol`:
 mv contracts/Lock.sol contracts/HelloAbstract.sol
 ```
 
-Write a new smart contract in the `contracts/HelloAbstract.sol` file, for example:
+Write a new smart contract in the `contracts/HelloAbstract.sol` file, or use the example smart contract below:
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -131,7 +132,7 @@ contract HelloAbstract {
 ## 5. Compile the smart contract
 
 Use the [zksolc compiler](https://docs.zksync.io/zk-stack/components/compiler/toolchain/solidity)
-(installed in the above step) to compile smart contracts for Abstract:
+(installed in the above steps) to compile smart contracts for Abstract:
 
 ```bash
 npx hardhat compile --network abstractTestnet
@@ -224,10 +225,9 @@ HelloAbstract was deployed to YOUR_CONTRACT_ADDRESS
 ```
 
   </Step>
-  <Step title="Verify smart contract on the block explorer" icon="check">
+  <Step title="Verify your smart contract on the block explorer" icon="check">
   Verifying your smart contract is helpful for others to view the code and 
   interact with it from a [block explorer](/ecosystem/block-explorers).
-
 To verify your smart contract, run the following command:
 
 ```bash

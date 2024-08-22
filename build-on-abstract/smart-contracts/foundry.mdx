@@ -8,7 +8,8 @@ To use Foundry to build smart contracts on Abstract, use the [foundry-zksync](ht
 <Warning>
   Note that the Foundry fork is currently in the alpha stage and has [limited
   support](https://github.com/matter-labs/foundry-zksync?tab=readme-ov-file#limitations);
-  we recommend using [Hardhat](/build-on-abstract/smart-contracts/hardhat).
+  we recommend using [Hardhat](/build-on-abstract/smart-contracts/hardhat) at
+  this time.
 </Warning>
 
 ## 1. Install the foundry-zksync fork
@@ -63,7 +64,7 @@ Run the installer:
          Run the following command to install the library:
 
          ```bash
-            brew install libusb
+         brew install libusb
         ```
         </Accordion>
 
@@ -153,11 +154,6 @@ You should now see the compiled smart contracts in the generated `zkout` directo
 
 ## 6. Deploy the smart contract
 
-<Tip>
-  For local development, the [zksync-cli](/build-on-abstract/zksync-cli) can run
-  local nodes and more.
-</Tip>
-
 <Steps>
   <Step title="Get testnet funds" icon="wallet">
     Deploying smart contracts requires testnet ETH.
@@ -188,7 +184,7 @@ Run the following command to deploy your smart contracts:
 forge create src/Counter.sol:Counter --account myKeystore --rpc-url https://api.testnet.abs.xyz --chain 11124 --zksync
 ```
 
-Ensure `myKeystore` is the name of the keystore file you created in the previous step.
+Ensure `myKeystore` _(in the above command)_ is the name of the keystore file you created in the previous step.
 
 If successful, your output should look similar to the following:
 
@@ -201,5 +197,8 @@ Transaction hash: 0xa7e2ecf1611fc01221678ac2c8919fe9c338b2aad9ac1ff4ae6f0d1711a6
   </Step>
   <Step title="Verify smart contract on the block explorer" icon="check">
   Contract verification is not supported with Foundry yet.
+
+You can verify your smart contracts manually on the [Abstract block explorer](https://explorer.testnet.abs.xyz/contracts/verify).
+
   </Step>
 </Steps>

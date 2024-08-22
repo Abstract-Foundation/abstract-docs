@@ -5,13 +5,14 @@ description: "Learn how to use thirdweb to build applications on Abstract."
 
 <Accordion title="Prerequisites">
   Ensure you have the following installed on your machine:
-  - [Node.js](https://nodejs.org/en/download/) v18.0.0 or later.
-</Accordion>
 
+- [Node.js](https://nodejs.org/en/download/) v18.0.0 or later.
+
+</Accordion>
 
 ## 1. Create a new project
 
-Create a new React or React Native based project using thirdweb.
+Create a new React or React Native project using the thirdweb CLI.
 
 ```bash
 npx thirdweb create app --legacy-peer-deps
@@ -27,6 +28,7 @@ Select your preferences when prompted by the CLI, or use the recommended setup b
 ✔ What is your project named? … my-abstract-app
 ✔ What framework do you want to use? › Next.js
 ```
+
 </Accordion>
 
 Change directory into the newly created project:
@@ -35,13 +37,15 @@ Change directory into the newly created project:
 cd my-abstract-app
 ```
 
-## 2. Set up Thirdweb API key
+(Replace `my-abstract-app` with your created project name.)
 
-On the [thirdweb dashboard](https://thirdweb.com/dashboard), create your 
-account (or sign in), and click **Settings** to reach the 
+## 2. Set up a Thirdweb API key
+
+On the [thirdweb dashboard](https://thirdweb.com/dashboard), create your
+account (or sign in), and go to the
 [API keys](https://thirdweb.com/dashboard/settings/api-keys) page.
 
-Create an API key with localhost included in the allowed domains, then copy your client ID.
+Create a new API key with `localhost` included in the allowed domains, then copy your **client ID**.
 
 Create a `.env` file and add your client ID as an environment variable:
 
@@ -49,7 +53,7 @@ Create a `.env` file and add your client ID as an environment variable:
 NEXT_PUBLIC_TEMPLATE_CLIENT_ID=your-client-id-here
 ```
 
-Start the development server with the command below and navigate to [`http://localhost:3000`](http://localhost:3000) in your browser to view the application.
+Start the development server and navigate to [`http://localhost:3000`](http://localhost:3000) in your browser to view the application.
 
 ```bash
 npm run dev
@@ -66,10 +70,7 @@ import { abstractTestnet } from "thirdweb/chains";
 Use the `abstractTestnet` import as the value for the `chain` property wherever required.
 
 ```javascript
-<ConnectButton
-  client={client}
-  chain={abstractTestnet}
-/>
+<ConnectButton client={client} chain={abstractTestnet} />
 ```
 
 Learn more on the official [thirdweb documentation](https://portal.thirdweb.com/react/v5).

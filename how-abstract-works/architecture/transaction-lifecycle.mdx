@@ -7,57 +7,60 @@ As explained in the [layer 2s](/how-abstract-works/architecture/layer-2s)
 section, Abstract inherits the security properties of Ethereum by posting
 batches of L2 transactions to the L1 and using ZK proofs to ensure their correctness.
 
-This interaction between L2 and L1 is managed by a set of smart contracts to
-transfer batches of transactions, enforce [data availability](https://ethereum.org/en/developers/docs/data-availability/),
-and ensure the validity of the ZK proofs.
+This relationship is implemented using both off-chain components as well
+as multiple smart contracts _(on both L1 and L2)_ to transfer batches of
+transactions, enforce [data availability](https://ethereum.org/en/developers/docs/data-availability/),
+ensure the validity of the ZK proofs, and more.
 
-This flow can be broken down into four phases, which are visible for each transaction
-on our [block explorers](/ecosystem/block-explorers):
-
+Each transaction goes through a flow that can broadly be separated into four phases,
+which can be seen for each transaction on our [block explorers](/ecosystem/block-explorers):
 
 <Steps>
   <Step title="Abstract (Processed)">
-    Abstract (Processed): The transaction is executed and soft confirmation is 
-    provided back to the user about the execution of their transaction (i.e. if their transaction succeeded or not). 
+    The transaction is executed and soft confirmation is 
+    provided back to the user about the execution of their transaction (i.e. if their transaction succeeded or not).
 
-    After execution, the sequencer both forwards the block to the prover and creates a 
-    batch containing transactions from multiple blocks. 
-    
+    After execution, the sequencer both forwards the block to the prover and creates a
+    batch containing transactions from multiple blocks.
+
     [Example batch ↗](https://explorer.testnet.abs.xyz/batch/3678).
     </Step>
-    
+
     <Step title="Ethereum (sending)">
-    Multiple batches are committed to the Ethereum blockchain in a 
+    Multiple batches are committed to Ethereum in a
     single transaction
-    in the form of an optimized data submission that only details the changes 
-    in blockchain state; called a 
-    **<Tooltip tip="State diffs offer a more cost-effective approach to transactions than full 
-    transaction data. By omitting signatures and publishing only the final state when multiple 
+    in the form of an optimized data submission that only details the changes
+    in blockchain state; called a
+    **<Tooltip tip="State diffs offer a more cost-effective approach to transactions than full
+    transaction data. By omitting signatures and publishing only the final state when multiple
     transactions alter the same slots.">state diff</Tooltip>**.
 
     This step is one of the roles of the [sequencer](/how-abstract-works/architecture/components/sequencer);
-    calling the `commitBatches` function on the [L1 smart contract](/how-abstract-works/architecture/l1-rollup-contracts) and ensuring their [data availability](https://ethereum.org/en/developers/docs/data-availability/).
-    The batches are stored on L1 using [blobs](https://info.etherscan.com/what-is-a-blob/) following the [EIP-4844](https://www.eip4844.com/) standard.
-    
+    calling the `commitBatches` function on the [L1 rollup contract](/how-abstract-works/architecture/components/l1-rollup-contracts) and
+    ensuring the [data availability](https://ethereum.org/en/developers/docs/data-availability/) of these batches.
+
+    The batches are stored on Ethereum using [blobs](https://info.etherscan.com/what-is-a-blob/) following the [EIP-4844](https://www.eip4844.com/) standard.
+
     [Example transaction ↗](https://sepolia.etherscan.io/tx/0xe6b786435793f9d66f907dd6c28eac709463e83e617a10f9afc64749719b85e5)
     </Step>
-  
+
   <Step title="Ethereum (validating)">
     A ZK proof that validates the batches is generated and submitted to the 
-    Ethereum smart contract for verification by calling the
-    `proveBatches` function on the [L1 smart contract](/how-abstract-works/architecture/l1-rollup-contracts). 
+    L1 rollup contract for verification by calling the contract&rsquo;s
+    `proveBatches` function.
 
-    This process involves both the [prover](/how-abstract-works/architecture/components/prover-and-verifier) responsible for 
-    generating the proof off-chain in the form of a [ZK-SNARK](https://ethereum.org/en/developers/docs/scaling/zk-rollups/#validity-proofs)
-    & submitting it to the [L1 smart contract](/how-abstract-works/architecture/l1-rollup-contracts) and the [verifier](/how-abstract-works/architecture/components/prover-and-verifier)
-    to confirm the validity of the proof on-chain.
-    
+    This process involves both the [prover](/how-abstract-works/architecture/components/prover-and-verifier), which is responsible for
+    generating the ZK proof off-chain in the form of a [ZK-SNARK](https://ethereum.org/en/developers/docs/scaling/zk-rollups/#validity-proofs)
+    & submitting it to the L1 rollup contract as well as the the [verifier](/how-abstract-works/architecture/components/prover-and-verifier), which
+    is responsible for confirming the validity of the proof on-chain.
+
     [Example transaction ↗](https://sepolia.etherscan.io/tx/0x3a30e04284fa52c002e6d7ff3b61e6d3b09d4c56c740162140687edb6405e38c)
+
   </Step>
   
   <Step title="Ethereum (executing)">
     Shortly after validation is complete, the state is finalized and the Merkle tree with L2 logs is saved
-    by calling the `executeBatches` function on the L1 smart contract. [Learn more about state commitments](https://ethereum.org/en/developers/docs/scaling/zk-rollups/#state-commitments).
+    by calling the `executeBatches` function on the L1 rollup contract. [Learn more about state commitments](https://ethereum.org/en/developers/docs/scaling/zk-rollups/#state-commitments).
     
     [Example transaction ↗](https://sepolia.etherscan.io/tx/0x16891b5227e7ee040aab79e2b8d74289ea6b9b65c83680d533f03508758576e6)
   </Step>
