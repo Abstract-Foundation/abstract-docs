@@ -135,8 +135,14 @@ export default config;
 Add the `is_system = true` flag to the `foundry.toml` configuration file.
 
 <Accordion title="View Foundry configuration">
-  ```toml [profile.default] src = 'src' libs = ['lib'] fallback_oz = true
-  is_system = false # Note: NonceHolder and the ContractDeployer system
-  contracts can only be called with a special isSystem flag as true mode = "3"
-  ```
+
+```toml
+[profile.default]
+src = 'src'
+libs = ['lib']
+fallback_oz = true
+is_system = false # Note: NonceHolder and the ContractDeployer system contracts can only be called with a special isSystem flag as true
+mode = "3"
+```
+
 </Accordion>

@@ -6,9 +6,9 @@ description: "Explore all of the system contracts that Abstract implements."
 ## AccountCodeStorage
 
 The `AccountCodeStorage` contract is responsible for storing the code hashes of accounts for retrieval
-whenever the VM calls accesses an `address`.
+whenever the VM accesses an `address`.
 
-The address is looked up in the `AccountCodeStorage` contract. If the associated value is non-zero (i.e. the address has code stored), this code hash
+The address is looked up in the `AccountCodeStorage` contract, if the associated value is non-zero (i.e. the address has code stored), this code hash
 is used by the VM for the account.
 
 <Card
@@ -50,8 +50,8 @@ by delegating calls to another contract.
 
 This contract is used to compress the data that is published to the L1, specifically, it:
 
-- Compresses the published bytecodes.
-- Compresses the state diffs (and validate state diff compression).
+- Compresses the deployed smart contract bytecodes.
+- Compresses the state diffs (and validates state diff compression).
 
 <Card
   title="View the source code for Compressor"
@@ -66,7 +66,7 @@ This contract is used to compress the data that is published to the L1, specific
 This contract contains helpful constant values that are used throughout the system
 and can be used in your own smart contracts. It includes:
 
-- Addresses for all system contracts
+- Addresses for all system contracts.
 - Values for other system constants such as `MAX_NUMBER_OF_BLOBS`, `CREATE2_PREFIX`, etc.
 
 <Card
@@ -81,7 +81,6 @@ and can be used in your own smart contracts. It includes:
 
 This contract is responsible for deploying smart contracts on Abstract as well as
 generating the address of the deployed contract.
-
 Before deployment, it ensures the code hash of the smart contract is known using the
 [KnownCodesStorage](#knowncodesstorage) system contract.
 
@@ -104,6 +103,8 @@ deploying a smart contract with the ability to predict the address of the deploy
 It contains two functions, `create2` and `create2Account`, which both
 call a third function, `_relayCall` that relays the calldata to the
 [ContractDeployer](#contractdeployer) contract.
+
+You do not need to use this system contract directly, instead use [ContractDeployer](#contractdeployer).
 
 <Card
   title="View the source code for Create2Factory"
@@ -137,9 +138,9 @@ a [smart contract wallet](/how-abstract-works/native-account-abstraction/smart-c
 Some contracts need no other code other than to return a success value.
 An example of such address is the `0` address. In addition, the
 [bootloader](/how-abstract-works/system-contracts/bootloader) also needs to be
-callable so that the users could transfer ETH to it.
+callable so that users can transfer ETH to it.
 
-For these contracts, we insert the EmptyContract code upon genesis.
+For these contracts, the EmptyContract code is inserted upon <Tooltip tip="The first block of the blockchain">Genesis</Tooltip>.
 It is essentially a noop code, which does nothing and returns `success=1`.
 
 <Card
@@ -153,9 +154,8 @@ It is essentially a noop code, which does nothing and returns `success=1`.
 ## EventWriter
 
 This contract is responsible for [emitting events](https://docs.soliditylang.org/en/latest/contracts.html#events).
-
 It is not required to interact with this smart contract, the
-standard Solidity `emit` keyword can be used to emit events.
+standard Solidity `emit` keyword can be used.
 
 <Card
   title="View the source code for EventWriter"
@@ -171,7 +171,7 @@ This contract simulates the behavior of immutable variables in Solidity. It exis
 smart contracts with the same Solidity code but different constructor parameters have the same bytecode.
 
 It is not required to interact with this smart contract directly,
-it is used indirectly via the compiler simulations for the immutable variables in Solidity.
+as it is used via the compiler.
 
 <Card
   title="View the source code for ImmutableSimulator"
@@ -184,7 +184,7 @@ it is used indirectly via the compiler simulations for the immutable variables i
 ## KnownCodesStorage
 
 Since Abstract stores the code hashes of smart contracts and not the code itself
-(see [AccountCodeStorage](#accountcodestorage)), the system must ensure that
+(see [contract deployment](/how-abstract-works/evm-differences/contract-deployment)), the system must ensure that
 it knows and stores the code hash of all smart contracts that are deployed.
 
 The [ContractDeployer](#contractdeployer) checks this `KnownCodesStorage` contract to see if the
@@ -213,7 +213,7 @@ This contract is used for sending messages from Abstract to Ethereum.
 It is used by the [KnownCodesStorage](#knowncodesstorage) contract to publish the
 code hash of smart contracts to Ethereum.
 
-Learn more about what data is sent in the [transaction lifecycle](/how-abstract-works/architecture/transaction-lifecycle) section.
+Learn more about what data is sent in the [contract deployment section](/how-abstract-works/evm-differences/contract-deployment) section.
 
 <Card
   title="View the source code for L1Messenger"
@@ -234,11 +234,6 @@ This is because the L2 does not have a set "native" token unlike Ethereum,
 so functions such as `transferFromTo`, `balanceOf`, `mint`, `withdraw`, etc. are
 implemented in this contract as if it were an ERC-20.
 
-While you don&rsquo;t need to interact with this contract directly, it does impact
-the support for `.send` and `.transfer` functions in Solidity.
-Learn more on the
-[recommended Solidity changes](/how-abstract-works/evm-differences/recommended-solidity-changes) page.
-
 <Card
   title="View the source code for L2BaseToken"
   href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/L2BaseToken.sol"
@@ -252,11 +247,6 @@ Learn more on the
 This contract calls the [L2BaseToken](#l2basetoken) contract&rsquo;s `transferFromTo` function to
 simulate the `msg.value` behaviour of Ethereum.
 
-While you don&rsquo;t need to interact with this contract directly, it does impact
-the support for `.send` and `.transfer` functions in Solidity.
-Learn more on the
-[recommended Solidity changes](/how-abstract-works/evm-differences/recommended-solidity-changes) page.
-
 <Card
   title="View the source code for MsgValueSimulator"
   href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/MsgValueSimulator.sol"
@@ -267,15 +257,16 @@ Learn more on the
 
 ## NonceHolder
 
-This contract stores the nonce for each account on the L2. More specifically, stores both
+This contract stores the nonce for each account on the L2. More specifically, it stores both
 the deployment nonce for each account and the transaction nonce for each account.
 
 Before each transaction starts, the bootloader uses the `NonceHolder` to ensure
 that the provided nonce for the transaction has not already been used by the sender.
+
 During the [transaction validation](/how-abstract-works/native-account-abstraction/handling-nonces#considering-nonces-in-your-smart-contract-account),
 it also enforces that the nonce _is_ set as used before the transaction execution begins.
 
-See more details in the [handling nonces](/how-abstract-works/native-account-abstraction/handling-nonces) section.
+See more details in the [nonces](/how-abstract-works/evm-differences/nonces) section.
 
 <Card
   title="View the source code for NonceHolder"
