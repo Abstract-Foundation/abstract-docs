@@ -3,26 +3,21 @@ title: "Viem"
 description: "Learn how to use the Viem library to build applications on Abstract."
 ---
 
+The Viem library has first-class support for Abstract by providing a set of
+extensions to interact with [paymasters](/how-abstract-works/native-account-abstraction/paymasters),
+[smart contract wallets](/how-abstract-works/native-account-abstraction/smart-contract-wallets), and more.
+This page will walk through how to configure Viem to utilize Abstract&rsquo;s features.
+
 <Accordion title="Prerequisites">
   Ensure you have the following installed on your machine:
 
 - [Node.js](https://nodejs.org/en/download/) v18.0.0 or later.
+- You&rsquo;ve already created a JavaScript project,
+  (e.g. using [CRA](https://create-react-app.dev/) or [Next.js](https://nextjs.org/)).
 
 </Accordion>
 
-## 1. Create a new project
-
-Create a new directory and change directory into it.
-
-```bash
-mkdir my-abstract-app && cd my-abstract-app
-```
-
-Initialize a new Node.js project.
-
-```bash
-npm init -y
-```
+## 1. Installation
 
 Install the `viem` package.
 
@@ -30,19 +25,97 @@ Install the `viem` package.
 npm install viem
 ```
 
-## 2. Connect to Abstract
+## 2. Client Configuration
 
-Configure your [client](https://viem.sh/docs/clients/intro) by setting `abstractTestnet`
-as the [chain](https://viem.sh/docs/chains/introduction) property.
+Configure your Viem [client](https://viem.sh/zksync/client) using `abstractTestnet`
+as the [chain](https://viem.sh/zksync/chains) and extend it with
+[eip712WalletActions](https://viem.sh/zksync/client#eip712walletactions).
 
 ```javascript
-import { createPublicClient, http } from "viem";
-import { abstractTestnet } from "viem/chains";
+import { createPublicClient, createWalletClient, custom, http } from 'viem'
+import { abstractTestnet } from 'viem/chains'
+import { eip712WalletActions } from 'viem/zksync'
 
-const client = createPublicClient({
+// Create a client from a wallet
+const walletClient = createWalletClient({
   chain: abstractTestnet,
-  transport: http(),
+  transport: custom(window.ethereum!),
+}).extend(eip712WalletActions()) ;
+
+// Create a client without a wallet
+const publicClient = createPublicClient({
+  chain: abstractTestnet,
+  transport: http()
+}).extend(eip712WalletActions());
+```
+
+Learn more on the official [viem documentation](https://viem.sh/zksync).
+
+### Reading Blockchain Data
+
+Use a [public client](https://viem.sh/docs/clients/public)
+to fetch data from the blockchain via an [RPC](/connect-to-abstract).
+
+```javascript
+const balance = await publicClient.getBalance({
+  address: "0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d",
 });
 ```
 
-Learn more on the official [viem documentation](https://viem.sh/docs/introduction).
+### Sending Transactions
+
+Use a [wallet client](https://viem.sh/docs/clients/wallet)
+to send transactions to the blockchain.
+
+```javascript
+const transactionHash = await walletClient.sendTransaction({
+  to: "0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d",
+  data: "0x69",
+});
+```
+
+#### Paymasters
+
+Viem has native support for Abstract [paymasters](/how-abstract-works/native-account-abstraction/paymasters).
+
+Provide the `paymaster` and `paymasterInput` fields when sending a transaction.
+
+[View Viem documentation](https://viem.sh/zksync#2-use-actions).
+
+```javascript
+const hash = await walletClient.sendTransaction({
+  to: "0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d",
+  paymaster: "0xFD9aE5ebB0F6656f4b77a0E99dCbc5138d54b0BA", // Your paymaster contract address
+  paymasterInput: "0x", // Any additional data to be sent to the paymaster
+});
+```
+
+#### Smart Contract Wallets
+
+Viem also has native support for using [smart contract wallets](/how-abstract-works/native-account-abstraction/smart-contract-wallets).
+This means you can submit transactions `from` a smart contract wallet by providing
+a smart wallet account as the `account` field to the [client](#client-configuration).
+
+[View Viem documentation](https://viem.sh/zksync/accounts/toSmartAccount).
+
+```javascript
+import { toSmartAccount, eip712WalletActions } from "viem/zksync";
+import { createWalletClient, http } from "viem";
+import { abstractTestnet } from "viem/chains";
+
+const account = toSmartAccount({
+  address: CONTRACT_ADDRESS,
+  async sign({ hash }) {
+    // ... signing logic here for your smart contract account
+  },
+});
+
+// Create a client from a smart contract wallet
+const walletClient = createWalletClient({
+  chain: abstractTestnet,
+  transport: http(),
+  account: account, // <-- Provide the smart contract wallet account
+}).extend(eip712WalletActions());
+
+// ... Continue using the wallet client as usual (will send transactions from the smart contract wallet)
+```
