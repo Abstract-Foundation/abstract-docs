@@ -15,6 +15,24 @@ it can optionally call `prepareForPaymaster` to delegate the payment of the gas 
 The `IPaymaster` interface defines the mandatory functions that a paymaster must implement to be
 compatible with Abstract. [View source code ↗](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/interfaces/IPaymaster.sol).
 
+First, install the [system contracts library](/how-abstract-works/system-contracts/using-system-contracts#installing-system-contracts):
+
+```bash
+npm install @matterlabs/zksync-contracts
+```
+
+Then, import and implement the `IPaymaster` interface in your smart contract:
+
+```solidity
+import {IPaymaster} from "@matterlabs/zksync-contracts/l2/system-contracts/interfaces/IPaymaster.sol";
+
+contract MyPaymaster is IPaymaster {
+  // Implement the interface (see docs below)
+    // validateAndPayForPaymasterTransaction
+    // postTransaction
+}
+```
+
 ### validateAndPayForPaymasterTransaction
 
 This function is called to perform 2 actions:

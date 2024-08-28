@@ -17,6 +17,27 @@ This contract acts as you would expect an EOA to act, with the added benefit of 
 The `IAccount` interface defines the mandatory functions that a smart contract account must implement to be
 compatible with Abstract. [View source code ↗](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/interfaces/IAccount.sol).
 
+First, install the [system contracts library](/how-abstract-works/system-contracts/using-system-contracts#installing-system-contracts):
+
+```bash
+npm install @matterlabs/zksync-contracts
+```
+
+Then, import and implement the `IAccount` interface in your smart contract:
+
+```solidity
+import {IAccount} from "@matterlabs/zksync-contracts/l2/system-contracts/interfaces/IAccount.sol";
+
+contract SmartAccount is IAccount {
+  // Implement the interface (see docs below)
+    // validateTransaction
+    // executeTransaction
+    // executeTransactionFromOutside
+    // payForTransaction
+    // prepareForPaymaster
+}
+```
+
 See the [DefaultAccount contract](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/DefaultAccount.sol)
 for an example implementation.
 
@@ -25,9 +46,7 @@ for an example implementation.
   icon="file-contract"
   href="/how-abstract-works/system-contracts/using-system-contracts#installing-system-contracts"
 >
-  Learn how to install the `@matterlabs/zksync-contracts` system contracts in
-  your smart contracts to import libraries, contracts and interfaces such as
-  `IAccount`.
+  Learn more about how to use system contracts in Solidity.
 </Card>
 
 ### validateTransaction
