@@ -102,7 +102,8 @@ the smart contract wallet is treated as a first-class citizen when interacting w
 
 The smart contract wallet that is deployed is a modified fork of
 [Clave](https://github.com/getclave/clave-contracts) customized to have an `secp256k1`
-signer by default to support the Privy Embedded Wallet _(as opposed to the default `secp256r1` signer in Clave)_.
+signer by default to support the Privy Embedded Wallet _(as opposed to the default `secp256r1` signer in Clave)_
+as well as custom validation logic to support [EIP-712](https://eips.ethereum.org/EIPS/eip-712) signatures.
 
 #### Smart Contract Wallet Features
 
