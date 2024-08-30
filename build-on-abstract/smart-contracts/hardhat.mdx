@@ -11,13 +11,6 @@ description: "Learn how to use Hardhat to build and deploy smart contracts on Ab
 
 </Accordion>
 
-<Tip>
-  **Starting a new project?** Consider using the [ZKsync CLI
-  `create`](/build-on-abstract/zksync-cli) command to initialize a new Hardhat
-  project with all the necessary dependencies & configurations setup, along with
-  some example smart contracts and scripts to get started with.
-</Tip>
-
 ## 1. Create a new project
 
 Inside an empty directory, initialize a new Hardhat project using
@@ -49,30 +42,23 @@ Select your preferences when prompted by the CLI, or use the recommended setup b
 
 </Accordion>
 
-## 2. Install the required Hardhat extension
+## 2. Install the required dependencies
 
 Abstract smart contracts use [different bytecode](/how-abstract-works/evm-differences/overview)
 than the Ethereum Virtual Machine (EVM).
 
-To compile smart contracts for Abstract, install the
-[hardhat-zksync](https://docs.zksync.io/build/tooling/hardhat/hardhat-zksync) extension.
+Install the required dependencies to compile, deploy and interact with smart contracts on Abstract:
+
+- [@matterlabs/hardhat-zksync](https://docs.zksync.io/build/tooling/hardhat/hardhat-zksync):
+  A suite of Hardhat plugins for working with Abstract.
+- [@matterlabs/zksync-contracts](https://docs.zksync.io/build/tooling/hardhat/hardhat-zksync#zksync-contracts):
+  Access [system contracts](/how-abstract-works/system-contracts/overview) and other utilities.
+- [zksync-ethers](/build-on-abstract/applications/ethers):
+  Recommended package for writing [Hardhat scripts](https://hardhat.org/hardhat-runner/docs/advanced/scripts)
+  to interact with your smart contracts.
 
 ```bash
-npm install -D @matterlabs/hardhat-zksync
-```
-
-To interact with [system contracts](/how-abstract-works/system-contracts/overview) install the
-[zksync-contracts](https://docs.zksync.io/build/tooling/hardhat/hardhat-zksync#zksync-contracts) package:
-
-```bash
-npm install -D @matterlabs/zksync-contracts
-```
-
-To write [Hardhat scripts](https://hardhat.org/hardhat-runner/docs/advanced/scripts), it&rsquo;s recommended to install
-the [zksync-ethers](/build-on-abstract/applications/ethers) package:
-
-```bash
-npm install -D zksync-ethers@6 ethers@6
+npm install -D @matterlabs/hardhat-zksync @matterlabs/zksync-contracts zksync-ethers@6 ethers@6
 ```
 
 ## 3. Modify the Hardhat configuration
@@ -87,8 +73,8 @@ const config: HardhatUserConfig = {
   zksolc: {
     version: "latest",
     settings: {
-      // This is the current name of the "isSystem" flag
-      enableEraVMExtensions: false, // Note: NonceHolder and the ContractDeployer system contracts can only be called with a special isSystem flag as true
+      // Note: This must be true to call NonceHolder & ContractDeployer system contracts
+      enableEraVMExtensions: false,
     },
   },
   defaultNetwork: "abstractTestnet",
@@ -109,11 +95,20 @@ const config: HardhatUserConfig = {
 export default config;
 ```
 
-<Tip>
-  For local development, the [zksync-cli](/build-on-abstract/zksync-cli) can run
-  local Abstract nodes which can also be configured as a network in the Hardhat
-  configuration file.
-</Tip>
+### Using system contracts
+
+To use [system contracts](/how-abstract-works/system-contracts/overview),
+set the `enableEraVMExtensions` flag to **true**:
+
+```typescript
+zksolc: {
+  settings: {
+    // If you plan to interact directly with the NonceHolder or ContractDeployer system contracts
+    enableEraVMExtensions: true,
+  },
+  version: "latest",
+},
+```
 
 ## 4. Write a smart contract
 
