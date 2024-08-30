@@ -28,11 +28,12 @@ For this reason, each AGW account is generated in a two-step process:
    (from the previous step) as an approved signer.
 
 Once the smart contract is initialized, the user can freely add and remove signers to the wallets
-and make use of the other features provided by the AGW.
+and make use of the [other features](#smart-contract-wallet-features)
+provided by the AGW.
 
 ### EOA Creation
 
-First, the user authenticates with their email, social account, or other login methods and
+First, the user authenticates with their email, social account, or other login method and
 an EOA wallet (public-private key pair) tied to this login method is created under the hood.
 
 This process is powered by
@@ -67,7 +68,7 @@ The three shards are:
 1. **Device Share**: This shard is stored on the user's device. In a browser environment,
    it is stored inside the local storage of the Privy iframe.
 
-2. **Auth Share**: This shard which is encrypted and stored by Privy&rsquo;s servers. It is retrieved
+2. **Auth Share**: This shard is encrypted and stored on Privy&rsquo;s servers. It is retrieved
    when the user logs in with their original login method.
 
 3. **Recovery Share**: This shard is stored in a back up location of the user&rsquo;s choice, typically
@@ -98,7 +99,6 @@ the initialization process.
 As all accounts on Abstract are smart contract accounts,
 (see [native account abstraction](/how-abstract-works/native-account-abstraction)),
 the smart contract wallet is treated as a first-class citizen when interacting with the Abstract ecosystem.
-Users can use their account going forward to interact with any application (including yours) built on Abstract.
 
 The smart contract wallet that is deployed is a modified fork of
 [Clave](https://github.com/getclave/clave-contracts) customized to have an `secp256k1`
@@ -108,8 +108,9 @@ signer by default to support the Privy Embedded Wallet _(as opposed to the defau
 
 The smart contract wallet includes many modules to extend the functionality of the wallet, including:
 
-- **Recovery Module**: Allows the user to recover their account if they lose access to their login method via methods
-  such as email or guardian recovery.
+- **Recovery Modules**: Allows the user to recover their account if they lose access to their login method via recovery methods
+  including email or guardian recovery.
+- **Paymaster Support**: Transaction gas fees&rsquo; can be sponsored by [paymasters](/how-abstract-works/native-account-abstraction/paymasters).
 - **Multiple Signers**: Users can add multiple signers to the wallet to allow for multiple different
   accounts to sign transactions.
 - **P256/secp256r1 Support**: Users can add signers generated from [passkeys](https://fidoalliance.org/passkeys/)
