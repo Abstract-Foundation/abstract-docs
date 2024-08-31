@@ -87,6 +87,13 @@
           ]
         },
         {
+          "group": "Abstract Global Wallet",
+          "pages": [
+            "how-abstract-works/abstract-global-wallet/overview",
+            "how-abstract-works/abstract-global-wallet/architecture"
+          ]
+        },
+        {
           "group": "EVM Differences",
           "pages": [
             "how-abstract-works/evm-differences/overview",
