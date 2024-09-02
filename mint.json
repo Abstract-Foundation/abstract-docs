@@ -130,6 +130,9 @@
       ]
     }
   ],
+  "feedback": {
+    "thumbsRating": true
+  },
   "footerSocials": {
     "x": "https://x.com/abstractchain",
     "discord": "https://discord.com/invite/abstractchain",
