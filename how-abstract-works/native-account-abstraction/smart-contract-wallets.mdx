@@ -12,6 +12,29 @@ Abstract maintains compatibility with popular EOA wallets from the Ethereum ecos
 converting them to the [DefaultAccount](/how-abstract-works/native-account-abstraction/smart-contract-wallets#defaultaccount-contract) system contract during the transaction flow.
 This contract acts as you would expect an EOA to act, with the added benefit of supporting paymasters.
 
+## Get Started with Smart Contract Wallets
+
+Use our [example repositories](https://github.com/Abstract-Foundation/examples)
+to quickly get started building smart contract wallets.
+
+<CardGroup cols={3}>
+  <Card
+    title="Smart Contract Wallets (Ethers)"
+    icon="github"
+    href="https://github.com/Abstract-Foundation/examples/tree/main/smart-contract-accounts"
+  />
+  <Card
+    title="Smart Contract Wallet Factory"
+    icon="github"
+    href="https://github.com/Abstract-Foundation/examples/tree/main/smart-contract-account-factory"
+  />
+  <Card
+    title="Smart Contract Wallets (Viem)"
+    icon="github"
+    href="https://github.com/Abstract-Foundation/examples/tree/main/smart-contract-accounts-viem"
+  />
+</CardGroup>
+
 ## IAccount Interface
 
 The `IAccount` interface defines the mandatory functions that a smart contract account must implement to be
@@ -22,6 +45,12 @@ First, install the [system contracts library](/how-abstract-works/system-contrac
 ```bash
 npm install @matterlabs/zksync-contracts
 ```
+
+<Note>
+  Ensure you have the `isSystem` flag set to `true` in your config:
+  [Hardhat](/build-on-abstract/smart-contracts/hardhat#using-system-contracts) ‧
+  [Foundry](/build-on-abstract/smart-contracts/foundry#3-modify-foundry-configuration)
+</Note>
 
 Then, import and implement the `IAccount` interface in your smart contract:
 
@@ -198,7 +227,7 @@ const resp = await sentTx.wait();
 
 ## DefaultAccount Contract
 
-The DefaultAccount contract is a system contract that mimicks the behaviour of an EOA.
+The `DefaultAccount` contract is a system contract that mimicks the behaviour of an EOA.
 The bytecode of the contract is set by default for all addresses for which no other bytecodes are deployed.
 
 <Card

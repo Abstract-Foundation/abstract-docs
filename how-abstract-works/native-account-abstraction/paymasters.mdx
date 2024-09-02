@@ -8,7 +8,24 @@ Paymasters are smart contracts that pay for the gas fees of transactions on beha
 All paymasters must implement the
 [IPaymaster](#ipaymaster-interface) interface. As outlined in the [transaction flow](/how-abstract-works/native-account-abstraction/transaction-flow),
 after the [smart contract wallet](/how-abstract-works/native-account-abstraction/smart-contract-wallets) validates and executes the transaction,
-it can optionally call `prepareForPaymaster` to delegate the payment of the gas fees to a paymaster set in the transaction.
+it can optionally call `prepareForPaymaster` to delegate the payment of the gas fees to a paymaster set in the transaction,
+at which point the paymaster will [validate and pay for the transaction](#validateandpayforpaymastertransaction).
+
+## Get Started with Paymasters
+
+Use our [example repositories](https://github.com/Abstract-Foundation/examples)
+to quickly get started building paymasters.
+
+<CardGroup cols={1}>
+  <Card
+    title="Paymasters Example Repo"
+    icon="github"
+    href="https://github.com/Abstract-Foundation/examples/tree/main/paymasters"
+  >
+    Use our example repository to quickly get started building paymasters on
+    Abstract.
+  </Card>
+</CardGroup>
 
 ## IPaymaster Interface
 
