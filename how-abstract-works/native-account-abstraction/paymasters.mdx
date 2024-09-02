@@ -34,9 +34,17 @@ compatible with Abstract. [View source code ↗](https://github.com/matter-labs/
 
 First, install the [system contracts library](/how-abstract-works/system-contracts/using-system-contracts#installing-system-contracts):
 
-```bash
+<CodeGroup>
+
+```bash Hardhat
 npm install @matterlabs/zksync-contracts
 ```
+
+```bash Foundry
+forge install matter-labs/era-contracts
+```
+
+</CodeGroup>
 
 Then, import and implement the `IPaymaster` interface in your smart contract:
 
