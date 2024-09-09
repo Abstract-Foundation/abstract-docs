@@ -1,22 +1,286 @@
 ---
 title: "Contract Deployment"
-description: "Learn the best practices for deploying smart contracts on Abstract."
+description: "Learn how to deploy smart contracts on Abstract."
 ---
 
-Smart contract deployment works differently on Abstract than Ethereum.
-Specifically, the code hash for each smart contract needs to be published on the
-[KnownCodesStorage](/how-abstract-works/system-contracts/list-of-system-contracts#knowncodesstorage)
-system contract before it can be deployed.
+Unlike Ethereum, Abstract does not store the bytecode of smart contracts directly;
+instead, it stores a hash of the bytecode and publishes the bytecode itself to Ethereum.
 
-In addition, if a subsequent
-contract deployment uses the same code hash (i.e. the contract code is the same),
-the contract deployment will be substantially cheaper as the
-code hash does not need to be published to Ethereum again.
+This adds several benefits to smart contract deployments on Abstract, including:
 
-For this reason, contract deployments on Abstract **must** be performed using [EIP-712](https://eips.ethereum.org/EIPS/eip-712) transactions,
-with the `factory_deps` field containing the bytecode of the smart contract being deployed.
+- **Inherited L1 Security**: Smart contract bytecode is stored directly on Ethereum.
+- **Increased Gas efficiency**: Only _unique_ contract bytecode needs to be published on Ethereum.
+  If you deploy the same contract more than once _(such as when using a factory)_, subsequent contract deployments are substantially cheaper.
 
-## Contract Deployment Flow
+## How Contract Deployment Works
+
+**Contracts cannot be deployed on Abstract unless the bytecode of the smart contract to be deployed is published on Ethereum.**
+If the bytecode of the contract has not been published, the deployment transaction will fail with the error `the code hash is not known`.
+
+To publish bytecode before deployment, all contract deployments on Abstract are performed by calling the 
+[ContractDeployer](/system-contracts/list-of-system-contracts#contractdeployer) system contract
+using one of it&rsquo;s
+[create](#how-abstract-works/evm-differences/contract-deployment#create),
+[create2](#how-abstract-works/evm-differences/contract-deployment#create2),
+[createAccount](#how-abstract-works/evm-differences/contract-deployment#createaccount), or
+[create2Account](#how-abstract-works/evm-differences/contract-deployment#create2account) functions.
+
+The bytecode of your smart contract and any other smart contracts that it can deploy _(such as when using a factory)_
+must be included inside the factory dependencies (`factoryDeps`) of the deployment transaction.
+
+Typically, this process occurs under the hood and is performed by the compiler and client libraries.
+This page will show you how to deploy smart contracts on Abstract by interacting with the
+[ContractDeployer](/system-contracts/list-of-system-contracts#contractdeployer) system contract.
+
+## Get Started Deploying Smart Contracts
+
+Use the [example repository](https://github.com/Abstract-Foundation/examples/tree/main/contract-deployment)
+below as a reference for creating smart contracts and scripts that can deploy smart contracts on Abstract using various libraries.
+
+<Card
+  title="Contract Deployment Example Repo"
+  icon="github"
+  href="https://github.com/Abstract-Foundation/examples/tree/main/contract-deployment"
+>
+  See example code on how to build factory contracts and deployment scripts
+  using Hardhat, Ethers, Viem, and more.
+</Card>
+
+## Deploying Smart Contracts
+
+When building smart contracts, the [zksolc](https://github.com/matter-labs/zksolc-bin) and [zkvyper](https://github.com/matter-labs/zkvyper-bin)
+compilers transform calls to the `CREATE` and `CREATE2` opcodes into calls to the `create` and `create2` functions on the `ContractDeployer` system contract.
+
+In addition, when you call either of these opcodes, the compiler automatically detects what other contracts
+your contract is capable of deploying and includes them in the `factoryDeps` field
+of the generated artifacts.
+
+### Solidity
+
+No Solidity changes are required to deploy smart contracts, as the compiler handles the transformation automatically.
+_Note_: address derivation via
+`CREATE` and `CREATE2` is different from Ethereum.
+[Learn more](/how-abstract-works/evm-differences/evm-opcodes#address-derivation).
+
+#### create
+
+Below are examples of how to write a smart contract that deploys other smart contracts
+using the `CREATE` opcode. The compiler will automatically transform these calls
+into calls to the `create` function on the `ContractDeployer` system contract.
+
+<AccordionGroup>
+  <Accordion title="New contract instance via create">
+    <CodeGroup>
+
+    ```solidity MyContractFactory.sol
+    import "./MyContract.sol";
+
+    contract MyContractFactory {
+        function createMyContract() public {
+            MyContract myContract = new MyContract();
+        }
+    }
+    ```
+
+    ```solidity MyContract.sol
+    contract MyContract {
+        function sayHello() public pure returns (string memory) {
+            return "Hello World!";
+        }
+    }
+    ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion title="New contract instance via create (using assembly)">
+    <CodeGroup>
+
+    ```solidity MyContractFactory.sol
+    import "./MyContract.sol";
+
+    contract MyContractFactory {
+      function createMyContractAssembly() public {
+          bytes memory bytecode = type(MyContract).creationCode;
+          address myContract;
+          assembly {
+              myContract := create(0, add(bytecode, 32), mload(bytecode))
+          }
+      }
+    }
+    ```
+
+    ```solidity MyContract.sol
+    contract MyContract {
+        function sayHello() public pure returns (string memory) {
+            return "Hello World!";
+        }
+    }
+    ```
+
+    </CodeGroup>
+
+  </Accordion>
+  
+</AccordionGroup>
+
+#### create2
+
+Below are examples of how to write a smart contract that deploys other smart contracts
+using the `CREATE2` opcode. The compiler will automatically transform these calls
+into calls to the `create2` function on the `ContractDeployer` system contract.
+
+<AccordionGroup>
+  <Accordion title="New contract instance via create2">
+    <CodeGroup>
+
+    ```solidity MyContractFactory.sol
+    import "./MyContract.sol";
+
+    contract MyContractFactory {
+      function create2MyContract(bytes32 salt) public {
+          MyContract myContract = new MyContract{salt: salt}();
+      }
+    }
+    ```
+
+    ```solidity MyContract.sol
+    contract MyContract {
+        function sayHello() public pure returns (string memory) {
+            return "Hello World!";
+        }
+    }
+    ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion title="New contract instance via create2 (using assembly)">
+    <CodeGroup>
+
+    ```solidity MyContractFactory.sol
+    import "./MyContract.sol";
+
+    contract MyContractFactory {
+      function create2MyContractAssembly(bytes32 salt) public {
+          bytes memory bytecode = type(MyContract).creationCode;
+          address myContract;
+          assembly {
+              myContract := create2(0, add(bytecode, 32), mload(bytecode), salt)
+          }
+      }
+    }
+    ```
+
+    ```solidity MyContract.sol
+    contract MyContract {
+        function sayHello() public pure returns (string memory) {
+            return "Hello World!";
+        }
+    }
+    ```
+
+    </CodeGroup>
+
+  </Accordion>
+  
+</AccordionGroup>
+
+#### createAccount
+
+When deploying [smart contract wallets](/how-abstract-works/native-account-abstraction/smart-contract-wallets) on Abstract,
+manually call the `createAccount` or `create2Account` function on the `ContractDeployer` system contract.
+This is required because the contract needs to be flagged as a smart contract wallet by setting
+the fourth argument of the `createAccount` function to the account abstraction version.
+
+<Card
+  title="View Example AccountFactory.sol using create"
+  icon="github"
+  href="https://github.com/Abstract-Foundation/examples/blob/main/contract-deployment/hardhat/contracts/AccountFactory.sol#L30-L54"
+>
+  See an example of a factory contract that deploys smart contract wallets using createAccount.
+</Card>
+
+
+#### create2Account
+
+Similar to the `createAccount` function, the `create2Account` function on the `ContractDeployer` system contract must be
+called manually when deploying smart contract wallets on Abstract to
+flag the contract as a smart contract wallet by setting the fourth argument of the `create2Account` function to the account abstraction version.
+
+<Card
+  title="View Example AccountFactory.sol using create2"
+  icon="github"
+  href="https://github.com/Abstract-Foundation/examples/blob/main/contract-deployment/hardhat/contracts/AccountFactory.sol#L57-L82"
+>
+  See an example of a factory contract that deploys smart contract wallets using create2Account.
+</Card>
+
+### EIP-712 Transactions via Clients
+
+Once your smart contracts are compiled and you have the bytecode(s),
+you can use various client libraries to deploy your smart contracts by creating
+[EIP-712](https://eips.ethereum.org/EIPS/eip-712) transactions that:
+
+- Have the transaction type set to `113` (to indicate an EIP-712 transaction).
+- Call the `create`, `create2`, `createAccount`, or `create2Account` function `to` the 
+    `ContractDeployer` system contract address (`0x0000000000000000000000000000000000008006`).
+- Include the bytecode of the smart contract and any other contracts it can deploy in the `customData.factoryDeps`
+  field of the transaction.
+
+#### hardhat-zksync
+
+Since the compiler automatically generates the `factoryDeps` field for you in the contract artifact _(unless you are manually
+calling the `ContractDeployer` via `createAccount` or `create2Account` functions)_,
+load the artifact of the contract and use the [Deployer](https://docs.zksync.io/build/tooling/hardhat/plugins/hardhat-zksync-deploy#deployer-export)
+class from the [hardhat-zksync](https://docs.zksync.io/build/tooling/hardhat/plugins/hardhat-zksync-deploy) plugin to deploy the contract.
+
+<CardGroup cols={2}>
+  <Card
+    title="Example contract factory contract deployment script"
+    icon="github"
+    href="https://github.com/Abstract-Foundation/examples/blob/main/contract-deployment/hardhat/deploy/deploy-account.ts"
+  />
+  <Card
+    title="Example smart contract wallet factory deployment script"
+    icon="github"
+    href="https://github.com/Abstract-Foundation/examples/blob/main/contract-deployment/hardhat/deploy/deploy-mycontract.ts"
+  />
+</CardGroup>
+
+#### zksync-ethers
+
+Use the [ContractFactory](https://sdk.zksync.io/js/ethers/api/v6/contract/contract-factory)
+class from the [zksync-ethers](https://sdk.zksync.io/js/ethers/api/v6/contract/contract-factory) library to deploy your smart contracts.
+
+<Card
+  title="View Example zksync-ethers Contract Deployment Script"
+  icon="github"
+  href="https://github.com/Abstract-Foundation/examples/blob/main/contract-deployment/clients/src/ethers.ts"
+/>
+
+#### viem
+
+Use Viem&rsquo;s [deployContract](https://viem.sh/zksync/actions/deployContract) method
+to deploy your smart contracts.
+
+<Card
+  title="View Example Viem Contract Deployment Script"
+  icon="github"
+  href="https://github.com/Abstract-Foundation/examples/blob/main/contract-deployment/clients/src/viem.ts"
+/>
+
+## How Bytecode Publishing Works
+
+When a contract is deployed on Abstract, multiple [system contracts](/how-abstract-works/system-contracts)
+work together to compress and publish the contract bytecode to Ethereum before the contract is deployed.
+
+Once the bytecode is published, the hash of the bytecode is set to "known"; meaning
+the contract can be deployed on Abstract without needing to publish the bytecode again.
+
+The process can be broken down into the following steps:
 
 <Steps>
   <Step title="Bootloader processes transaction">
@@ -50,11 +314,6 @@ with the `factory_deps` field containing the bytecode of the smart contract bein
 
     </Accordion>
 
-    <Tip>
-        If you are deploying from a client _(i.e. not within a smart contract)_, use the [zksync-ethers](https://sdk.zksync.io/js/ethers/api/v6/contract/contract-factory)
-        or [hardhat-zksync](/build-on-abstract/smart-contracts/hardhat) library to easily create EIP-712 deploy transactions.
-    </Tip>
-
   </Step>
   <Step title="Marking contract as known and publishing compressed bytedata">
     Under the hood, the bootloader informs the
@@ -83,11 +342,3 @@ with the `factory_deps` field containing the bytecode of the smart contract bein
 
   </Step>
 </Steps>
-
-<Card
-  title="Further Reading: ZKsync Documentation"
-  icon="file-contract"
-  href="https://docs.zksync.io/build/developer-reference/ethereum-differences/contract-deployment"
->
-  Learn more about contract deployment details on the ZKsync documentation.
-</Card>
