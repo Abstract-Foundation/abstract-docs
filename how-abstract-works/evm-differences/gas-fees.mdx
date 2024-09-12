@@ -10,23 +10,40 @@ section, Abstract posts state diffs _(as well as compressed contract bytecode)_ 
 in the form of [blobs](https://www.eip4844.com/).
 
 In addition to the cost of posting blobs, their are costs associated with generating
-ZK proofs for batches and committing & verifying these proofs on Ethereum. To fairly distribute
+ZK proofs for batches and committing & verifying these proofs on Ethereum.
+
+To fairly distribute
 these costs among L2 transactions, gas fees on Abstract are charged proportionally
 to how close a transaction brought a batch to being **sealed** (i.e. full).
 
-<Card
-  title="ZK Stack Docs - Fee Mechanism"
-  icon="file-contract"
-  href="https://docs.zksync.io/zk-stack/concepts/fee-mechanism"
->
-  View the full equations of how gas fees are calculated on Abstract.
-</Card>
+## Components
 
-## Gas Fees & Refunds
+Fees on Abstract therefore consist of both **off-chain** and **on-chain** components:
+
+1. **Off-chain Fee**:
+   - Fixed cost (approximately $0.001 per transaction).
+   - Covers L2 state storage and zero-knowledge [proof generation](/how-abstract-works/architecture/components/prover-and-verifier#proof-generation).
+   - Independent of transaction complexity.
+2. **On-chain Fee**:
+   - Variable cost (influenced by Ethereum gas prices).
+   - Covers [proof verification](/how-abstract-works/architecture/components/prover-and-verifier#proof-verification) and [publishing state](/how-abstract-works/architecture/transaction-lifecycle) on Ethereum.
+
+## Differences from Ethereum
+
+| Aspect                  | Ethereum                                                    | Abstract                                                                                   |
+| ----------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| **Fee Composition**     | Entirely on-chain, consisting of base fee and priority fee. | Split between off-chain (fixed) and on-chain (variable) components.                        |
+| **Pricing Model**       | Dynamic, congestion-based model for base fee.               | Fixed off-chain component with a variable on-chain part influenced by Ethereum gas prices. |
+| **Data Efficiency**     | Publishes full transaction data.                            | Publishes only state deltas, significantly reducing on-chain data and costs.               |
+| **Resource Allocation** | Each transaction independently consumes gas.                | Transactions share batch overhead, potentially leading to cost optimizations.              |
+| **Opcode Pricing**      | Each opcode has a specific gas cost.                        | Most opcodes have similar gas costs, simplifying estimation.                               |
+| **Refund Handling**     | Limited refund capabilities.                                | Smarter refund system for unused resources and overpayments.                               |
+
+## Gas Refunds
 
 You may notice that a portion of gas fees are **refunded** for transactions on Abstract. This
-is because accounts don&rsquo;t have access to the `block.baseFee` context variable,
-so have no way to know the exact fee to pay for a transaction.
+is because accounts don&rsquo;t have access to the `block.baseFee` context variable;
+and have no way to know the exact fee to pay for a transaction.
 
 Instead, the following steps occur to refund accounts for any excess funds spent on a transaction:
 
@@ -54,3 +71,9 @@ Instead, the following steps occur to refund accounts for any excess funds spent
     **refunds** the account any excess funds that were not spent on the transaction.
 </Step>
 </Steps>
+
+## Transaction Gas Fields
+
+When creating a transaction on Abstract, you can set the `gas_per_pubdata_limit` value
+to configure the maximum gas price that can be charged per byte of pubdata (data posted to Ethereum in the form of blobs).
+The default value for this parameter is `50000`.
