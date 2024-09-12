@@ -10,163 +10,40 @@ section, Abstract posts state diffs _(as well as compressed contract bytecode)_ 
 in the form of [blobs](https://www.eip4844.com/).
 
 In addition to the cost of posting blobs, their are costs associated with generating
-ZK proofs for batches and committing & verifying these proofs on Ethereum. To fairly distribute
+ZK proofs for batches and committing & verifying these proofs on Ethereum.
+
+To fairly distribute
 these costs among L2 transactions, gas fees on Abstract are charged proportionally
 to how close a transaction brought a batch to being **sealed** (i.e. full).
 
-<Card
-  title="ZK Stack Docs - Fee Mechanism"
-  icon="file-contract"
-  href="https://docs.zksync.io/zk-stack/concepts/fee-mechanism"
->
-  View the full equations of how gas fees are calculated on Abstract.
-</Card>
+## Components
 
-## Ethereum Gas Fees
-
-
-Ethereum's gas fee structure consists of two main components:
-
-1. **Base Fee**: Set by the network based on demand for block space. This fee is burned upon transaction execution.
-2. **Priority Fee (Tip)**: An optional amount paid to validators as an incentive for faster processing.
-
-The total gas fee on Ethereum is calculated as:
-
-` Total Fee = (Base Fee + Priority Fee) * Gas Used `
-
-
-Each operation (opcode) in the Ethereum Virtual Machine (EVM) has a specific gas cost, contributing to the overall `Gas Used` value.
-
-## Dynamic Pricing Model
-
-Ethereum employs a dynamic pricing model for its base fee:
-
-- If the previous block is more than 50% full, the base fee increases by up to 12.5%.
-- If it's less than 50% full, the base fee decreases.
-
-This mechanism helps manage network congestion but can lead to significant fee volatility.
-
-## User Experience
-
-Users specify two key parameters when sending a transaction:
-
-1. `maxFeePerGas`: The maximum total fee they're willing to pay per unit of gas.
-2. `maxPriorityFeePerGas`: The maximum tip they're willing to pay.
-
-If the actual fee is lower than the max fee, the difference is refunded.
-
-## Abstract and Ethereum: Main Differences
-
-
-| Aspect | Ethereum | Abstract |
-| --- | --- | --- |
-| Fee Composition | Entirely on-chain, consisting of base fee and priority fee | Split between off-chain (fixed) and on-chain (variable) components |
-| Pricing Model | Dynamic, congestion-based model for base fee | Fixed off-chain component with a variable on-chain part influenced by Ethereum gas prices |
-| Data Efficiency | Publishes full transaction data | Publishes only state deltas, significantly reducing on-chain data and costs |
-| Resource Allocation | Each transaction independently consumes gas | Transactions share batch overhead, potentially leading to cost optimizations |
-| Opcode Pricing | Each opcode has a specific gas cost | Most opcodes have similar gas costs, simplifying estimation |
-| Refund Handling | Limited refund capabilities | Smarter refund system for unused resources and overpayments |
-
-## Components 
+Fees on Abstract therefore consist of both **off-chain** and **on-chain** components:
 
 1. **Off-chain Fee**:
-    - Fixed cost (approximately $0.001 per transaction)
-    - Covers state storage and zero-knowledge proof generation
-    - Independent of transaction complexity
+   - Fixed cost (approximately $0.001 per transaction).
+   - Covers L2 state storage and zero-knowledge [proof generation](/how-abstract-works/architecture/components/prover-and-verifier#proof-generation).
+   - Independent of transaction complexity.
 2. **On-chain Fee**:
-    - Variable cost
-    - Covers proof verification and publishing state deltas on Ethereum
-    - Influenced by Ethereum's current gas prices
+   - Variable cost (influenced by Ethereum gas prices).
+   - Covers [proof verification](/how-abstract-works/architecture/components/prover-and-verifier#proof-verification) and [publishing state](/how-abstract-works/architecture/transaction-lifecycle) on Ethereum.
 
-## Parameters
+## Differences from Ethereum
 
-1. `gas_per_pubdata_limit:`
-    - Indicates the maximum gas price the operator can charge users per byte of pubdata
-    - Helps manage the influence of volatile L1 gas prices on L2 transaction costs
-2. `MAX_TRANSACTION_GAS_LIMIT:`
-    - A safeguard against DDoS attacks
-    - Sets an upper bound on gas consumption per transaction
-3. `GUARANTEED_PUBDATA_PER_TX:`
-    - The guaranteed number of pubdata bytes that should be possible to pay for in one batch
+| Aspect                  | Ethereum                                                    | Abstract                                                                                   |
+| ----------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| **Fee Composition**     | Entirely on-chain, consisting of base fee and priority fee. | Split between off-chain (fixed) and on-chain (variable) components.                        |
+| **Pricing Model**       | Dynamic, congestion-based model for base fee.               | Fixed off-chain component with a variable on-chain part influenced by Ethereum gas prices. |
+| **Data Efficiency**     | Publishes full transaction data.                            | Publishes only state deltas, significantly reducing on-chain data and costs.               |
+| **Resource Allocation** | Each transaction independently consumes gas.                | Transactions share batch overhead, potentially leading to cost optimizations.              |
+| **Opcode Pricing**      | Each opcode has a specific gas cost.                        | Most opcodes have similar gas costs, simplifying estimation.                               |
+| **Refund Handling**     | Limited refund capabilities.                                | Smarter refund system for unused resources and overpayments.                               |
 
-##  Calculation Process 
-
-1. **Base Fee Determination**: When a batch opens, Abstract calculates the FAIR_GAS_PER_PUBDATA_BYTE (EPf):
-
-```
-EPf = ⌈(Ef) / (L1_P * L1_PUB)⌉
-```
-
-
-- Ef is the "fair" gas price in ETH
-- L1_P is the price for L1 gas in ETH
-- L1_PUB is the number of L1 gas needed for a single pubdata byte
-
-2. **Overhead Calculation**: For each transaction, Abstract calculates several types of overhead:
-
-The total overhead is the maximum of these:
-- Slot overhead (SO)
-- Memory overhead (MO)
-- Execution overhead (EAO)
-- `O(tx) = max(SO, MO(tx), EAO(tx))`
-
-
-3. **Gas Limit Estimation**: When estimating a transaction, the server returns:
-
-```
-tx.gasLimit = tx.actualGasLimit + overhead_gas(tx)
-```
-
-
-4. **Actual Fee Calculation**: The actual fee a user pays is:
-
-```
-ActualFee = gasSpent * gasPrice
-```
-
-
-
-5. **Fair Fee Calculation**: It also calculates a "fair fee":
-
-```
-FairFee = Ef * tx.computationalGas + EPf * pubdataUsed
-```
-
-
-6. **Refund Calculation**: If the actual fee exceeds the fair fee, a refund is issued:
-
-```
-Refund = (ActualFee - FairFee) / Base
-```
-
-
-## State Delta Optimization
-
-Unlike Ethereum, which publishes full transaction data, Abstract only publishes state changes (deltas):
-
-- Significantly reduces on-chain data
-- Lowers fees by minimizing data that needs to be stored on Ethereum
-- Multiple updates to the same storage slot within a batch only incur fees for the final state
-
-## Batch Overhead
-
-This introduces the concept of "batch overhead," which includes:
-
-- **L2 Costs**: Gas required for proving circuits
-- **L1 Costs**: Costs for proof verification and batch processing on L1
-
-These costs are distributed among transactions in a batch, with each transaction paying proportionally to its resource usage.
-
-## Simplified Opcode Pricing
-
-Abstract assigns similar gas costs to most operations, operating differently than Ethereum's opcode costs. This simplification makes fee estimation more predictable.
-
-
-## Gas Fees & Refunds
+## Gas Refunds
 
 You may notice that a portion of gas fees are **refunded** for transactions on Abstract. This
-is because accounts don&rsquo;t have access to the `block.baseFee` context variable,
-so have no way to know the exact fee to pay for a transaction.
+is because accounts don&rsquo;t have access to the `block.baseFee` context variable;
+and have no way to know the exact fee to pay for a transaction.
 
 Instead, the following steps occur to refund accounts for any excess funds spent on a transaction:
 
@@ -195,4 +72,8 @@ Instead, the following steps occur to refund accounts for any excess funds spent
 </Step>
 </Steps>
 
+## Transaction Gas Fields
 
+When creating a transaction on Abstract, you can set the `gas_per_pubdata_limit` value
+to configure the maximum gas price that can be charged per byte of pubdata (data posted to Ethereum in the form of blobs).
+The default value for this parameter is `50000`.
