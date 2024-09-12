@@ -18,19 +18,19 @@ This adds several benefits to smart contract deployments on Abstract, including:
 If the bytecode of the contract has not been published, the deployment transaction will fail with the error `the code hash is not known`.
 
 To publish bytecode before deployment, all contract deployments on Abstract are performed by calling the 
-[ContractDeployer](/system-contracts/list-of-system-contracts#contractdeployer) system contract
+[ContractDeployer](/how-abstract-works/system-contracts/list-of-system-contracts#contractdeployer) system contract
 using one of it&rsquo;s
-[create](#how-abstract-works/evm-differences/contract-deployment#create),
-[create2](#how-abstract-works/evm-differences/contract-deployment#create2),
-[createAccount](#how-abstract-works/evm-differences/contract-deployment#createaccount), or
-[create2Account](#how-abstract-works/evm-differences/contract-deployment#create2account) functions.
+[create](#create),
+[create2](#create2),
+[createAccount](#createaccount), or
+[create2Account](#create2account) functions.
 
 The bytecode of your smart contract and any other smart contracts that it can deploy _(such as when using a factory)_
 must be included inside the factory dependencies (`factoryDeps`) of the deployment transaction.
 
 Typically, this process occurs under the hood and is performed by the compiler and client libraries.
 This page will show you how to deploy smart contracts on Abstract by interacting with the
-[ContractDeployer](/system-contracts/list-of-system-contracts#contractdeployer) system contract.
+[ContractDeployer](/how-abstract-works/system-contracts/list-of-system-contracts#contractdeployer) system contract.
 
 ## Get Started Deploying Smart Contracts
 
