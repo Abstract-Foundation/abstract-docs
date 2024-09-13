@@ -34,7 +34,8 @@
           "group": "Smart Contracts",
           "pages": [
             "build-on-abstract/smart-contracts/hardhat",
-            "build-on-abstract/smart-contracts/foundry"
+            "build-on-abstract/smart-contracts/foundry",
+            "build-on-abstract/smart-contracts/debugging-contracts"
           ]
         },
         {

@@ -1,0 +1,86 @@
+---
+title: "Debugging Smart Contracts"
+description: "Learn how to run a local node to debug smart contracts on Abstract."
+---
+
+To view logs, trace calls to [system contracts](/how-abstract-works/system-contracts/overview) and more, 
+Abstract offers a [local node](https://github.com/matter-labs/era-test-node).
+
+## Running a local node
+
+To get started running a local node, follow the steps below:
+
+<Steps>
+  <Step title="Install Prerequisites">
+    If you are on Windows, we strongly recommend using [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/about).
+
+    The node is written in Rust. Install [Rust](https://www.rust-lang.org/tools/install) on your machine:
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+  </Step>
+
+  <Step title="Clone the repository">
+  From any directory, clone the `era-test-node` repository.
+
+```bash
+git clone https://github.com/matter-labs/era-test-node && cd era-test-node
+```
+
+  </Step>
+
+  <Step title="Build smart contracts">
+  You will notice there is a [Makefile](https://github.com/matter-labs/era-test-node/blob/main/Makefile)
+  at the root of the repository containing various commands.
+
+Use the commands below to fetch and build the smart contracts:
+
+```bash
+make fetch-contracts && make build-contracts
+```
+
+You can now make any changes (such as including logs) to the smart contracts in the `contracts` directory.
+
+  </Step>
+
+  <Step title="Build the node">
+  To build the binary, run the following command. 
+  
+  *Omit `clean` and `build-contracts` 
+  if you have not made any changes to the smart contracts.*
+
+```bash
+make clean && make build-contracts && make rust-build
+```
+
+  </Step>
+
+  <Step title="Run the node">
+    Once built, the node binary is available at `./target/release/era-test-node`.
+
+    Run the node using the built binary:
+
+```bash
+./target/release/era_test_node
+```
+
+    You can also run the node that forks from the current state of the Abstract testnet:
+
+```bash
+./target/release/era_test_node fork https://api.testnet.abs.xyz
+```
+
+  </Step>
+
+</Steps>
+
+### Network Details
+
+Use the details below to connect to the local node:
+
+- **Chain ID**: `260`
+- **RPC URL**: `http://localhost:8011`
+- `ethNetwork`: `localhost` (Add this for [Hardhat](/build-on-abstract/smart-contracts/hardhat))
+- `zksync`: `true` (Add this for [Hardhat](/build-on-abstract/smart-contracts/hardhat))
