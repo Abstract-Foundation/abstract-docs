@@ -18,9 +18,172 @@ Use the information below to connect and submit transactions to Abstract.
 | Verify URL          | `https://api-explorer-verify.testnet.abs.xyz/contract_verification` |
 | Currency Symbol     | ETH                                                                 |
 
+<Tip>
+  Click the button below to connect your wallet to the Abstract Testnet.
+  <ConnectWallet />
+</Tip>
+
 Once connected, use a [bridge](/ecosystem/bridges) or
 [faucet](/ecosystem/faucets) to get testnet funds into your wallet.
 
 ## Mainnet
 
 Abstract Mainnet is coming soon.
+
+export const ConnectWallet = ({ title }) => {
+  if (typeof document === "undefined") {
+    return null;
+  } else {
+    setTimeout(() => {
+      const connectWalletContainer = document.getElementById("connect-wallet-container");
+      if (connectWalletContainer) {
+        connectWalletContainer.innerHTML = '<div id="wallet-content"><button id="connectWalletBtn" class="connect-wallet-btn">Connect Wallet</button><button id="switchNetworkBtn" class="connect-wallet-btn" style="display:none;">Switch Network</button><strong id="walletStatus"></strong></div>';
+
+        const style = document.createElement('style');
+        style.textContent = `
+          .connect-wallet-btn {
+            background-color: var(--accent);
+            color: var(--accent-inverse);
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            outline: none;
+            margin-right: 10px;
+          }
+          .connect-wallet-btn:hover {
+            background-color: var(--accent-dark);
+            border-color: rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+          }
+          .connect-wallet-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
+          #walletStatus {
+            margin-top: 10px;
+            color: var(--text);
+            font-size: 14px;
+          }
+          @media (prefers-color-scheme: dark) {
+            .connect-wallet-btn {
+              background-color: var(--accent-light);
+              color: var(--accent-dark);
+              border-color: rgba(255, 255, 255, 0.1);
+            }
+            .connect-wallet-btn:hover {
+              background-color: var(--accent);
+              color: var(--accent-inverse);
+              border-color: rgba(255, 255, 255, 0.2);
+            }
+          }
+        `;
+        document.head.appendChild(style);
+
+        const connectWalletBtn = document.getElementById('connectWalletBtn');
+        const switchNetworkBtn = document.getElementById('switchNetworkBtn');
+        const walletStatus = document.getElementById('walletStatus');
+
+        const ABSTRACT_CHAIN_ID = '0x2b74'; // 11124 in hexadecimal
+        const ABSTRACT_RPC_URL = 'https://api.testnet.abs.xyz';
+
+        async function connectWallet() {
+          if (typeof window.ethereum !== 'undefined') {
+            try {
+              await window.ethereum.request({ method: 'eth_requestAccounts' });
+              connectWalletBtn.style.display = 'none';
+              await checkNetwork();
+            } catch (error) {
+              console.error('Failed to connect wallet:', error);
+            }
+          } else {
+            console.error('Please install MetaMask or another Ethereum wallet');
+          }
+        }
+
+        async function checkNetwork() {
+          if (typeof window.ethereum !== 'undefined') {
+            const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+            if (chainId === ABSTRACT_CHAIN_ID) {
+              switchNetworkBtn.style.display = 'none';
+              walletStatus.textContent = 'Connected to Abstract Testnet.';
+            } else {
+              switchNetworkBtn.style.display = 'inline-block';
+              walletStatus.textContent = '';
+            }
+          }
+        }
+
+        async function switchToAbstractChain() {
+          if (typeof window.ethereum !== 'undefined') {
+            try {
+              await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: ABSTRACT_CHAIN_ID }],
+              });
+              await checkNetwork();
+            } catch (switchError) {
+              if (switchError.code === 4902) {
+                try {
+                  await window.ethereum.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [{
+                      chainId: ABSTRACT_CHAIN_ID,
+                      chainName: 'Abstract Testnet',
+                      nativeCurrency: {
+                        name: 'Ethereum',
+                        symbol: 'ETH',
+                        decimals: 18
+                      },
+                      rpcUrls: [ABSTRACT_RPC_URL],
+                      blockExplorerUrls: ['https://explorer.testnet.abs.xyz']
+                    }],
+                  });
+                  await checkNetwork();
+                } catch (addError) {
+                  console.error('Failed to add Abstract chain:', addError);
+                }
+              } else {
+                console.error('Failed to switch to Abstract chain:', switchError);
+              }
+            }
+          }
+        }
+
+        connectWalletBtn.addEventListener('click', connectWallet);
+        switchNetworkBtn.addEventListener('click', switchToAbstractChain);
+
+        // Listen for network changes
+        if (typeof window.ethereum !== 'undefined') {
+          window.ethereum.on('chainChanged', checkNetwork);
+          window.ethereum.on('accountsChanged', (accounts) => {
+            if (accounts.length === 0) {
+              connectWalletBtn.style.display = 'inline-block';
+              switchNetworkBtn.style.display = 'none';
+              walletStatus.textContent = '';
+            } else {
+              checkNetwork();
+            }
+          });
+        }
+
+        // Initial check
+        if (typeof window.ethereum !== 'undefined') {
+          window.ethereum.request({ method: 'eth_accounts' }).then(accounts => {
+            if (accounts.length > 0) {
+              connectWalletBtn.style.display = 'none';
+              checkNetwork();
+            }
+          });
+        }
+      }
+    }, 1);
+
+    return <div id="connect-wallet-container"></div>;
+  }
+};
