@@ -76,4 +76,54 @@ Instead, the following steps occur to refund accounts for any excess funds spent
 
 When creating a transaction on Abstract, you can set the `gas_per_pubdata_limit` value
 to configure the maximum gas price that can be charged per byte of pubdata (data posted to Ethereum in the form of blobs).
-The default value for this parameter is `50000`.
+The default value for this parameter is `50000`. 
+
+##  Calculate Gas Fees 
+
+1. **Base Fee Determination**: When a batch opens, Abstract calculates the FAIR_GAS_PER_PUBDATA_BYTE (EPf):
+
+```
+EPf = ⌈(Ef) / (L1_P * L1_PUB)⌉
+```
+
+
+- Ef is the "fair" gas price in ETH
+- L1_P is the price for L1 gas in ETH
+- L1_PUB is the number of L1 gas needed for a single pubdata byte
+
+2. **Overhead Calculation**: For each transaction, Abstract calculates several types of overhead:
+
+The total overhead is the maximum of these:
+- Slot overhead (SO)
+- Memory overhead (MO)
+- Execution overhead (EAO)
+- `O(tx) = max(SO, MO(tx), EAO(tx))`
+
+
+3. **Gas Limit Estimation**: When estimating a transaction, the server returns:
+
+```
+tx.gasLimit = tx.actualGasLimit + overhead_gas(tx)
+```
+
+
+4. **Actual Fee Calculation**: The actual fee a user pays is:
+
+```
+ActualFee = gasSpent * gasPrice
+```
+
+
+
+5. **Fair Fee Calculation**: Abstract calculates a "fair fee":
+
+```
+FairFee = Ef * tx.computationalGas + EPf * pubdataUsed
+```
+
+
+6. **Refund Calculation**: If the actual fee exceeds the fair fee, a refund is issued:
+
+```
+Refund = (ActualFee - FairFee) / Base
+```
