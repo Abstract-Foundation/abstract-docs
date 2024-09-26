@@ -14,13 +14,13 @@ It uses the following hooks from [wagmi](https://wagmi.sh/) under the hood:
 ## Import
 
 ```tsx
-import { useLoginWithAbstract } from "@abstract-wallet/agw-react";
+import { useLoginWithAbstract } from "@abstract-foundation/agw-react";
 ```
 
 ## Usage
 
 ```tsx
-import { useLoginWithAbstract } from "@abstract-wallet/agw-react";
+import { useLoginWithAbstract } from "@abstract-foundation/agw-react";
 
 export default function App() {
   const { login, logout } = useLoginWithAbstract();
@@ -28,3 +28,14 @@ export default function App() {
   return <button onClick={loginWithAbstract}>Connect with Abstract</button>;
 }
 ```
+
+## Returns
+
+<ResponseField name="login" type="function">
+  Opens the signup/login modal to prompt the user to connect to the application
+  using Abstract Global Wallet.
+</ResponseField>
+
+<ResponseField name="logout" type="function">
+  Disconnects the user's wallet from the application.
+</ResponseField>
