@@ -35,7 +35,7 @@
   "anchors": [],
   "navigation": [
     {
-      "group": "",
+      "group": "Overview",
       "pages": ["overview", "what-is-abstract", "connect-to-abstract"]
     },
     {
@@ -136,7 +136,7 @@
       ]
     },
     {
-      "group": "",
+      "group": "Abstract Global Wallet",
       "pages": [
         "abstract-global-wallet/overview",
         "abstract-global-wallet/getting-started",
