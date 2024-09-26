@@ -1,7 +1,6 @@
 ---
 title: "Getting Started"
 description: "Learn how to integrate Abstract Global Wallet into your React application using the agw-react package."
-icon: "react"
 ---
 
 <Accordion title="Prerequisites">
@@ -42,6 +41,10 @@ const App = () => {
   );
 };
 ```
+
+This component wraps your application in a [WagmiProvider](https://wagmi.sh/react/api/WagmiProvider) and
+[QueryClientProvider](https://tanstack.com/query/latest/docs/framework/react/reference/QueryClientProvider),
+meaning you can use the hooks and features of both libraries within your application.
 
 ## 3. Use React Hooks
 

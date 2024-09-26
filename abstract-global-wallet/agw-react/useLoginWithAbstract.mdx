@@ -1,0 +1,30 @@
+---
+title: "useLoginWithAbstract"
+description: Hook for signing in and signing out users with Abstract Global Wallet.
+---
+
+Use the `useLoginWithAbstract` hook to prompt users to sign up or sign into your application using Abstract Global Wallet
+and optionally sign out once connected.
+
+It uses the following hooks from [wagmi](https://wagmi.sh/) under the hood:
+
+- `login`: [useConnect](https://wagmi.sh/react/api/hooks/useConnect).
+- `logout`: [useDisconnect](https://wagmi.sh/react/api/hooks/useDisconnect).
+
+## Import
+
+```tsx
+import { useLoginWithAbstract } from "@abstract-wallet/agw-react";
+```
+
+## Usage
+
+```tsx
+import { useLoginWithAbstract } from "@abstract-wallet/agw-react";
+
+export default function App() {
+  const { login, logout } = useLoginWithAbstract();
+
+  return <button onClick={loginWithAbstract}>Connect with Abstract</button>;
+}
+```

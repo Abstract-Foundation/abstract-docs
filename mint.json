@@ -144,14 +144,26 @@
       ]
     },
     {
-      "group": "agw-client",
-      "icon": "js",
-      "pages": ["abstract-global-wallet/agw-client/getting-started"]
-    },
-    {
       "group": "agw-react",
       "icon": "react",
-      "pages": ["abstract-global-wallet/agw-react/getting-started"]
+      "pages": [
+        "abstract-global-wallet/agw-react/overview",
+        "abstract-global-wallet/agw-react/getting-started",
+        "abstract-global-wallet/agw-react/integrating-with-rainbowkit",
+        "abstract-global-wallet/agw-react/useAbstractClient",
+        "abstract-global-wallet/agw-react/useGlobalWalletSignerAccount",
+        "abstract-global-wallet/agw-react/useGlobalWalletSignerClient",
+        "abstract-global-wallet/agw-react/useLoginWithAbstract",
+        "abstract-global-wallet/agw-react/useWriteContractSponsored"
+      ]
+    },
+    {
+      "group": "agw-client",
+      "icon": "js",
+      "pages": [
+        "abstract-global-wallet/agw-client/overview",
+        "abstract-global-wallet/agw-client/getting-started"
+      ]
     }
   ],
   "footerSocials": {
