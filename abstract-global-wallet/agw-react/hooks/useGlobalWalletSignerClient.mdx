@@ -27,7 +27,23 @@ import { useGlobalWalletSignerClient } from "@abstract-foundation/agw-react";
 ## Usage
 
 ```tsx
-todo;
+import { useGlobalWalletSignerClient } from "@abstract-foundation/agw-react";
+
+export default function App() {
+  const { data: client, isLoading, error } = useGlobalWalletSignerClient();
+
+  // Use the client to perform actions such as sending transactions or deploying contracts
+  async function submitTx() {
+    if (!client) return;
+
+    const hash = await client.sendTransaction({
+      to: "0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d",
+      data: "0x69",
+    });
+  }
+
+  // ... rest of your component ...
+}
 ```
 
 ## Returns
