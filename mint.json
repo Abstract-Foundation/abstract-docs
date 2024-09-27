@@ -166,7 +166,6 @@
     },
     {
       "group": "agw-client",
-      "icon": "js",
       "pages": [
         "abstract-global-wallet/agw-client/overview",
         "abstract-global-wallet/agw-client/getting-started",
