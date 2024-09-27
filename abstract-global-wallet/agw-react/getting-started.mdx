@@ -16,7 +16,7 @@ description: "Learn how to integrate Abstract Global Wallet into your React appl
 To install the `agw-react package`, run the following command:
 
 ```bash
-npm install @abstract-foundation/agw-react
+npm install @abstract-foundation/agw-react wagmi viem@2.x @tanstack/react-query
 ```
 
 ## 2. Setup the AbstractWalletProvider
@@ -48,43 +48,60 @@ meaning you can use the hooks and features of both libraries within your applica
 
 ## 3. Use React Hooks
 
-With the provider setup, you can now use any of the available hooks from the agw-react package inside
+With the provider setup, you can now use any of the available hooks from the `agw-react` package inside
 any component within your application:
 
 ```tsx
-import {
-  useLoginWithAbstract,
-  useGlobalWalletSignerAccount,
-} from "@abstract-foundation/agw-react";
+import { useLoginWithAbstract } from "@abstract-foundation/agw-react";
 
 export default function SignIn() {
-  // Prompt the user to sign in with AGW
-  const { login, logout } = useLoginWithAbstract();
-  // Get information about the user's wallet
-  const { address, status } = useGlobalWalletSignerAccount();
-
-  // Example UI:
-  if (status === "connected") {
-    return <div>Connected to {address}</div>;
-  }
+  // login function to prompt the user to sign in with AGW.
+  const { login } = useLoginWithAbstract();
 
   return <button onClick={login}>Connect with AGW</button>;
 }
 ```
 
-## 4. Submit transactions
+## 4. Use wagmi hooks
 
-Once the user has signed in, use the client available via the `useGlobalWalletSignerClient` hook to submit transactions,
-deploy smart contracts, and more.
+Once the user has signed in using the `useLoginWithAbstract` hook,
+you can freely use any wagmi hooks to send transactions, read data from the blockchain, and more.
+
+All transactions will be sent (i.e. the `tx.from` address) from the connected AGW smart contract wallet.
+
+```tsx
+import { useAccount, useSendTransaction } from "wagmi";
+
+export default function SendTransactionWithWagmi() {
+  const { address, status } = useAccount();
+  const { sendTransaction, isPending } = useSendTransaction();
+
+  return (
+    <button
+      onClick={() =>
+        sendTransaction({
+          to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
+          data: "0x69",
+        })
+      }
+      disabled={isPending || status !== "connected"}
+    >
+      {isPending ? "Sending..." : "Send Transaction"}
+    </button>
+  );
+}
+```
+
+## 5. Call the client directly
+
+If you prefer to not use wagmi hooks, you can instead call the client directly using [viem](https://viem.sh/) features.
 
 ```tsx
 import { useGlobalWalletSignerClient } from "@abstract-foundation/agw-react";
 
 export default function SendTransaction() {
-  // Get the signer (the Abstract Global Wallet)
   const { data: client } = useGlobalWalletSignerClient();
 
-  // Use the sigend-in account to submit a transaction:
   async function submitTransaction() {
     const hash = await client.sendTransaction({
       to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
