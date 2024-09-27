@@ -1,4 +1,95 @@
 ---
 title: "useGlobalWalletSignerAccount"
-description:
+description: Hook to get the approved signer of the connected Abstract Global Wallet.
 ---
+
+Use the `useGlobalWalletSignerAccount` hook to retrieve the [account](https://viem.sh/docs/ethers-migration#signers--accounts)
+approved to sign transactions for the connected Abstract Global Wallet. Helpful if you need to acces the underlying [EOA](https://ethereum.org/en/developers/docs/accounts/#types-of-account)
+approved to sign transactions for the Abstract Global Wallet smart contract.
+
+It uses the [useAccount](https://wagmi.sh/react/api/hooks/useAccount) hook from [wagmi](https://wagmi.sh/) under the hood.
+
+## Import
+
+```tsx
+import { useGlobalWalletSignerAccount } from "@abstract-foundation/agw-react";
+```
+
+## Usage
+
+```tsx
+import { useGlobalWalletSignerAccount } from "@abstract-foundation/agw-react";
+
+export default function App() {
+  const { address, status } = useGlobalWalletSignerAccount();
+
+  if (status === "disconnected") return <div>Disconnected</div>;
+
+  if (status === "connecting" || status === "reconnecting") {
+    return <div>Connecting...</div>;
+  }
+
+  return (
+    <div>
+      Connected to {address}
+      Status: {status}
+    </div>
+  );
+}
+```
+
+## Returns
+
+Returns a `UseAccountReturnType<Config>`.
+
+<Expandable title="properties">
+<ResponseField name="address" type="0x${string}` | undefined">
+  The specific address of the approved signer account (selected using `useAccount`'s `addresses[1]`).
+</ResponseField>
+
+<ResponseField name="addresses" type="readonly `0x${string}`[] | undefined">
+  An array of all addresses connected to the application.
+</ResponseField>
+
+<ResponseField name="chain" type="Chain">
+  Information about the currently connected blockchain network.
+</ResponseField>
+
+<ResponseField name="chainId" type="number">
+  The ID of the current blockchain network.
+</ResponseField>
+
+<ResponseField name="connector" type="Connector">
+  The connector instance used to manage the connection.
+</ResponseField>
+
+<ResponseField name="isConnected" type="boolean">
+  Indicates if the account is currently connected.
+</ResponseField>
+
+<ResponseField name="isReconnecting" type="boolean">
+  Indicates if the account is attempting to reconnect.
+</ResponseField>
+
+<ResponseField name="isConnecting" type="boolean">
+  Indicates if the account is in the process of connecting.
+</ResponseField>
+
+<ResponseField name="isDisconnected" type="boolean">
+  Indicates if the account is disconnected.
+</ResponseField>
+
+<ResponseField
+  name="status"
+  type="'connected' | 'connecting' | 'reconnecting' | 'disconnected'"
+>
+  A string representing the connection status of the account to the application.
+
+- `'connecting'` attempting to establish connection.
+- `'reconnecting'` attempting to re-establish connection to one or more connectors.
+- `'connected'` at least one connector is connected.
+- `'disconnected'` no connection to any connector.
+
+</ResponseField>
+
+</Expandable>
