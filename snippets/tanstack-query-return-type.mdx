@@ -1,0 +1,102 @@
+<ResponseField name="dataUpdatedAt" type="number">
+  The timestamp for when the query most recently returned the status as
+  'success'.
+</ResponseField>
+
+<ResponseField name="error" type="null | Error">
+  The error object for the query, if an error was thrown. Defaults to null.
+</ResponseField>
+
+<ResponseField name="errorUpdatedAt" type="number">
+  The timestamp for when the query most recently returned the status as 'error'.
+</ResponseField>
+
+<ResponseField name="errorUpdateCount" type="number">
+  The sum of all errors.
+</ResponseField>
+
+<ResponseField name="failureCount" type="number">
+  The failure count for the query. Incremented every time the query fails. Reset
+  to 0 when the query succeeds.
+</ResponseField>
+
+<ResponseField name="failureReason" type="null | Error">
+  The failure reason for the query retry. Reset to null when the query succeeds.
+</ResponseField>
+
+<ResponseField name="fetchStatus" type="'fetching' | 'idle' | 'paused'">
+  - fetching: Is true whenever the queryFn is executing, which includes initial
+  pending as well as background refetches. - paused: The query wanted to fetch,
+  but has been paused. - idle: The query is not fetching. See Network Mode for
+  more information.
+</ResponseField>
+
+<ResponseField name="isError / isPending / isSuccess" type="boolean">
+  Boolean variables derived from status.
+</ResponseField>
+
+<ResponseField name="isFetched" type="boolean">
+  Will be true if the query has been fetched.
+</ResponseField>
+
+<ResponseField name="isFetchedAfterMount" type="boolean">
+  Will be true if the query has been fetched after the component mounted. This
+  property can be used to not show any previously cached data.
+</ResponseField>
+
+<ResponseField name="isFetching / isPaused" type="boolean">
+  Boolean variables derived from fetchStatus.
+</ResponseField>
+
+<ResponseField name="isLoading" type="boolean">
+  Is `true` whenever the first fetch for a query is in-flight. Is the same as
+  `isFetching && isPending`.
+</ResponseField>
+
+<ResponseField name="isLoadingError" type="boolean">
+  Will be `true` if the query failed while fetching for the first time.
+</ResponseField>
+
+<ResponseField name="isPlaceholderData" type="boolean">
+  Will be `true` if the data shown is the placeholder data.
+</ResponseField>
+
+<ResponseField name="isRefetchError" type="boolean">
+  Will be `true` if the query failed while refetching.
+</ResponseField>
+
+<ResponseField name="isRefetching" type="boolean">
+  Is true whenever a background refetch is in-flight, which does not include
+  initial `pending`. Is the same as `isFetching && !isPending`.
+</ResponseField>
+
+<ResponseField name="isStale" type="boolean">
+  Will be `true` if the data in the cache is invalidated or if the data is older
+  than the given staleTime.
+</ResponseField>
+
+<ResponseField
+  name="refetch"
+  type="(options?: {cancelRefetch?: boolean}) => Promise<QueryObserverResult<AbstractClient, Error>>"
+>
+A function to manually refetch the query.
+
+- `cancelRefetch`: When set to `true`, a
+  currently running request will be cancelled before a new request is made. When
+  set to false, no refetch will be made if there is already a request running. Defaults to `true`.
+
+</ResponseField>
+
+<ResponseField name="status" type="'error' | 'pending' | 'success'">
+
+- `pending`: if there's no cached data and no query attempt was finished yet.
+- `error`: if the query attempt resulted in an error. The corresponding error
+  property has the error received from the attempted fetch.
+- `success`: if the query has received a response with no errors and is ready to display its data.
+
+The corresponding data property on the query is the data received from the
+successful fetch or if the query's enabled property is set to successful fetch
+or if the query's enabled property is set to false and has not been fetched
+yet data is the first initialData supplied to the query on initialization.
+
+</ResponseField>

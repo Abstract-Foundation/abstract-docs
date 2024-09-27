@@ -2,3 +2,55 @@
 title: "useAbstractClient"
 description: Hook for creating and managing an Abstract client instance.
 ---
+
+import TanStackQueryReturnTypeSnippet from "/snippets/tanstack-query-return-type.mdx";
+
+Gets the [Wallet client](https://viem.sh/docs/clients/wallet)
+exposed by the the [AbstractWalletProvider](/abstract-global-wallet/agw-react/AbstractWalletProvider) context.
+
+Use this client to perform actions from the connected Abstract Global Wallet, for example [deployContract](https://viem.sh/zksync/actions/deployContract),
+[sendTransaction](https://viem.sh/zksync/actions/sendTransaction), [writeContract](https://viem.sh/zksync/actions/writeContract), etc.
+
+_Note: Wagmi hooks are also available for these actions (e.g. [useDeployContract](https://wagmi.sh/react/api/hooks/useDeployContract)). The `useAbstractClient` hook
+is useful if you want to perform these actions **without** hooks._
+
+## Import
+
+```tsx
+import { useAbstractClient } from "@abstract-wallet/agw-react";
+```
+
+## Usage
+
+```tsx
+import { useAbstractClient } from "@abstract-foundation/agw-react";
+
+export default function App() {
+  const { data: abstractClient, isLoading, error } = useAbstractClient();
+
+  // Use the client to perform actions such as sending transactions or deploying contracts
+  async function submitTx() {
+    if (!abstractClient) return;
+
+    const hash = await abstractClient.sendTransaction({
+      to: "0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d",
+      data: "0x69",
+    });
+  }
+
+  // ... rest of your component ...
+}
+```
+
+## Returns
+
+Returns a `UseQueryResult<AbstractClient, Error>`.
+
+<Expandable title="return fields">
+  <ResponseField name="data" type="AbstractClient | undefined">
+    The Abstract client instance from the
+    [AbstractWalletProvider](/abstract-global-wallet/agw-react/AbstractWalletProvider)
+    context.
+  </ResponseField>
+  <TanStackQueryReturnTypeSnippet />
+</Expandable>
