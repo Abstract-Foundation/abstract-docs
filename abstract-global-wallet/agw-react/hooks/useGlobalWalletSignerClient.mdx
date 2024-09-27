@@ -1,4 +1,45 @@
 ---
 title: "useGlobalWalletSignerClient"
-description:
+description: Hook to get a wallet client instance connected to the approved signer of the connected Abstract Global Wallet.
 ---
+
+import TanStackQueryReturnTypeSnippet from "/snippets/tanstack-query-return-type.mdx";
+
+Use the `useGlobalWalletSignerClient` hook to get a [wallet client](https://viem.sh/docs/clients/wallet)
+instance that can perform actions from the underlying [EOA](https://ethereum.org/en/developers/docs/accounts/#types-of-account)
+approved to sign transactions for the Abstract Global Wallet smart contract.
+
+This hook is different from [useAbstractClient](/abstract-global-wallet/agw-react/hooks/useAbstractClient), which
+performs actions (e.g. sending a transaction) from the Abstract Global Wallet smart contract itself, not the account approved to sign transactions for it.
+
+It uses the following hooks from under the hood:
+
+- [useGlobalWalletSignerAccount](/abstract-global-wallet/agw-react/hooks/useGlobalWalletSignerAccount): Retrieves the specific address of the Global Wallet Signer.
+- [useWalletClient](https://wagmi.sh/react/api/hooks/useWalletClient): Returns a [wallet client](https://viem.sh/docs/clients/wallet) instance with the `account`
+  set as the approved EOA.
+
+## Import
+
+```tsx
+import { useGlobalWalletSignerClient } from "@abstract-foundation/agw-react";
+```
+
+## Usage
+
+```tsx
+todo;
+```
+
+## Returns
+
+Returns a `UseQueryResult<UseWalletClientReturnType, Error>`.
+
+See [wagmi's useWalletClient](https://wagmi.sh/react/api/hooks/useWalletClient) for more information.
+
+<Expandable title="properties">
+  <ResponseField name="data" type="UseWalletClientReturnType | undefined">
+    The wallet client instance connected to the approved signer of the connected
+    Abstract Global Wallet.
+  </ResponseField>
+  <TanStackQueryReturnTypeSnippet />
+</Expandable>
