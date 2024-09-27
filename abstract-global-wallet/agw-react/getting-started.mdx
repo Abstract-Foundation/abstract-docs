@@ -11,7 +11,19 @@ description: "Learn how to integrate Abstract Global Wallet into your React appl
 
 </Accordion>
 
-## 1. Install agw-react
+## Quickstart
+
+Starting a new project? Use our CLI to bootstrap a new project with Abstract Global Wallet configured inside a Next.js app.
+
+```bash
+npx create-abstract-app@latest my-app
+```
+
+## Manual Setup
+
+Alternatively, integrate AGW into an existing React app using the steps below.
+
+### 1. Install agw-react
 
 To install the `agw-react package`, run the following command:
 
@@ -19,7 +31,7 @@ To install the `agw-react package`, run the following command:
 npm install @abstract-foundation/agw-react wagmi viem@2.x @tanstack/react-query
 ```
 
-## 2. Setup the AbstractWalletProvider
+### 2. Setup the AbstractWalletProvider
 
 Wrap your application in the `AbstractWalletProvider` component to enable the use of the package's hooks and components
 throughout your application.
@@ -46,7 +58,7 @@ This component wraps your application in a [WagmiProvider](https://wagmi.sh/reac
 [QueryClientProvider](https://tanstack.com/query/latest/docs/framework/react/reference/QueryClientProvider),
 meaning you can use the hooks and features of both libraries within your application.
 
-## 3. Use React Hooks
+### 3. Use React Hooks
 
 With the provider setup, you can now use any of the available hooks from the `agw-react` package inside
 any component within your application:
@@ -62,7 +74,7 @@ export default function SignIn() {
 }
 ```
 
-## 4. Use wagmi hooks
+### 4. Use wagmi hooks
 
 Once the user has signed in using the `useLoginWithAbstract` hook,
 you can freely use any wagmi hooks to send transactions, read data from the blockchain, and more.
@@ -92,7 +104,7 @@ export default function SendTransactionWithWagmi() {
 }
 ```
 
-## 5. Call the client directly
+### 5. Call the client directly
 
 If you prefer to not use wagmi hooks, you can instead call the client directly using [viem](https://viem.sh/) features.
 
