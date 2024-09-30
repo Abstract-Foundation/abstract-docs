@@ -177,7 +177,6 @@
           "group": "Actions",
           "pages": [
             "abstract-global-wallet/agw-client/actions/deployContract",
-            "abstract-global-wallet/agw-client/actions/prepareTransaction",
             "abstract-global-wallet/agw-client/actions/sendTransaction",
             "abstract-global-wallet/agw-client/actions/signTransaction",
             "abstract-global-wallet/agw-client/actions/writeContract"
