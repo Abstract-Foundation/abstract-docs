@@ -28,7 +28,6 @@ the first transaction they send will first deploy one, set the account as the ow
 
 ```tsx
 import { createAbstractClient } from "@abstract-foundation/agw-client";
-import { http } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { abstractTestnet } from "viem/chains";
 
@@ -42,7 +41,6 @@ const account = privateKeyToAccount(randomPrivateKey); // Use that to create a s
 const agwClient = await createAbstractClient({
   chain: abstractTestnet,
   signer: account, // This is the AGW "owner" (the initial approved signer) of the smart contract wallet.
-  transport: http(`https://api.testnet.abs.xyz`),
 });
 ```
 

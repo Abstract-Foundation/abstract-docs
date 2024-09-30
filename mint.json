@@ -169,10 +169,20 @@
       "pages": [
         "abstract-global-wallet/agw-client/overview",
         "abstract-global-wallet/agw-client/getting-started",
-        "abstract-global-wallet/agw-client/AbstractClient",
         "abstract-global-wallet/agw-client/createAbstractClient",
         "abstract-global-wallet/agw-client/getSmartAccountAddressFromInitialSigner",
-        "abstract-global-wallet/agw-client/transformEIP1193Provider"
+        "abstract-global-wallet/agw-client/transformEIP1193Provider",
+
+        {
+          "group": "Actions",
+          "pages": [
+            "abstract-global-wallet/agw-client/actions/deployContract",
+            "abstract-global-wallet/agw-client/actions/prepareTransaction",
+            "abstract-global-wallet/agw-client/actions/sendTransaction",
+            "abstract-global-wallet/agw-client/actions/signTransaction",
+            "abstract-global-wallet/agw-client/actions/writeContract"
+          ]
+        }
       ]
     }
   ],
