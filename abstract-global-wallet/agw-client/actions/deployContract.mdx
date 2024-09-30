@@ -70,6 +70,26 @@ export const agwClient = await createAbstractClient({
 
 <ResponseField name="args" type="Inferred from ABI">
   Constructor arguments to call upon deployment.
+
+<Expandable title="Example">
+
+```tsx
+import { deployContract } from "@abstract-foundation/agw-client";
+import { contractAbi, contractBytecode } from "./const";
+import { agwClient } from "./config";
+import { abstractTestnet } from "viem/chains";
+
+const hash = await deployContract({
+  abi: contractAbi,
+  bytecode: contractBytecode,
+  chain: abstractTestnet,
+  account: agwClient.account,
+  args: [123, "0x1234567890123456789012345678901234567890", true],
+});
+```
+
+</Expandable>
+
 </ResponseField>
 
 <ResponseField
@@ -98,6 +118,30 @@ contracts that are not yet deployed on the network.
 
 Learn more on the [Contract deployment page](/how-abstract-works/evm-differences/contract-deployment).
 
+<Expandable title="Example">
+
+```tsx
+import { deployContract } from "@abstract-foundation/agw-client";
+import {
+  contractAbi,
+  contractBytecode,
+  dependencyBytecode1,
+  dependencyBytecode2,
+} from "./const";
+import { agwClient } from "./config";
+import { abstractTestnet } from "viem/chains";
+
+const hash = await deployContract({
+  abi: contractAbi,
+  bytecode: contractBytecode,
+  chain: abstractTestnet,
+  account: agwClient.account,
+  factoryDeps: [dependencyBytecode1, dependencyBytecode2],
+});
+```
+
+</Expandable>
+
 </ResponseField>
 
 <ResponseField name="salt" type="Hash">
@@ -109,12 +153,44 @@ Learn more on the [Contract deployment page](/how-abstract-works/evm-differences
 </ResponseField>
 
 <ResponseField name="paymaster" type="Account | Address">
-  Address of the paymaster account that will pay the fees. The paymasterInput
-  field is required with this one.
+
+Address of the
+[paymaster](/how-abstract-works/native-account-abstraction/paymasters) smart
+contract that will pay the gas fees of the deployment transaction.
+
+Must also provide a `paymasterInput` field.
+
 </ResponseField>
 
 <ResponseField name="paymasterInput" type="0x${string}">
-  Input data to the paymaster. The paymaster field is required with this one.
+
+Input data to the **paymaster**.
+
+Must also provide a `paymaster` field.
+
+<Expandable title="Example">
+
+```tsx
+import { deployContract } from "@abstract-foundation/agw-client";
+import { contractAbi, contractBytecode } from "./const";
+import { agwClient } from "./config";
+import { abstractTestnet } from "viem/chains";
+import { getGeneralPaymasterInput } from "viem/zksync";
+
+const hash = await deployContract({
+  abi: contractAbi,
+  bytecode: contractBytecode,
+  chain: abstractTestnet,
+  account: agwClient.account,
+  paymaster: "0x1234567890123456789012345678901234567890",
+  paymasterInput: getGeneralPaymasterInput({
+    innerInput: "0x",
+  }),
+});
+```
+
+</Expandable>
+
 </ResponseField>
 
 ## Returns
