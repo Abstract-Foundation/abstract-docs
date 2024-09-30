@@ -4,7 +4,7 @@ description: Hook to get the approved signer of the connected Abstract Global Wa
 ---
 
 Use the `useGlobalWalletSignerAccount` hook to retrieve the [account](https://viem.sh/docs/ethers-migration#signers--accounts)
-approved to sign transactions for the connected Abstract Global Wallet. Helpful if you need to acces the underlying [EOA](https://ethereum.org/en/developers/docs/accounts/#types-of-account)
+approved to sign transactions for the connected Abstract Global Wallet. This is helpful if you need to acces the underlying [EOA](https://ethereum.org/en/developers/docs/accounts/#types-of-account)
 approved to sign transactions for the Abstract Global Wallet smart contract.
 
 It uses the [useAccount](https://wagmi.sh/react/api/hooks/useAccount) hook from [wagmi](https://wagmi.sh/) under the hood.
@@ -31,7 +31,7 @@ export default function App() {
 
   return (
     <div>
-      Connected to {address}
+      Connected to EOA: {address}
       Status: {status}
     </div>
   );

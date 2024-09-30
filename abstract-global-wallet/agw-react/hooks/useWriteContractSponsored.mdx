@@ -3,7 +3,7 @@ title: "useWriteContractSponsored"
 description: "Hook for interacting with smart contracts using paymasters to cover gas fees."
 ---
 
-Use the `useWriteContractSponsored` hook to interact with smart contracts with gas fees sponsored by a
+Use the `useWriteContractSponsored` hook to initiate transactions on smart contracts with the transaction gas fees sponsored by a
 [paymaster](/how-abstract-works/native-account-abstraction/paymasters).
 
 It uses the [useWriteContract](https://wagmi.sh/react/api/hooks/useWriteContract) hook from [wagmi](https://wagmi.sh/)
@@ -32,11 +32,11 @@ export default function App() {
 
   const handleWriteContract = () => {
     writeContractSponsored({
-      address: "0xYourContractAddress",
       abi: contractAbi,
-      functionName: "yourFunctionName",
-      args: ["arg1", "arg2"],
-      paymaster: "0xYourPaymasterAddress",
+      address: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA",
+      functionName: "mint",
+      args: [address, BigInt(1)],
+      paymaster: "0x5407B5040dec3D339A9247f3654E59EEccbb6391",
       paymasterInput: getGeneralPaymasterInput({
         innerInput: "0x",
       }),

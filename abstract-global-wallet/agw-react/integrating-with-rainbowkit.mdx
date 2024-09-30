@@ -22,7 +22,7 @@ npm install @abstract-foundation/agw-react @rainbow-me/rainbowkit wagmi viem@2.x
 
 ## Import
 
-Below is the `abstractWallet` connector you can use to add Abstract Global Wallet as a
+The `agw-react` package includes the `abstractWallet` connector you can use to add Abstract Global Wallet as a
 connection option in your RainbowKit [ConnectButton](https://www.rainbowkit.com/docs/connect-button).
 
 ```tsx
@@ -31,7 +31,8 @@ import { abstractWallet } from "@abstract-foundation/agw-react/connectors";
 
 ## Usage
 
-First, wrap your application in the providers and render the `ConnectButton` in your app.
+1. Wrap your application in the wagmi, TanStack Query, and RainbowKit providers with the `abstractWallet` connector included as a connection option.
+2. Render the `ConnectButton`.
 
 ### 1. Configure the Providers
 
@@ -41,42 +42,12 @@ Wrap your application in the following providers:
 - [QueryClientProvider](https://tanstack.com/query/latest/docs/framework/react/reference/QueryClientProvider) from `@tanstack/react-query`.
 - [RainbowKitProvider](https://www.rainbowkit.com/docs/customization#customizing-the-connect-button) from `@rainbow-me/rainbowkit`.
 
-```tsx
-import {
-  RainbowKitProvider,
-  connectorsForWallets,
-  darkTheme,
-} from "@rainbow-me/rainbowkit";
-import { abstractWallet } from "@abstract-foundation/agw-react/connectors";
-import { abstractTestnet } from "wagmi/chains";
-import { createConfig, WagmiProvider } from "wagmi";
-import { http } from "viem";
+<CodeGroup>
+
+```tsx Providers
+import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const connectors = connectorsForWallets(
-  [
-    {
-      groupName: "Abstract",
-      wallets: [abstractWallet],
-    },
-  ],
-  {
-    appName: "Rainbowkit Test",
-    projectId: "",
-    appDescription: "",
-    appIcon: "",
-    appUrl: "",
-  }
-);
-
-export const config = createConfig({
-  connectors,
-  chains: [abstractTestnet],
-  transports: {
-    [abstractTestnet.id]: http(),
-  },
-  ssr: true,
-});
+import { WagmiProvider } from "wagmi";
 
 const client = new QueryClient();
 
@@ -93,6 +64,44 @@ export default function AbstractWalletWrapper() {
 }
 ```
 
+```tsx RainbowKit Config
+import { connectorsForWallets } from "@rainbow-me/rainbowkit";
+import { abstractWallet } from "@abstract-foundation/agw-react/connectors";
+
+const connectors = connectorsForWallets(
+  [
+    {
+      groupName: "Abstract",
+      wallets: [abstractWallet],
+    },
+  ],
+  {
+    appName: "Rainbowkit Test",
+    projectId: "",
+    appDescription: "",
+    appIcon: "",
+    appUrl: "",
+  }
+);
+```
+
+```tsx Wagmi Config
+import { createConfig } from "wagmi";
+import { abstractTestnet } from "wagmi/chains";
+import { http } from "viem";
+
+export const config = createConfig({
+  connectors,
+  chains: [abstractTestnet],
+  transports: {
+    [abstractTestnet.id]: http(),
+  },
+  ssr: true,
+});
+```
+
+</CodeGroup>
+
 ### 2. Render the ConnectButton
 
 Render the `ConnectButton` from `@rainbow-me/rainbowkit` anywhere in your app.
@@ -105,7 +114,7 @@ export default function AbstractWalletWrapper() {
 }
 ```
 
-It will add the **Abstract** section as an option for users to connect using Abstract Global Wallet.
+It will add the **Abstract** section as an option for users to connect using Abstract Global Wallet:
 
 <img
   className="block dark:hidden"

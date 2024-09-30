@@ -1,6 +1,6 @@
 ---
 title: "useGlobalWalletSignerClient"
-description: Hook to get a wallet client instance connected to the approved signer of the connected Abstract Global Wallet.
+description: Hook to get a wallet client instance of the approved signer of the connected Abstract Global Wallet.
 ---
 
 import TanStackQueryReturnTypeSnippet from "/snippets/tanstack-query-return-type.mdx";
@@ -10,7 +10,7 @@ instance that can perform actions from the underlying [EOA](https://ethereum.org
 approved to sign transactions for the Abstract Global Wallet smart contract.
 
 This hook is different from [useAbstractClient](/abstract-global-wallet/agw-react/hooks/useAbstractClient), which
-performs actions (e.g. sending a transaction) from the Abstract Global Wallet smart contract itself, not the account approved to sign transactions for it.
+performs actions (e.g. sending a transaction) from the Abstract Global Wallet smart contract itself, not the EOA approved to sign transactions for it.
 
 It uses the following hooks from under the hood:
 

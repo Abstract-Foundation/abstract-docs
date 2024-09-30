@@ -5,36 +5,40 @@ description: "Learn how to integrate Abstract Global Wallet into your applicatio
 
 Abstract Global Wallet (AGW) has two packages available for integration:
 
-1. <Icon icon="js" /> [agw-client](/abstract-global-wallet/agw-client/getting-started):
-   For JavaScript/TypeScript environments - built on [viem](https://github.com/wagmi-dev/viem).
-
-2. <Icon icon="react" /> [agw-react](/abstract-global-wallet/agw-react/getting-started):
+1. <Icon icon="react" /> [agw-react](/abstract-global-wallet/agw-react/overview):
    For frontend applications using React - built on [wagmi](https://github.com/wagmi-dev/wagmi).
+
+2. <Icon icon="js" /> [agw-client](/abstract-global-wallet/agw-client/overview):
+   For JavaScript/TypeScript environments - built on [viem](https://github.com/wagmi-dev/viem).
 
 ## Starter Kits
 
-To kickstart a new project with AGW configured in a Next.js app, use our [CLI](TODO) tool:
+To kickstart a new project with AGW configured in a Next.js app, use our CLI tool:
 
 ```bash
-npx create-abstract-app@latest my-app
+npx @abstract-foundation/create-abstract-app@latest my-app
 ```
 
 Or clone one of our [example repositories](https://github.com/Abstract-Foundation/examples)
 to quickly get started:
 
 <CardGroup cols={3}>
-  <Card title="TypeScript + AGW" icon="js" href="TODO" />
-  <Card title="Next.js + AGW" icon="react" href="TODO" />
-  <Card title="Next.js, AGW, & RainbowKit" icon="react" href="TODO" />
+  <Card
+    title="Next.js + AGW"
+    icon="react"
+    href="https://github.com/Abstract-Foundation/examples/tree/main/agw-nextjs"
+  />
+  <Card
+    title="Next.js, AGW, & RainbowKit"
+    icon="react"
+    href="https://github.com/Abstract-Foundation/examples/tree/main/agw-rainbowkit-nextjs"
+  />
+  <Card
+    title="TypeScript + AGW"
+    icon="js"
+    href="https://github.com/Abstract-Foundation/examples/tree/main/agw-typescript"
+  />
 </CardGroup>
-
-Or follow our [video tutorial](TODO) for a step-by-step guide to using AGW in your application.
-
-<Card
-  title="YouTube Video: Get Started with Abstract Global Wallet"
-  icon="youtube"
-  href="TODO"
-/>
 
 ## Manual Installation
 
@@ -44,17 +48,17 @@ or [agw-react](/abstract-global-wallet/agw-react/getting-started) package.
 
 <CardGroup cols={2}>
   <Card
-    title="Get Started: agw-client"
-    icon="js"
-    href="/abstract-global-wallet/agw-client/getting-started"
-  >
-    Setup AGW in a JavaScript/TypeScript project using `agw-client`.
-  </Card>
-  <Card
     title="Get Started: agw-react"
     icon="react"
     href="/abstract-global-wallet/agw-react/getting-started"
   >
     Setup AGW in a frontend application with React using `agw-react`.
+  </Card>
+  <Card
+    title="Get Started: agw-client"
+    icon="js"
+    href="/abstract-global-wallet/agw-client/getting-started"
+  >
+    Setup AGW in a JavaScript/TypeScript project using `agw-client`.
   </Card>
 </CardGroup>

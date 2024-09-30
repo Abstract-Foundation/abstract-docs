@@ -16,16 +16,15 @@ hooks as you would with any other wallet, as well as all of the [viem](https://v
 
 Both wagmi and TanStack Query wrap your application in a **provider** component that allows you
 to use the hooks and components they provide anywhere in your application.
-This is called the [provider pattern](https://react.dev/learn/passing-data-deeply-with-context).
 
 The `agw-react` package similarly provides the [AbstractWalletProvider](/abstract-global-wallet/agw-react/AbstractWalletProvider) component,
-which under the hood wraps your application in both of these providers:
+which under the hood wraps your application in the following providers:
 
-- The TanStack [QueryClientProvider](https://tanstack.com/query/latest/docs/framework/react/reference/QueryClientProvider):
-  to manage your application's state using [queries](https://wagmi.sh/react/guides/tanstack-query) and [mutations](https://wagmi.sh/react/guides/tanstack-query),
-  e.g. to check if a wallet is connected, read data from the blockchain, and send transactions.
-- The wagmi [WagmiProvider](https://wagmi.sh/react/api/WagmiProvider): configured to use the Abstract [networks](/connect-to-abstract)
-  and the Abstract Global Wallet as a [wallet connection option](https://wagmi.sh/react/guides/connect-wallet).
+1. The TanStack [QueryClientProvider](https://tanstack.com/query/latest/docs/framework/react/reference/QueryClientProvider):
+   to manage your application's state using [queries](https://wagmi.sh/react/guides/tanstack-query) and [mutations](https://wagmi.sh/react/guides/tanstack-query),
+   e.g. to check if a wallet is connected, read data from the blockchain, and send transactions.
+2. The wagmi [WagmiProvider](https://wagmi.sh/react/api/WagmiProvider): configured to use the Abstract [network](/connect-to-abstract)
+   with Abstract Global Wallet as a [wallet connection option](https://wagmi.sh/react/guides/connect-wallet).
 
 Learn more about the [wagmi](https://wagmi.sh/) and [TanStack Query](https://tanstack.com/query/latest/docs/framework/react/overview)
 libraries using the resources below:
