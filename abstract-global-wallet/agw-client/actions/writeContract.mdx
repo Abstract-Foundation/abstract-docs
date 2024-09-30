@@ -1,4 +1,123 @@
 ---
 title: "writeContract"
-description:
+description: Function to call functions on a smart contract using the connected Abstract Global Wallet.
 ---
+
+The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient)
+includes a `writeContract` method that can be used to call functions on a smart contract using the connected Abstract Global Wallet.
+
+## Usage
+
+<CodeGroup>
+
+```tsx example.ts
+import { agwClient } from "./config";
+import { parseAbi } from "viem";
+import { getGeneralPaymasterInput } from "viem/zksync";
+
+const transactionHash = await agwClient.writeContract({
+  abi: parseAbi(["function mint(address,uint256) external"]), // Your contract ABI
+  address: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA",
+  functionName: "mint",
+  args: [address, BigInt(1)],
+  // Optional paymaster fields
+  paymaster: "0x5407B5040dec3D339A9247f3654E59EEccbb6391",
+  paymasterInput: getGeneralPaymasterInput({
+    innerInput: "0x",
+  }),
+});
+```
+
+```tsx config.ts
+import { createAbstractClient } from "@abstract-foundation/agw-client";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { abstractTestnet } from "viem/chains";
+
+// As an example, we are creating a new dummy account here for the signer.
+const randomPrivateKey = generatePrivateKey(); // Make a random private key
+const account = privateKeyToAccount(randomPrivateKey); // Use that to create a signer
+
+export const agwClient = await createAbstractClient({
+  chain: abstractTestnet,
+  signer: account, // The "owner" (initial approved signer) of the AGW smart contract wallet.
+});
+```
+
+</CodeGroup>
+
+## Parameters
+
+<ResponseField name="address" type="Address" required>
+  The address of the contract to write to.
+</ResponseField>
+
+<ResponseField name="abi" type="Abi" required>
+  The ABI of the contract to write to.
+</ResponseField>
+
+<ResponseField name="functionName" type="string" required>
+  The name of the function to call on the contract.
+</ResponseField>
+
+<ResponseField name="args" type="unknown[]">
+  The arguments to pass to the function.
+</ResponseField>
+
+<ResponseField name="account" type="Account">
+  The account to use for the transaction. By default, this is set to the
+  Abstract Global Wallet's account.
+</ResponseField>
+
+<ResponseField name="chain" type="Chain">
+  The chain to use for the transaction. By default, this is set to the chain
+  specified in the AbstractClient.
+</ResponseField>
+
+<ResponseField name="value" type="bigint">
+  The amount of native token to send with the transaction (in wei).
+</ResponseField>
+
+<ResponseField name="dataSuffix" type="Hex">
+  Data to append to the end of the calldata. Useful for adding a ["domain"
+  tag](https://opensea.notion.site/opensea/Seaport-Order-Attributions-ec2d69bf455041a5baa490941aad307f).
+</ResponseField>
+
+<ResponseField name="gasPerPubdata" type="bigint">
+  The amount of gas for publishing one byte of data on Ethereum.
+</ResponseField>
+
+<ResponseField name="paymaster" type="Account | Address">
+  Address of the
+  [paymaster](/how-abstract-works/native-account-abstraction/paymasters) smart
+  contract that will pay the gas fees of the transaction.
+</ResponseField>
+
+<ResponseField name="paymasterInput" type="0x${string}">
+  Input data to the paymaster. Required if `paymaster` is provided.
+
+<Expandable title="Example with Paymaster">
+
+```tsx
+import { agwClient } from "./config";
+import { parseAbi } from "viem";
+import { getGeneralPaymasterInput } from "viem/zksync";
+
+const transactionHash = await agwClient.writeContract({
+  abi: parseAbi(["function mint(address,uint256) external"]),
+  address: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA",
+  functionName: "mint",
+  args: [address, BigInt(1)],
+  paymaster: "0x5407B5040dec3D339A9247f3654E59EEccbb6391",
+  paymasterInput: getGeneralPaymasterInput({
+    innerInput: "0x",
+  }),
+});
+```
+
+</Expandable>
+
+</ResponseField>
+
+## Returns
+
+Returns a `Promise<Hash>` containing the transaction hash of the contract write operation.
