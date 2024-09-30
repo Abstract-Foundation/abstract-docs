@@ -5,7 +5,7 @@ description: Function to sign a transaction using the connected Abstract Global 
 
 The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient)
 includes a `signTransaction` method that can be used to sign a transaction using the connected Abstract Global Wallet.
-It extends the [signTransaction](https://viem.sh/docs/actions/wallet/signTransaction) function from Viem to include support for
+It extends the [signTransaction](https://viem.sh/zksync/actions/signTransaction) function from Viem to include support for
 [EIP-712 transactions on Abstract](/how-abstract-works/evm-differences/transactions).
 
 Transactions are signed by the approved signer account of the Abstract Global Wallet.
@@ -16,7 +16,6 @@ Transactions are signed by the approved signer account of the Abstract Global Wa
 
 ```tsx example.ts
 import { agwClient } from "./config";
-import { parseEther } from "viem";
 
 const signedTransaction = await agwClient.signTransaction({
   to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
@@ -118,7 +117,7 @@ import { getGeneralPaymasterInput } from "viem/zksync";
 const signature = await signTransaction({
   to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
   data: "0x69",
-  paymaster: "0x9876543210987654321098765432109876543210",
+  paymaster: "0x5407B5040dec3D339A9247f3654E59EEccbb6391",
   paymasterInput: getGeneralPaymasterInput({
     innerInput: "0x",
   }),

@@ -1,4 +1,142 @@
 ---
 title: "sendTransaction"
-description:
+description: Function to send a transaction using the connected Abstract Global Wallet.
 ---
+
+The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient)
+includes a `sendTransaction` method that can be used to sign and submit a transaction to the chain using the connected Abstract Global Wallet.
+It extends the [sendTransaction](https://viem.sh/zksync/actions/sendTransaction) function from Viem to include support for
+[EIP-712 transactions on Abstract](/how-abstract-works/evm-differences/transactions).
+
+Transactions are signed by the approved signer account of the Abstract Global Wallet.
+
+## Usage
+
+<CodeGroup>
+
+```tsx example.ts
+import { agwClient } from "./config";
+
+const transactionHash = await agwClient.sendTransaction({
+  to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
+  data: "0x69",
+});
+```
+
+```tsx config.ts
+import { createAbstractClient } from "@abstract-foundation/agw-client";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { abstractTestnet } from "viem/chains";
+
+// As an example, we are creating a new dummy account here for the signer.
+const randomPrivateKey = generatePrivateKey(); // Make a random private key
+const account = privateKeyToAccount(randomPrivateKey); // Use that to create a signer
+
+export const agwClient = await createAbstractClient({
+  chain: abstractTestnet,
+  signer: account, // The "owner" (initial approved signer) of the AGW smart contract wallet.
+});
+```
+
+</CodeGroup>
+
+## Parameters
+
+<ResponseField name="to" type="Address | null | undefined">
+  The recipient address of the transaction.
+</ResponseField>
+
+<ResponseField name="from" type="Address">
+
+The sender address of the transaction.
+
+By default, this is set as the Abstract Global Wallet smart contract address.
+
+</ResponseField>
+
+<ResponseField name="data" type="Hex | undefined">
+  Contract code or a hashed method call with encoded args.
+</ResponseField>
+
+<ResponseField name="gas" type="bigint | undefined">
+  Gas provided for transaction execution.
+</ResponseField>
+
+<ResponseField name="nonce" type="number | undefined">
+
+Unique number identifying this transaction.
+
+Learn more in the [handling nonces](/how-abstract-works/native-account-abstraction/handling-nonces) section.
+
+</ResponseField>
+
+<ResponseField name="value" type="bigint | undefined">
+  Value in wei sent with this transaction.
+</ResponseField>
+
+<ResponseField name="maxFeePerGas" type="bigint">
+  Total fee per gas in wei (`gasPrice/baseFeePerGas + maxPriorityFeePerGas`).
+</ResponseField>
+
+<ResponseField name="maxPriorityFeePerGas" type="bigint">
+  Max priority fee per gas (in wei).
+</ResponseField>
+
+<ResponseField name="gasPerPubdata" type="bigint | undefined">
+  The amount of gas for publishing one byte of data on Ethereum.
+</ResponseField>
+
+<ResponseField name="factoryDeps" type="Hex[] | undefined">
+  An array of bytecodes of contracts that are dependencies for the transaction.
+</ResponseField>
+
+<ResponseField name="paymaster" type="Account | Address">
+
+Address of the
+[paymaster](/how-abstract-works/native-account-abstraction/paymasters) smart
+contract that will pay the gas fees of the transaction.
+
+Must also provide a `paymasterInput` field.
+
+</ResponseField>
+
+<ResponseField name="paymasterInput" type="0x${string}">
+
+Input data to the **paymaster**.
+
+Must also provide a `paymaster` field.
+
+<Expandable title="Example">
+
+```tsx
+import { sendTransaction } from "@abstract-foundation/agw-client";
+import { agwClient } from "./config";
+import { abstractTestnet } from "viem/chains";
+import { getGeneralPaymasterInput } from "viem/zksync";
+
+const transactionHash = await sendTransaction({
+  to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
+  value: parseEther("0.1"),
+  data: "0x69",
+  paymaster: "0x5407B5040dec3D339A9247f3654E59EEccbb6391",
+  paymasterInput: getGeneralPaymasterInput({
+    innerInput: "0x",
+  }),
+});
+```
+
+</Expandable>
+
+</ResponseField>
+
+<ResponseField name="customSignature" type="Hex | undefined">
+  Custom signature for the transaction.
+</ResponseField>
+
+<ResponseField name="type" type="'eip712' | undefined">
+  Transaction type. For EIP-712 transactions, this should be `eip712`.
+</ResponseField>
+
+## Returns
+
+Returns a `Promise<Hash>` containing the transaction hash of the submitted transaction.
