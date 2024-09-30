@@ -1,0 +1,122 @@
+---
+title: "deployContract"
+description: Function to deploy a smart contract from the connected Abstract Global Wallet.
+---
+
+The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient)
+includes a `deployContract` method that can be used to deploy a smart contract from the connected Abstract Global Wallet.
+It extends the [deployContract](https://viem.sh/zksync/actions/deployContract) function from Viem to include options for
+[contract deployment on Abstract](/how-abstract-works/evm-differences/contract-deployment).
+
+## Usage
+
+<CodeGroup>
+
+```tsx example.ts
+import { deployContract } from "@abstract-foundation/agw-client";
+import { contractAbi, contractBytecode } from "./const";
+import { agwClient } from "./config";
+import { abstractTestnet } from "viem/chains";
+
+const hash = await deployContract({
+  abi: contractAbi,
+  bytecode: contractBytecode,
+  chain: abstractTestnet,
+  account: agwClient.account,
+});
+```
+
+```tsx const.ts
+export const contractAbi = []; // Your contract ABI
+export const contractBytecode = ""; // Your contract bytecode
+```
+
+```tsx config.ts
+import { createAbstractClient } from "@abstract-foundation/agw-client";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { abstractTestnet } from "viem/chains";
+
+// As an example, we are creating a new dummy account here for the signer.
+const randomPrivateKey = generatePrivateKey(); // Make a random private key
+const account = privateKeyToAccount(randomPrivateKey); // Use that to create a signer
+
+export const agwClient = await createAbstractClient({
+  chain: abstractTestnet,
+  signer: account, // The "owner" (initial approved signer) of the AGW smart contract wallet.
+});
+```
+
+</CodeGroup>
+
+## Parameters
+
+<ResponseField name="abi" type="Abi" required>
+  The ABI of the contract to deploy.
+</ResponseField>
+
+<ResponseField name="bytecode" type="string" required>
+  The bytecode of the contract to deploy.
+</ResponseField>
+
+<ResponseField name="account" type="Account" required>
+  The account to deploy the contract from. Use the `account` from the
+  [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient) to
+  use the Abstract Global Wallet.
+</ResponseField>
+
+<ResponseField name="chain" type="Chain" required>
+  The chain to deploy the contract on. e.g. `abstractTestnet`.
+</ResponseField>
+
+<ResponseField name="args" type="Inferred from ABI">
+  Constructor arguments to call upon deployment.
+</ResponseField>
+
+<ResponseField
+  name="deploymentType"
+  type="'create' | 'create2' | 'createAccount' | 'create2Account'"
+>
+
+Specifies the type of contract deployment. Defaults to `create`.
+
+- `'create'`: Deploys the contract using the `CREATE` opcode.
+- `'create2'`: Deploys the contract using the `CREATE2` opcode.
+- `'createAccount'`: Deploys a [smart contract wallet](/how-abstract-works/native-account-abstraction/smart-contract-wallets)
+  using the [ContractDeployer](/how-abstract-works/system-contracts/list-of-system-contracts#contractdeployer)&rsquo;s
+  `createAccount` function.
+- `'create2Account'`: Deploys a [smart contract wallet](/how-abstract-works/native-account-abstraction/smart-contract-wallets)
+  using the [ContractDeployer](/how-abstract-works/system-contracts/list-of-system-contracts#contractdeployer)&rsquo;s
+  `create2Account` function.
+
+</ResponseField>
+
+<ResponseField name="factoryDeps" type="Hex[]">
+  An array of bytecodes of contracts that are dependencies for the contract
+  being deployed. This is used for deploying contracts that depend on other
+  contracts that are not yet deployed on the network. Learn more on the
+  [Contract deployment
+  page](/how-abstract-works/evm-differences/contract-deployment).
+</ResponseField>
+
+<ResponseField name="salt" type="Hash">
+  Specifies a unique identifier for the contract deployment.
+</ResponseField>
+
+<ResponseField name="gasPerPubdata" type="bigint">
+  The amount of gas for publishing one byte of data on Ethereum.
+</ResponseField>
+
+<ResponseField name="paymaster" type="Account | Address">
+  Address of the paymaster account that will pay the fees. The paymasterInput
+  field is required with this one.
+</ResponseField>
+
+<ResponseField name="paymasterInput" type="0x${string}">
+  Input data to the paymaster. The paymaster field is required with this one.
+</ResponseField>
+
+## Returns
+
+Returns the `0x${string}` hash of the transaction that deployed the contract.
+
+Use [waitForTransactionReceipt](https://viem.sh/docs/actions/public/waitForTransactionReceipt) to get the transaction receipt from the hash.

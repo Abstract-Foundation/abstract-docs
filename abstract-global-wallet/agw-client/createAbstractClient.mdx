@@ -28,7 +28,6 @@ const account: Account = privateKeyToAccount(randomPrivateKey); // Use that to c
 const agwClient = await createAbstractClient({
   chain: abstractTestnet,
   signer: account, // The "owner" (initial approved signer) of the AGW smart contract wallet.
-  transport: http(`https://api.testnet.abs.xyz`),
 });
 
 const hash = await agwClient.sendTransaction({
