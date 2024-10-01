@@ -12,11 +12,8 @@ approved to sign transactions for the Abstract Global Wallet smart contract.
 This hook is different from [useAbstractClient](/abstract-global-wallet/agw-react/hooks/useAbstractClient), which
 performs actions (e.g. sending a transaction) from the Abstract Global Wallet smart contract itself, not the EOA approved to sign transactions for it.
 
-It uses the following hooks from under the hood:
-
-- [useGlobalWalletSignerAccount](/abstract-global-wallet/agw-react/hooks/useGlobalWalletSignerAccount): Retrieves the specific address of the Global Wallet Signer.
-- [useWalletClient](https://wagmi.sh/react/api/hooks/useWalletClient): Returns a [wallet client](https://viem.sh/docs/clients/wallet) instance with the `account`
-  set as the approved EOA.
+It uses wagmi&rsquo;s [useWalletClient](https://wagmi.sh/react/api/hooks/useWalletClient) hook under the hood, returning
+a [wallet client](https://viem.sh/docs/clients/wallet) instance with the `account` set as the approved EOA of the Abstract Global Wallet.
 
 ## Import
 

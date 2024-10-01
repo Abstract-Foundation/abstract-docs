@@ -4,9 +4,8 @@ description: Function to send a batch of transactions in a single call using the
 ---
 
 The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient)
-includes a `sendTransactionBatch` method that can be used to sign and submit multiple transactions in a single batch to the chain using the connected Abstract Global Wallet.
-
-Transactions are signed by the approved signer account of the Abstract Global Wallet.
+includes a `sendTransactionBatch` method that can be used to sign and submit multiple transactions
+in a single call using the connected Abstract Global Wallet.
 
 ## Usage
 
@@ -120,4 +119,4 @@ export const agwClient = await createAbstractClient({
 
 ## Returns
 
-Returns a `Promise<Hash>` containing the transaction hash of the submitted transaction batch.
+Returns a `Promise<Hex>` containing the transaction hash of the submitted transaction batch.

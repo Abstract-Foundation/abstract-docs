@@ -5,10 +5,7 @@ description: Function to sign a transaction using the connected Abstract Global 
 
 The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient)
 includes a `signTransaction` method that can be used to sign a transaction using the connected Abstract Global Wallet.
-It extends the [signTransaction](https://viem.sh/zksync/actions/signTransaction) function from Viem to include support for
-[EIP-712 transactions on Abstract](/how-abstract-works/evm-differences/transactions).
-
-Transactions are signed by the approved signer account of the Abstract Global Wallet.
+Transactions are signed by the approved signer account (EOA) of the Abstract Global Wallet.
 
 ## Usage
 

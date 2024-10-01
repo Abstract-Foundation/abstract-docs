@@ -53,14 +53,25 @@ const App = () => {
 };
 ```
 
-This component wraps your application in a [WagmiProvider](https://wagmi.sh/react/api/WagmiProvider) and
+<Tip>
+  **Next.js App Router:** If you are using [Next.js App
+  Router](https://nextjs.org/docs), create a new component and add the `use
+  client` directive at the top of your file ([see
+  example](https://github.com/Abstract-Foundation/examples/blob/main/agw-nextjs/src/components/NextAbstractWalletProvider.tsx))
+  and wrap your application in this component ([see
+  example](https://github.com/Abstract-Foundation/examples/blob/main/agw-nextjs/src/app/layout.tsx#L48-L54)).
+</Tip>
+
+The `AbstractWalletProvider` wraps your application in both the [WagmiProvider](https://wagmi.sh/react/api/WagmiProvider) and
 [QueryClientProvider](https://tanstack.com/query/latest/docs/framework/react/reference/QueryClientProvider),
-meaning you can use the hooks and features of both libraries within your application.
+meaning you can use the hooks and features of these libraries within your application.
 
 ### 3. Use React Hooks
 
-With the provider setup, you can now use any of the available hooks from the `agw-react` package inside
-any component within your application:
+With the provider setup, you can now use any of the available [hooks](/abstract-global-wallet/agw-react/hooks/useAbstractClient)
+from the `agw-react` package inside
+any component within your application. To prompt the user to sign in with AGW, use the
+[useLoginWithAbstract](/abstract-global-wallet/agw-react/hooks/useLoginWithAbstract) hook.
 
 ```tsx
 import { useLoginWithAbstract } from "@abstract-foundation/agw-react";
@@ -75,10 +86,12 @@ export default function SignIn() {
 
 ### 4. Use wagmi hooks
 
-Once the user has signed in using the `useLoginWithAbstract` hook,
-you can freely use any wagmi hooks to send transactions, read data from the blockchain, and more.
+Once the user has signed in, you can begin to use any of the `agw-react` hooks,
+such as [useWriteContractSponsored](/abstract-global-wallet/agw-react/hooks/useWriteContractSponsored)
+as well as all of the existing [wagmi hooks](https://wagmi.sh/react/api/hooks); such as [useAccount](https://wagmi.sh/react/api/hooks/useAccount),
+[useBalance](https://wagmi.sh/react/api/hooks/useBalance), etc.
 
-All transactions will be sent (i.e. the `tx.from` address) from the connected AGW smart contract wallet.
+All transactions will be sent from the connected AGW smart contract wallet (i.e. the `tx.from` address will be the AGW smart contract wallet address).
 
 ```tsx
 import { useAccount, useSendTransaction } from "wagmi";
@@ -103,9 +116,14 @@ export default function SendTransactionWithWagmi() {
 }
 ```
 
-### 5. Call the client directly
+### 5. Use the client directly
 
-If you prefer to not use wagmi hooks, you can instead call the client directly using [viem](https://viem.sh/) features.
+The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient)
+also exposes a set of [actions](/abstract-global-wallet/agw-client/actions/deployContract)
+you can use to interact with the wallet, including
+[deploying a contract](/abstract-global-wallet/agw-client/actions/deployContract),
+[sending a transaction](/abstract-global-wallet/agw-client/actions/sendTransaction),
+or [calling a contract function](/abstract-global-wallet/agw-client/actions/writeContract).
 
 ```tsx
 import { useGlobalWalletSignerClient } from "@abstract-foundation/agw-react";

@@ -21,9 +21,9 @@ npm install @abstract-foundation/agw-client viem
 
 ## 2. Instantiate a client
 
-Use the [`createAbstractClient`](/abstract-global-wallet/agw-client/api/createAbstractClient) function to instantiate a new client.
+Use the [createAbstractClient](/abstract-global-wallet/agw-client/createAbstractClient) function to instantiate a new isntance of the `AbstractClient`.
 
-The given `account` is the EOA that owns the Abstract Global Wallet smart contract. If this account has not yet created an Abstract Global Wallet,
+The `signer` field is the EOA that owns the Abstract Global Wallet smart contract. If this account has not yet created an Abstract Global Wallet,
 the first transaction they send will first deploy one, set the account as the owner and then continue with the transaction.
 
 ```tsx

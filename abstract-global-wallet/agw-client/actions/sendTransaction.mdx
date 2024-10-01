@@ -5,10 +5,8 @@ description: Function to send a transaction using the connected Abstract Global 
 
 The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient)
 includes a `sendTransaction` method that can be used to sign and submit a transaction to the chain using the connected Abstract Global Wallet.
-It extends the [sendTransaction](https://viem.sh/zksync/actions/sendTransaction) function from Viem to include support for
-[EIP-712 transactions on Abstract](/how-abstract-works/evm-differences/transactions).
 
-Transactions are signed by the approved signer account of the Abstract Global Wallet.
+Transactions are signed by the approved signer account (EOA) of the Abstract Global Wallet and sent `from` the AGW smart contract itself.
 
 ## Usage
 
@@ -136,4 +134,4 @@ const transactionHash = await agwClient.sendTransaction({
 
 ## Returns
 
-Returns a `Promise<Hash>` containing the transaction hash of the submitted transaction.
+Returns a `Promise<Hex>` containing the transaction hash of the submitted transaction.
