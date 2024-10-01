@@ -1,0 +1,56 @@
+---
+title: "useAbstractClient"
+description: Hook for creating and managing an Abstract client instance.
+---
+
+import TanStackQueryReturnTypeSnippet from "/snippets/tanstack-query-return-type.mdx";
+
+Gets the [Wallet client](https://viem.sh/docs/clients/wallet)
+exposed by the the [AbstractWalletProvider](/abstract-global-wallet/agw-react/AbstractWalletProvider) context.
+Use this client to perform actions from the connected Abstract Global Wallet, for example
+[deployContract](/abstract-global-wallet/agw-client/actions/deployContract),
+[sendTransaction](/abstract-global-wallet/agw-client/actions/sendTransaction),
+[writeContract](/abstract-global-wallet/agw-client/actions/writeContract), etc.
+
+## Import
+
+```tsx
+import { useAbstractClient } from "@abstract-foundation/agw-react";
+```
+
+## Usage
+
+```tsx
+import { useAbstractClient } from "@abstract-foundation/agw-react";
+
+export default function App() {
+  const { data: abstractClient, isLoading, error } = useAbstractClient();
+
+  // Use the client to perform actions such as sending transactions or deploying contracts
+  async function submitTx() {
+    if (!abstractClient) return;
+
+    const hash = await abstractClient.sendTransaction({
+      to: "0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d",
+      data: "0x69",
+    });
+  }
+
+  // ... rest of your component ...
+}
+```
+
+## Returns
+
+Returns a `UseQueryResult<AbstractClient, Error>`.
+
+<Expandable title="properties">
+  <ResponseField name="data" type="AbstractClient | undefined">
+    The
+    [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient)
+    instance from the
+    [AbstractWalletProvider](/abstract-global-wallet/agw-react/AbstractWalletProvider)
+    context.
+  </ResponseField>
+  <TanStackQueryReturnTypeSnippet />
+</Expandable>

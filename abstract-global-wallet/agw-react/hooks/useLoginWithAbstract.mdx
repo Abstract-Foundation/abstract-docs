@@ -1,0 +1,73 @@
+---
+title: "useLoginWithAbstract"
+description: Hook for signing in and signing out users with Abstract Global Wallet.
+---
+
+Use the `useLoginWithAbstract` hook to prompt users to sign up or sign into your application using Abstract Global Wallet
+and optionally sign out once connected.
+
+It uses the following hooks from [wagmi](https://wagmi.sh/) under the hood:
+
+- `login`: [useConnect](https://wagmi.sh/react/api/hooks/useConnect).
+- `logout`: [useDisconnect](https://wagmi.sh/react/api/hooks/useDisconnect).
+
+## Import
+
+```tsx
+import { useLoginWithAbstract } from "@abstract-foundation/agw-react";
+```
+
+## Usage
+
+```tsx
+import { useLoginWithAbstract } from "@abstract-foundation/agw-react";
+
+export default function App() {
+  const { login, logout } = useLoginWithAbstract();
+
+  return <button onClick={login}>Login with Abstract</button>;
+}
+```
+
+## Returns
+
+<ResponseField name="login" type="function">
+  Opens the signup/login modal to prompt the user to connect to the application
+  using Abstract Global Wallet.
+</ResponseField>
+
+<ResponseField name="logout" type="function">
+  Disconnects the user's wallet from the application.
+</ResponseField>
+
+## Demo
+
+View the [live demo](https://create-abstract-app.vercel.app/) to see Abstract Global Wallet in action.
+
+If the user does not have an Abstract Global Wallet, they will be prompted to create one:
+
+<img
+  className="block dark:hidden"
+  src="/images/agw-signup-2.gif"
+  alt="Abstract Global Wallet with useLoginWithAbstract Light"
+/>
+
+<img
+  className="hidden dark:block"
+  src="/images/agw-signup-2.gif"
+  alt="Abstract Global Wallet with useLoginWithAbstract Dark"
+/>
+
+If the user already has an Abstract Global Wallet, they will be prompted to use it to sign in:
+
+<img
+  className="block dark:hidden"
+  src="/images/agw-signin.gif"
+  alt="Abstract Global Wallet with useLoginWithAbstract Light"
+/>
+
+<img
+  className="hidden dark:block"
+  src="/images/agw-signin.gif"
+  alt="Abstract Global Wallet with useLoginWithAbstract Dark"
+/>

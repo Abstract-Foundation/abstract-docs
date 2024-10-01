@@ -1,0 +1,146 @@
+---
+title: "useWriteContractSponsored"
+description: "Hook for interacting with smart contracts using paymasters to cover gas fees."
+---
+
+Use the `useWriteContractSponsored` hook to initiate transactions on smart contracts with the transaction gas fees sponsored by a
+[paymaster](/how-abstract-works/native-account-abstraction/paymasters).
+
+It uses the [useWriteContract](https://wagmi.sh/react/api/hooks/useWriteContract) hook from [wagmi](https://wagmi.sh/)
+under the hood.
+
+## Import
+
+```tsx
+import { useWriteContractSponsored } from "@abstract-foundation/agw-react";
+```
+
+## Usage
+
+```tsx
+import { useWriteContractSponsored } from "@abstract-foundation/agw-react";
+import { getGeneralPaymasterInput } from "viem/zksync";
+import type { Abi } from "viem";
+
+const contractAbi: Abi = [
+  /* Your contract ABI here */
+];
+
+export default function App() {
+  const { writeContractSponsored, data, error, isSuccess, isPending } =
+    useWriteContractSponsored();
+
+  const handleWriteContract = () => {
+    writeContractSponsored({
+      abi: contractAbi,
+      address: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA",
+      functionName: "mint",
+      args: ["0x273B3527BF5b607dE86F504fED49e1582dD2a1C6", BigInt(1)],
+      paymaster: "0x5407B5040dec3D339A9247f3654E59EEccbb6391",
+      paymasterInput: getGeneralPaymasterInput({
+        innerInput: "0x",
+      }),
+    });
+  };
+
+  return (
+    <div>
+      <button onClick={handleWriteContract} disabled={isPending}>
+        {isPending ? "Processing..." : "Execute Sponsored Transaction"}
+      </button>
+      {isSuccess && <div>Transaction Hash: {data}</div>}
+      {error && <div>Error: {error.message}</div>}
+    </div>
+  );
+}
+```
+
+## Returns
+
+Returns a `UseWriteContractSponsoredReturnType<Config, unknown>`.
+
+<Expandable title="properties">
+  <ResponseField name="writeContractSponsored" type="function">
+    Synchronous function to submit a transaction to a smart contract with gas
+    fees sponsored by a paymaster.
+  </ResponseField>
+
+<ResponseField name="writeContractSponsoredAsync" type="function">
+  Asynchronous function to submit a transaction to a smart contract with gas
+  fees sponsored by a paymaster.
+</ResponseField>
+
+<ResponseField name="data" type="Hex | undefined">
+  The transaction hash of the sponsored transaction.
+</ResponseField>
+
+<ResponseField name="error" type="WriteContractErrorType | null">
+  The error if the transaction failed.
+</ResponseField>
+
+<ResponseField name="isSuccess" type="boolean">
+  Indicates if the transaction was successful.
+</ResponseField>
+
+<ResponseField name="isPending" type="boolean">
+  Indicates if the transaction is currently pending.
+</ResponseField>
+
+<ResponseField name="context" type="unknown">
+  Additional context information about the transaction.
+</ResponseField>
+
+<ResponseField name="failureCount" type="number">
+  The number of times the transaction has failed.
+</ResponseField>
+
+<ResponseField name="failureReason" type="WriteContractErrorType | null">
+  The reason for the transaction failure, if any.
+</ResponseField>
+
+<ResponseField name="isError" type="boolean">
+  Indicates if the transaction resulted in an error.
+</ResponseField>
+
+<ResponseField name="isIdle" type="boolean">
+  Indicates if the hook is in an idle state (no transaction has been initiated).
+</ResponseField>
+
+<ResponseField name="isPaused" type="boolean">
+  Indicates if the transaction processing is paused.
+</ResponseField>
+
+<ResponseField name="reset" type="() => void">
+  A function to clean the mutation internal state (i.e., it resets the mutation
+  to its initial state).
+</ResponseField>
+
+<ResponseField name="status" type="'idle' | 'pending' | 'success' | 'error'">
+  The current status of the transaction.
+
+- `'idle'` initial status prior to the mutation function executing.
+- `'pending'` if the mutation is currently executing.
+- `'error'` if the last mutation attempt resulted in an error.
+- `'success'` if the last mutation attempt was successful.
+
+</ResponseField>
+
+<ResponseField name="submittedAt" type="number">
+  The timestamp when the transaction was submitted.
+</ResponseField>
+
+<ResponseField
+  name="submittedTransaction"
+  type="TransactionRequest | undefined"
+>
+  The submitted transaction details.
+</ResponseField>
+
+<ResponseField
+  name="variables"
+  type="WriteContractSponsoredVariables<Abi, string, readonly unknown[], Config, number> | undefined"
+>
+  The variables used for the contract write operation.
+</ResponseField>
+
+</Expandable>

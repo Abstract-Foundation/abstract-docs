@@ -1,0 +1,50 @@
+---
+title: "AbstractWalletProvider"
+description: "The AbstractWalletProvider component is a wrapper component that provides the Abstract Global Wallet context to your application, allowing you to use hooks and components."
+---
+
+Wrap your application in the `AbstractWalletProvider` component to enable the use of the package's hooks and components
+throughout your application.
+
+```tsx
+import { AbstractWalletProvider } from "@abstract-foundation/agw-react";
+
+const config = {
+  testnet: true, // Required
+  // Optionally, provide your own RPC URL
+  // Learn more: https://viem.sh/docs/clients/transports/http.html
+  // transport: http("https://.../rpc") // Optional
+};
+
+const App = () => {
+  return (
+    <AbstractWalletProvider config={config}>
+      {/* Your application components */}
+    </AbstractWalletProvider>
+  );
+};
+```
+
+## Props
+
+<ResponseField name="config" type="object" required>
+
+The configuration object for the AbstractWalletProvider.
+
+    <Expandable title="properties">
+        <ResponseField name="testnet" type="boolean" required>
+            Whether to use the Abstract testnet (`true`) or mainnet (`false`).
+
+            Currently, both flags use the testnet since mainnet is not yet live.
+
+        </ResponseField>
+
+        <ResponseField name="transport" type="Transport">
+            Optional. A [Viem Transport](https://viem.sh/docs/clients/transports/http.html) instance to use if you
+            want to connect to a custom RPC URL.
+
+            If not provided, the default Abstract RPC URL will be used.
+        </ResponseField>
+    </Expandable>
+
+</ResponseField>

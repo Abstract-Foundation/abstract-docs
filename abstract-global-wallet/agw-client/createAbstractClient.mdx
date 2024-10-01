@@ -1,0 +1,131 @@
+---
+title: "createAbstractClient"
+description: "Function to create an instance of the Abstract Global Wallet client."
+---
+
+Use the `createAbstractClient` function to initialize an `AbstractClient` instance, which provides a set
+of actions and methods to make use of the Abstract Global Wallet.
+
+## Import
+
+```tsx
+import { createAbstractClient } from "@abstract-foundation/agw-client";
+import type { AbstractClient } from "@abstract-foundation/agw-client"; // Optional
+```
+
+## Usage
+
+```tsx
+import { createAbstractClient } from "@abstract-foundation/agw-client";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { abstractTestnet } from "viem/chains";
+
+// As an example, we are creating a new dummy account here for the signer.
+const randomPrivateKey = generatePrivateKey(); // Make a random private key
+const account = privateKeyToAccount(randomPrivateKey); // Use that to create a signer
+
+const agwClient = await createAbstractClient({
+  chain: abstractTestnet,
+  signer: account, // The "owner" (initial approved signer) of the AGW smart contract wallet.
+});
+
+const hash = await agwClient.sendTransaction({
+  to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
+  data: "0x69",
+});
+
+console.log("Transaction sent:", `https://explorer.testnet.abs.xyz/tx/${hash}`);
+```
+
+## Parameters
+
+<ResponseField name="signer" type="Account" required>
+  The EOA account that is the owner of the AGW smart contract wallet.
+
+- If this account has not yet created an Abstract Global Wallet, the first transaction they send will first deploy one,
+  set the account as the owner and then continue with the transaction.
+
+- If the account has already created an Abstract Global Wallet, it will use the existing AGW.
+
+</ResponseField>
+
+<ResponseField name="address" type="ChainEIP712" required>
+  A valid [EIP712 chain](https://viem.sh/zksync/chains) such as
+  `abstractTestnet`.
+</ResponseField>
+
+<ResponseField name="transport" type="ChainEIP712">
+  A [viem Transport](https://viem.sh/docs/clients/transports/http). Defaults to
+  `http()`.
+</ResponseField>
+
+## Returns
+
+Returns an `AbstractClient` instance. This is an extension of the [Viem wallet client](https://viem.sh/docs/clients/wallet) with
+additional methods and properties specific to the Abstract Global Wallet.
+
+<Expandable title="methods">
+  <ResponseField name="account" type="Account">
+
+Returns the Abstract Global Wallet account created using the [createClient](https://viem.sh/docs/clients/custom) function.
+
+The account has the address of the AGW smart contract wallet using [getSmartAccountAddressFromInitialSigner](/abstract-global-wallet/agw-client/getSmartAccountAddressFromInitialSigner).
+
+  </ResponseField>
+  <ResponseField name="batch" type="{ multicall?: boolean | MulticallBatchOptions }">
+    Configuration for batch operations. It includes an optional `multicall` property which can be:
+    - `boolean`: To enable/disable `eth_call` multicall aggregation.
+    - `MulticallBatchOptions`: An object to fine-tune multicall behavior with properties:
+      - `batchSize`: The maximum size (in bytes) for each calldata chunk. Default is `1024`.
+      - `wait`: The maximum number of milliseconds to wait before sending a batch. Default is `0`.
+  </ResponseField>
+  <ResponseField name="cacheTime" type="number">
+    Time (in ms) that cached data will remain in memory.
+  </ResponseField>
+  <ResponseField name="ccipRead" type="Function">
+
+[CCIP Read](https://eips.ethereum.org/EIPS/eip-3668) configuration.
+
+If `false`, the client will not support offchain CCIP lookups.
+
+  </ResponseField>
+  <ResponseField name="chain" type="ChainEIP712">
+    Returns the current chain configuration.
+  </ResponseField>
+  <ResponseField name="deployContract" type="Function">
+    Deploys a new smart contract from the AGW smart contract wallet. See [deployContract](/abstract-global-wallet/agw-client/actions/deployContract).
+  </ResponseField>
+  <ResponseField name="extend" type="Function">
+    Extends the client with additional functionality.
+  </ResponseField>
+  <ResponseField name="key" type="string">
+    A unique identifier for the client instance.
+  </ResponseField>
+  <ResponseField name="name" type="string">
+    The name of the client.
+  </ResponseField>
+  <ResponseField name="pollingInterval" type="number">
+    Frequency (in ms) for polling enabled actions & events. Defaults to `4000` milliseconds.
+  </ResponseField>
+  <ResponseField name="request" type="Function">
+    Request function wrapped with friendly error handling.
+  </ResponseField>
+  <ResponseField name="sendTransaction" type="Function">
+    Sends a transaction to the network from the AGW smart contract wallet. See [sendTransaction](/abstract-global-wallet/agw-client/actions/sendTransaction).
+  </ResponseField>
+  <ResponseField name="sendTransactionBatch" type="Function">
+    Sends multiple transactions in a single call from the AGW smart contract wallet. See [sendTransactionBatch](/abstract-global-wallet/agw-client/actions/sendTransactionBatch).
+  </ResponseField>
+  <ResponseField name="transport" type="Transport">
+    The RPC transport.
+  </ResponseField>
+  <ResponseField name="type" type="string">
+    The type of the client.
+  </ResponseField>
+  <ResponseField name="uid" type="string">
+    A unique identifier for the client.
+  </ResponseField>
+  <ResponseField name="writeContract" type="Function">
+    Call a function on a smart contract from the AGW smart contract wallet. See [writeContract](/abstract-global-wallet/agw-client/actions/writeContract).
+  </ResponseField>
+</Expandable>

@@ -1,0 +1,45 @@
+---
+title: "Overview"
+description: "Learn how the agw-react package works and how to use it to interact with the Abstract Global Wallet."
+icon: "react"
+---
+
+The `agw-react` package provides a set of hooks and components that allow users to sign in and send
+transactions using Abstract Global Wallet. **It is built on top of the [wagmi](https://wagmi.sh/) library.**
+
+Once the user connect&rsquo;s their wallet by calling [useLoginWithAbstract](/abstract-global-wallet/agw-react/hooks/useLoginWithAbstract) _(within the context
+of an [AbstractWalletProvider](/abstract-global-wallet/agw-react/AbstractWalletProvider)_),
+you can continue to use any of the [wagmi](https://wagmi.sh/) and [TanStack Query](https://tanstack.com/query/latest/docs/framework/react/overview)
+hooks as you would with any other wallet, as well as all of the [viem](https://viem.sh/) functionality.
+
+## How it works
+
+Both wagmi and TanStack Query wrap your application in a **provider** component that allows you
+to use the hooks and components they provide anywhere in your application.
+
+The `agw-react` package similarly provides the [AbstractWalletProvider](/abstract-global-wallet/agw-react/AbstractWalletProvider) component,
+which under the hood wraps your application in the following providers:
+
+1. The TanStack [QueryClientProvider](https://tanstack.com/query/latest/docs/framework/react/reference/QueryClientProvider):
+   to manage your application's state using [queries](https://wagmi.sh/react/guides/tanstack-query) and [mutations](https://wagmi.sh/react/guides/tanstack-query),
+   e.g. to check if a wallet is connected, read data from the blockchain, and send transactions.
+2. The wagmi [WagmiProvider](https://wagmi.sh/react/api/WagmiProvider): configured to use the Abstract [network](/connect-to-abstract)
+   with Abstract Global Wallet as a [wallet connection option](https://wagmi.sh/react/guides/connect-wallet).
+
+Learn more about the [wagmi](https://wagmi.sh/) and [TanStack Query](https://tanstack.com/query/latest/docs/framework/react/overview)
+libraries using the resources below:
+
+<CardGroup cols={2}>
+  <Card title="Wagmi Documentation" icon="book" href="https://wagmi.sh/">
+    Explore the wagmi documentation to learn more about the available hooks you
+    can use with AGW.
+  </Card>
+  <Card
+    title="TanStack Query Docs"
+    icon="book"
+    href="https://tanstack.com/query/latest/docs/react/overview"
+  >
+    Understand how to use TanStack Query to manually manage your application's
+    state.
+  </Card>
+</CardGroup>

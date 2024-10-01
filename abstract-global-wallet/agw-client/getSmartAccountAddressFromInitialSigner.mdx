@@ -1,0 +1,82 @@
+---
+title: "getSmartAccountAddress FromInitialSigner"
+description: "Function to deterministically derive the deployed Abstract Global Wallet smart account address from the initial signer account."
+---
+
+Use the `getSmartAccountAddressFromInitialSigner` function to get the smart contract address of the Abstract Global Wallet
+that will be deployed given an initial signer account.
+
+This is useful if you need to know what the address of the Abstract Global Wallet smart contract will be before it is deployed.
+
+## Import
+
+```tsx
+import { getSmartAccountAddressFromInitialSigner } from "@abstract-foundation/agw-client";
+```
+
+## Usage
+
+```tsx
+import { getSmartAccountAddressFromInitialSigner } from "@abstract-foundation/agw-client";
+import { createPublicClient, http } from "viem";
+import { abstractTestnet } from "viem/chains";
+
+// Create a public client connected to the desired chain
+const publicClient = createPublicClient({
+  chain: abstractTestnet,
+  transport: http(),
+});
+
+// Initial signer address (EOA)
+const initialSignerAddress = "0xYourSignerAddress";
+
+// Get the smart account address
+const smartAccountAddress = await getSmartAccountAddressFromInitialSigner(
+  initialSignerAddress,
+  publicClient
+);
+
+console.log("Smart Account Address:", smartAccountAddress);
+```
+
+## Parameters
+
+<ResponseField name="initialSigner" type="Address" required>
+  The EOA account/signer that will be the owner of the AGW smart contract
+  wallet.
+</ResponseField>
+
+<ResponseField name="publicClient" type="PublicClient" required>
+  A [public client](https://viem.sh/zksync/client) connected to the desired
+  chain (e.g. `abstractTestnet`).
+</ResponseField>
+
+## Returns
+
+Returns a `Hex`: The address of the AGW smart contract that will be deployed.
+
+## How it works
+
+The smart account address is derived from the initial signer using the following process:
+
+```tsx
+import AccountFactoryAbi from "./abis/AccountFactory.js"; // ABI of AGW factory contract
+import { keccak256, toBytes } from "viem";
+import { SMART_ACCOUNT_FACTORY_ADDRESS } from "./constants.js";
+
+// Generate salt based off address
+const addressBytes = toBytes(initialSigner);
+const salt = keccak256(addressBytes);
+
+// Get the deployed account address
+const accountAddress = (await publicClient.readContract({
+  address: SMART_ACCOUNT_FACTORY_ADDRESS, // "0xe86Bf72715dF28a0b7c3C8F596E7fE05a22A139c"
+  abi: AccountFactoryAbi,
+  functionName: "getAddressForSalt",
+  args: [salt],
+})) as Hex;
+```
+
+This function returns the determined AGW smart contract address
+using the [Contract Deployer](/how-abstract-works/system-contracts/list-of-system-contracts#contractdeployer)&rsquo;s
+`getNewAddressForCreate2` function.

@@ -19,11 +19,23 @@
     "style": "grid"
   },
   "topbarLinks": [],
-  "tabs": [],
+  "primaryTab": {
+    "name": "Documentation"
+  },
+  "tabs": [
+    {
+      "name": "Documentation",
+      "url": "docs"
+    },
+    {
+      "name": "Abstract Global Wallet",
+      "url": "abstract-global-wallet"
+    }
+  ],
   "anchors": [],
   "navigation": [
     {
-      "group": "",
+      "group": "Overview",
       "pages": ["overview", "what-is-abstract", "connect-to-abstract"]
     },
     {
@@ -88,13 +100,6 @@
           ]
         },
         {
-          "group": "Abstract Global Wallet",
-          "pages": [
-            "how-abstract-works/abstract-global-wallet/overview",
-            "how-abstract-works/abstract-global-wallet/architecture"
-          ]
-        },
-        {
           "group": "EVM Differences",
           "pages": [
             "how-abstract-works/evm-differences/overview",
@@ -129,11 +134,58 @@
           ]
         }
       ]
+    },
+    {
+      "group": "Abstract Global Wallet",
+      "pages": [
+        "abstract-global-wallet/overview",
+        "abstract-global-wallet/getting-started",
+        "abstract-global-wallet/architecture"
+      ]
+    },
+    {
+      "group": "agw-react",
+      "icon": "react",
+      "pages": [
+        "abstract-global-wallet/agw-react/overview",
+        "abstract-global-wallet/agw-react/getting-started",
+        "abstract-global-wallet/agw-react/integrating-with-rainbowkit",
+        "abstract-global-wallet/agw-react/AbstractWalletProvider",
+
+        {
+          "group": "Hooks",
+          "pages": [
+            "abstract-global-wallet/agw-react/hooks/useAbstractClient",
+            "abstract-global-wallet/agw-react/hooks/useGlobalWalletSignerAccount",
+            "abstract-global-wallet/agw-react/hooks/useGlobalWalletSignerClient",
+            "abstract-global-wallet/agw-react/hooks/useLoginWithAbstract",
+            "abstract-global-wallet/agw-react/hooks/useWriteContractSponsored"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "agw-client",
+      "pages": [
+        "abstract-global-wallet/agw-client/overview",
+        "abstract-global-wallet/agw-client/getting-started",
+        "abstract-global-wallet/agw-client/createAbstractClient",
+        "abstract-global-wallet/agw-client/getSmartAccountAddressFromInitialSigner",
+        "abstract-global-wallet/agw-client/transformEIP1193Provider",
+
+        {
+          "group": "Actions",
+          "pages": [
+            "abstract-global-wallet/agw-client/actions/deployContract",
+            "abstract-global-wallet/agw-client/actions/signTransaction",
+            "abstract-global-wallet/agw-client/actions/sendTransaction",
+            "abstract-global-wallet/agw-client/actions/sendTransactionBatch",
+            "abstract-global-wallet/agw-client/actions/writeContract"
+          ]
+        }
+      ]
     }
   ],
-  "feedback": {
-    "thumbsRating": true
-  },
   "footerSocials": {
     "x": "https://x.com/abstractchain",
     "discord": "https://discord.com/invite/abstractchain",
@@ -141,72 +193,12 @@
   },
   "redirects": [
     {
-      "source": "/getting_started",
-      "destination": "/build-on-abstract/getting-started"
+      "source": "/how-abstract-works/abstract-global-wallet/overview",
+      "destination": "/abstract-global-wallet/overview"
     },
     {
-      "source": "/network_info/testnet",
-      "destination": "/connect-to-abstract"
-    },
-    {
-      "source": "/network_info/mainnet",
-      "destination": "/connect-to-abstract"
-    },
-    {
-      "source": "/tools_integrations/block_explorer",
-      "destination": "/ecosystem/block-explorers"
-    },
-    {
-      "source": "/tools_integrations/bridge",
-      "destination": "/ecosystem/bridges"
-    },
-    {
-      "source": "/tools_integrations/faucets",
-      "destination": "/ecosystem/faucets"
-    },
-    {
-      "source": "/wallet_setup/setting_up",
-      "destination": "/connect-to-abstract"
-    },
-    {
-      "source": "/wallet_setup/funding",
-      "destination": "/connect-to-abstract"
-    },
-    {
-      "source": "/tooling/hardhat",
-      "destination": "/build-on-abstract/smart-contracts/hardhat"
-    },
-    {
-      "source": "/tooling/foundry",
-      "destination": "/build-on-abstract/smart-contracts/foundry"
-    },
-    {
-      "source": "/tooling/zksync_cli",
-      "destination": "/build-on-abstract/zksync-cli"
-    },
-    {
-      "source": "/your_first_contract/setup",
-      "destination": "/build-on-abstract/getting-started"
-    },
-    {
-      "source": "/your_first_contract/writing",
-      "destination": "/build-on-abstract/getting-started"
-    },
-    {
-      "source": "/your_first_contract/deploying",
-      "destination": "/build-on-abstract/getting-started"
-    },
-    {
-      "source": "/node/introduction",
-      "destination": "infrastructure/nodes/introduction"
-    },
-    {
-      "source": "/node/components",
-      "destination": "infrastructure/nodes/components"
-    },
-    {
-      "source": "/node/node_running",
-      "destination": "infrastructure/nodes/running-a-node"
+      "source": "/how-abstract-works/abstract-global-wallet/architecture",
+      "destination": "/abstract-global-wallet/architecture"
     }
   ]
 }

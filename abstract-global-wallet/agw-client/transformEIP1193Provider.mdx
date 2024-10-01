@@ -1,0 +1,65 @@
+---
+title: "transformEIP1193Provider"
+description: "Function to transform an EIP1193 provider into an Abstract Global Wallet client."
+---
+
+The `transformEIP1193Provider` function transforms a standard [EIP1193 provider](https://eips.ethereum.org/EIPS/eip-1193)
+into an Abstract Global Wallet (AGW) compatible provider.
+This allows you to use existing wallet providers with Abstract Global Wallet.
+
+## Import
+
+```tsx
+import { transformEIP1193Provider } from "@abstract-foundation/agw-client";
+```
+
+## Usage
+
+```tsx
+import { transformEIP1193Provider } from "@abstract-foundation/agw-client";
+import { abstractTestnet } from "viem/chains";
+import { getDefaultProvider } from "ethers";
+
+// Assume we have an EIP1193 provider
+const originalProvider = getDefaultProvider();
+
+const agwProvider = transformEIP1193Provider({
+  provider: originalProvider,
+  chain: abstractTestnet,
+});
+
+// Now you can use agwProvider as a drop-in replacement
+```
+
+## Parameters
+
+<ResponseField name="options" type="TransformEIP1193ProviderOptions" required>
+  An object containing the following properties:
+  <Expandable title="properties">
+    <ResponseField name="provider" type="EIP1193Provider" required>
+      The original EIP1193 provider to be transformed.
+    </ResponseField>
+    <ResponseField name="chain" type="Chain" required>
+      The blockchain network to connect to.
+    </ResponseField>
+    <ResponseField name="transport" type="Transport" optional>
+      An optional custom transport layer. If not provided, it will use the
+      default transport based on the provider.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Returns
+
+An `EIP1193Provider` instance with modified behavior for specific JSON-RPC methods to be compatible with the Abstract Global Wallet.
+
+## How it works
+
+The `transformEIP1193Provider` function wraps the original provider and intercepts specific Ethereum JSON-RPC methods:
+
+1. `eth_accounts`: Returns the smart account address along with the original signer address.
+2. `eth_signTransaction` and `eth_sendTransaction`:
+   - If the transaction is from the original signer, it passes through to the original provider.
+   - If it's from the smart account, it uses the AGW client to handle the transaction.
+
+For all other methods, it passes the request through to the original provider.

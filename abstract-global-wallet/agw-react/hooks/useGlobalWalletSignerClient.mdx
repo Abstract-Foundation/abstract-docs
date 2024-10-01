@@ -1,0 +1,58 @@
+---
+title: "useGlobalWalletSignerClient"
+description: Hook to get a wallet client instance of the approved signer of the connected Abstract Global Wallet.
+---
+
+import TanStackQueryReturnTypeSnippet from "/snippets/tanstack-query-return-type.mdx";
+
+Use the `useGlobalWalletSignerClient` hook to get a [wallet client](https://viem.sh/docs/clients/wallet)
+instance that can perform actions from the underlying [EOA](https://ethereum.org/en/developers/docs/accounts/#types-of-account)
+approved to sign transactions for the Abstract Global Wallet smart contract.
+
+This hook is different from [useAbstractClient](/abstract-global-wallet/agw-react/hooks/useAbstractClient), which
+performs actions (e.g. sending a transaction) from the Abstract Global Wallet smart contract itself, not the EOA approved to sign transactions for it.
+
+It uses wagmi&rsquo;s [useWalletClient](https://wagmi.sh/react/api/hooks/useWalletClient) hook under the hood, returning
+a [wallet client](https://viem.sh/docs/clients/wallet) instance with the `account` set as the approved EOA of the Abstract Global Wallet.
+
+## Import
+
+```tsx
+import { useGlobalWalletSignerClient } from "@abstract-foundation/agw-react";
+```
+
+## Usage
+
+```tsx
+import { useGlobalWalletSignerClient } from "@abstract-foundation/agw-react";
+
+export default function App() {
+  const { data: client, isLoading, error } = useGlobalWalletSignerClient();
+
+  // Use the client to perform actions such as sending transactions or deploying contracts
+  async function submitTx() {
+    if (!client) return;
+
+    const hash = await client.sendTransaction({
+      to: "0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d",
+      data: "0x69",
+    });
+  }
+
+  // ... rest of your component ...
+}
+```
+
+## Returns
+
+Returns a `UseQueryResult<UseWalletClientReturnType, Error>`.
+
+See [wagmi's useWalletClient](https://wagmi.sh/react/api/hooks/useWalletClient) for more information.
+
+<Expandable title="properties">
+  <ResponseField name="data" type="UseWalletClientReturnType | undefined">
+    The wallet client instance connected to the approved signer of the connected
+    Abstract Global Wallet.
+  </ResponseField>
+  <TanStackQueryReturnTypeSnippet />
+</Expandable>
