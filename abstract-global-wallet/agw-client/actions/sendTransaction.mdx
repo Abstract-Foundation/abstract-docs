@@ -109,14 +109,11 @@ Must also provide a `paymaster` field.
 <Expandable title="Example">
 
 ```tsx
-import { sendTransaction } from "@abstract-foundation/agw-client";
 import { agwClient } from "./config";
-import { abstractTestnet } from "viem/chains";
 import { getGeneralPaymasterInput } from "viem/zksync";
 
-const transactionHash = await sendTransaction({
+const transactionHash = await agwClient.sendTransaction({
   to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
-  value: parseEther("0.1"),
   data: "0x69",
   paymaster: "0x5407B5040dec3D339A9247f3654E59EEccbb6391",
   paymasterInput: getGeneralPaymasterInput({

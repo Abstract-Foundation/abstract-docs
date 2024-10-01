@@ -109,12 +109,10 @@ Must also provide a `paymaster` field.
 <Expandable title="Example">
 
 ```tsx
-import { signTransaction } from "@abstract-foundation/agw-client";
 import { agwClient } from "./config";
-import { abstractTestnet } from "viem/chains";
 import { getGeneralPaymasterInput } from "viem/zksync";
 
-const signature = await signTransaction({
+const signature = await agwClient.signTransaction({
   to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
   data: "0x69",
   paymaster: "0x5407B5040dec3D339A9247f3654E59EEccbb6391",

@@ -13,12 +13,11 @@ It extends the [deployContract](https://viem.sh/zksync/actions/deployContract) f
 <CodeGroup>
 
 ```tsx example.ts
-import { deployContract } from "@abstract-foundation/agw-client";
 import { contractAbi, contractBytecode } from "./const";
 import { agwClient } from "./config";
 import { abstractTestnet } from "viem/chains";
 
-const hash = await deployContract({
+const hash = await agwClient.deployContract({
   abi: contractAbi,
   bytecode: contractBytecode,
   chain: abstractTestnet,
@@ -28,7 +27,7 @@ const hash = await deployContract({
 
 ```tsx const.ts
 export const contractAbi = []; // Your contract ABI
-export const contractBytecode = ""; // Your contract bytecode
+export const contractBytecode = "0x..."; // Your contract bytecode
 ```
 
 ```tsx config.ts
@@ -121,22 +120,16 @@ Learn more on the [Contract deployment page](/how-abstract-works/evm-differences
 <Expandable title="Example">
 
 ```tsx
-import { deployContract } from "@abstract-foundation/agw-client";
-import {
-  contractAbi,
-  contractBytecode,
-  dependencyBytecode1,
-  dependencyBytecode2,
-} from "./const";
+import { contractAbi, contractBytecode } from "./const";
 import { agwClient } from "./config";
 import { abstractTestnet } from "viem/chains";
 
-const hash = await deployContract({
+const hash = await agwClient.deployContract({
   abi: contractAbi,
   bytecode: contractBytecode,
   chain: abstractTestnet,
   account: agwClient.account,
-  factoryDeps: [dependencyBytecode1, dependencyBytecode2],
+  factoryDeps: ["0x123", "0x456"],
 });
 ```
 
@@ -171,13 +164,12 @@ Must also provide a `paymaster` field.
 <Expandable title="Example">
 
 ```tsx
-import { deployContract } from "@abstract-foundation/agw-client";
 import { contractAbi, contractBytecode } from "./const";
 import { agwClient } from "./config";
 import { abstractTestnet } from "viem/chains";
 import { getGeneralPaymasterInput } from "viem/zksync";
 
-const hash = await deployContract({
+const hash = await agwClient.deployContract({
   abi: contractAbi,
   bytecode: contractBytecode,
   chain: abstractTestnet,

@@ -13,18 +13,12 @@ includes a `writeContract` method that can be used to call functions on a smart 
 ```tsx example.ts
 import { agwClient } from "./config";
 import { parseAbi } from "viem";
-import { getGeneralPaymasterInput } from "viem/zksync";
 
 const transactionHash = await agwClient.writeContract({
   abi: parseAbi(["function mint(address,uint256) external"]), // Your contract ABI
   address: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA",
   functionName: "mint",
-  args: [address, BigInt(1)],
-  // Optional paymaster fields
-  paymaster: "0x5407B5040dec3D339A9247f3654E59EEccbb6391",
-  paymasterInput: getGeneralPaymasterInput({
-    innerInput: "0x",
-  }),
+  args: ["0x273B3527BF5b607dE86F504fED49e1582dD2a1C6", BigInt(1)],
 });
 ```
 
@@ -100,17 +94,12 @@ export const agwClient = await createAbstractClient({
 ```tsx
 import { agwClient } from "./config";
 import { parseAbi } from "viem";
-import { getGeneralPaymasterInput } from "viem/zksync";
 
 const transactionHash = await agwClient.writeContract({
   abi: parseAbi(["function mint(address,uint256) external"]),
   address: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA",
   functionName: "mint",
-  args: [address, BigInt(1)],
-  paymaster: "0x5407B5040dec3D339A9247f3654E59EEccbb6391",
-  paymasterInput: getGeneralPaymasterInput({
-    innerInput: "0x",
-  }),
+  args: ["0x273B3527BF5b607dE86F504fED49e1582dD2a1C6", BigInt(1)],
 });
 ```
 
