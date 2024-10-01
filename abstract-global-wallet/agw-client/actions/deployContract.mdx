@@ -155,7 +155,7 @@ Must also provide a `paymasterInput` field.
 
 </ResponseField>
 
-<ResponseField name="paymasterInput" type="0x${string}">
+<ResponseField name="paymasterInput" type="Hex">
 
 Input data to the **paymaster**.
 
@@ -187,6 +187,6 @@ const hash = await agwClient.deployContract({
 
 ## Returns
 
-Returns the `0x${string}` hash of the transaction that deployed the contract.
+Returns the `Hex` hash of the transaction that deployed the contract.
 
 Use [waitForTransactionReceipt](https://viem.sh/docs/actions/public/waitForTransactionReceipt) to get the transaction receipt from the hash.
