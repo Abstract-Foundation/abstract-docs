@@ -60,7 +60,10 @@
             "build-on-abstract/applications/thirdweb"
           ]
         },
-        "abstract-global-wallet",
+        {
+          "group": "Abstract Glboal Wallet",
+          "pages": ["abstract-global-wallet"]
+        },
         "build-on-abstract/zksync-cli"
       ]
     },
