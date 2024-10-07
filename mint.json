@@ -15,6 +15,9 @@
       "to": "#07C983"
     }
   },
+  "feedback": {
+    "thumbsRating": true
+  },
   "background": {
     "style": "grid"
   },
