@@ -21,10 +21,10 @@
   "background": {
     "style": "grid"
   },
-  "topbarLinks": [],
   "primaryTab": {
     "name": "Documentation"
   },
+  "layout": "topnav",
   "tabs": [
     {
       "name": "Documentation",
@@ -35,7 +35,6 @@
       "url": "abstract-global-wallet"
     }
   ],
-  "anchors": [],
   "navigation": [
     {
       "group": "Overview",
@@ -61,6 +60,7 @@
             "build-on-abstract/applications/thirdweb"
           ]
         },
+        "abstract-global-wallet",
         "build-on-abstract/zksync-cli"
       ]
     },
