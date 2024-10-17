@@ -60,10 +60,6 @@
             "build-on-abstract/applications/thirdweb"
           ]
         },
-        {
-          "group": "Abstract Glboal Wallet",
-          "pages": ["abstract-global-wallet"]
-        },
         "build-on-abstract/zksync-cli"
       ]
     },
@@ -156,8 +152,8 @@
         "abstract-global-wallet/agw-react/overview",
         "abstract-global-wallet/agw-react/getting-started",
         "abstract-global-wallet/agw-react/integrating-with-rainbowkit",
+        "abstract-global-wallet/agw-react/integrating-with-privy",
         "abstract-global-wallet/agw-react/AbstractWalletProvider",
-
         {
           "group": "Hooks",
           "pages": [
