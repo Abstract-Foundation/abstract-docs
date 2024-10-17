@@ -1,0 +1,95 @@
+---
+title: "Integrating with Privy"
+description: "Learn how to integrate Privy natively to use Abstract Global Wallet"
+---
+
+[Privy](https://docs.privy.io/guide/react/quickstart) powers the login screen and EOA creation
+of Abstract Global Wallet, meaning you can use Privy&rsquo;s features and SDKs natively alongside AGW.
+
+The `agw-react` package includes a `AbstractPrivyProvider` component that allows you to
+use Privy features from the Abstract Global Wallet (e.g. sending transactions).
+
+This page assumes you have already created an app on the [Privy dashboard](https://docs.privy.io/guide/react/quickstart).
+
+## 1. Enable Abstract Integration
+
+From the [Privy dashboard](https://dashboard.privy.io/),
+navigate to **Ecosystem** > **Integrations**.
+
+Scroll down to find **Abstract** and toggle the switch to enable the integration.
+
+<img
+  src="/images/privy-integration.png"
+  alt="Privy Integration from Dashboard - enable Abstract" 
+/>
+
+
+## 2. Setup the AbstractPrivyProvider
+
+
+Wrap your application in the `AbstractPrivyProvider` component, providing your
+<Tooltip tip="Available from the Settings tab of the Privy dashboard.">Privy app ID</Tooltip>
+ as the `appId` prop.
+
+```tsx
+import { AbstractPrivyProvider } from "@abstract-foundation/agw-react/privy";
+
+const App = () => {
+  return (
+    <AbstractPrivyProvider appId="your-privy-app-id">
+      {children}
+    </AbstractPrivyProvider>
+  );
+};
+```
+
+## 3. Login users
+
+Use the `useAbstractPrivyLogin` hook to prompt users to login with Abstract Global Wallet.
+
+```tsx
+import { useAbstractPrivyLogin } from "@abstract-foundation/agw-react/privy";
+
+const LoginButton = () => {
+  const { login, link } = useAbstractPrivyLogin();
+  return <button onClick={login}>Login with Abstract</button>;
+};
+```
+
+- The `login` function uses Privy's [loginWithCrossAppAccount](https://docs.privy.io/guide/react/cross-app/requester#login)
+function to authenticate users with their Abstract Global Wallet account. 
+
+- The `link` function uses Privy's [linkCrossAppAccount](https://docs.privy.io/guide/react/cross-app/requester#linking) 
+function to allow authenticated users to link their existing account to an Abstract Global Wallet.
+
+## 4. Use hooks and functions
+
+Once the user has signed in, you can begin to use any of the `agw-react` hooks,
+such as [useWriteContractSponsored](/abstract-global-wallet/agw-react/hooks/useWriteContractSponsored)
+as well as all of the existing [wagmi hooks](https://wagmi.sh/react/api/hooks); such as [useAccount](https://wagmi.sh/react/api/hooks/useAccount),
+[useBalance](https://wagmi.sh/react/api/hooks/useBalance), etc.
+
+All transactions will be sent from the connected AGW smart contract wallet (i.e. the `tx.from` address will be the AGW smart contract wallet address).
+
+```tsx
+import { useAccount, useSendTransaction } from "wagmi";
+
+export default function Example() {
+  const { address, status } = useAccount();
+  const { sendTransaction, isPending } = useSendTransaction();
+
+  return (
+    <button
+      onClick={() =>
+        sendTransaction({
+          to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
+          data: "0x69",
+        })
+      }
+      disabled={isPending || status !== "connected"}
+    >
+      {isPending ? "Sending..." : "Send Transaction"}
+    </button>
+  );
+}
+```
