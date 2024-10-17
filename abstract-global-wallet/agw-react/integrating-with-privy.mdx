@@ -1,13 +1,16 @@
 ---
 title: "Integrating with Privy"
-description: "Learn how to integrate Privy natively to use Abstract Global Wallet"
+description: "Learn how to integrate Privy with Abstract Global Wallet"
 ---
 
-[Privy](https://docs.privy.io/guide/react/quickstart) powers the login screen and EOA creation
+[Privy](https://docs.privy.io/guide/react/quickstart) powers the login screen and 
+[EOA creation](/abstract-global-wallet/architecture#eoa-creation)
 of Abstract Global Wallet, meaning you can use Privy&rsquo;s features and SDKs natively alongside AGW.
 
-The `agw-react` package includes a `AbstractPrivyProvider` component that allows you to
-use Privy features from the Abstract Global Wallet (e.g. sending transactions).
+The `agw-react` package provides an `AbstractPrivyProvider` component, 
+which wraps your application with the [PrivyProvider](https://docs.privy.io/reference/sdk/react-auth/functions/PrivyProvider) 
+as well as the Wagmi and TanStack Query providers; allowing you to use the features of each library with Abstract Global Wallet.
+
 
 This page assumes you have already created an app on the [Privy dashboard](https://docs.privy.io/guide/react/quickstart).
 
