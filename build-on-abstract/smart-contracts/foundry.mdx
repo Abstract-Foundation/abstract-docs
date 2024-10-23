@@ -203,9 +203,18 @@ Transaction hash: 0xa7e2ecf1611fc01221678ac2c8919fe9c338b2aad9ac1ff4ae6f0d1711a6
 
   </Step>
   <Step title="Verify smart contract on the block explorer" icon="check">
-  Contract verification is not supported with Foundry yet.
 
-You can verify your smart contracts manually on the [Abstract block explorer](https://explorer.testnet.abs.xyz/contracts/verify).
+Verify your smart contracts so others can see the code on the [block explorer](/ecosystem/block-explorers):
+
+```bash
+forge verify-contract 0x1590522E5758a7A8DD00f212fe487AE94fE69dcf \
+    src/Counter.sol:Counter \
+    --verifier zksync \
+    --verifier-url https://api-explorer-verify.testnet.abs.xyz/contract_verification \
+    --zksync
+```
+
+**Note**: Replace the contract address and the contract path with your own.
 
   </Step>
 </Steps>
