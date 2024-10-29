@@ -24,59 +24,46 @@ To use Foundry to build smart contracts on Abstract, use the [foundry-zksync](ht
 </Note>
 
 <Steps>
-  <Step title="Clone the repository">
-  From any directory, clone the `foundry-zksync` repository.
+  <Step title="Install foundry-zksync">
+
+Install the `foundryup-zksync` fork:
 
 ```bash
-git clone https://github.com/matter-labs/foundry-zksync.git
+curl -L https://raw.githubusercontent.com/matter-labs/foundry-zksync/main/install-foundry-zksync | bash
 ```
 
-  </Step>
-  <Step title="Run the installer">
-  Change directory into the `foundry-zksync` directory.
+Run `foundryup-zksync` to install the latest versions of the `forge` and `cast` binaries:
 
 ```bash
-cd foundry-zksync
+foundryup-zksync
 ```
 
-Run the installer:
-
-```bash
-./install-foundry-zksync
-```
-
-  <Accordion title="Common installation issues" icon="circle-exclamation">
-    
-    <AccordionGroup>
-        <Accordion title="Could not detect shell">
-        To add the `foundry` binary to your PATH, run the following command:
-
-        ```
-        export PATH="$PATH:/Users/<your-username-here>/.foundry/bin"
-        ```
-
-        Replace `<your-username-here>` with the correct path to your home directory.
-
-        </Accordion>
-
-        <Accordion title="Library not loaded: libusb" >
-         The [libusb](https://libusb.info/) library may need to be installed manually on MacOS.
-
-         Run the following command to install the library:
-
-         ```bash
-         brew install libusb
-        ```
-        </Accordion>
-
-    </AccordionGroup>
-
-  </Accordion>
+<Accordion title="Common installation issues" icon="circle-exclamation">
+  
+  <AccordionGroup>
+      <Accordion title="Could not detect shell">
+      To add the `foundry` binary to your PATH, run the following command:
+      ```
+      export PATH="$PATH:/Users/<your-username-here>/.foundry/bin"
+      ```
+      Replace `<your-username-here>` with the correct path to your home directory.
+      </Accordion>
+      <Accordion title="Library not loaded: libusb" >
+       The [libusb](https://libusb.info/) library may need to be installed manually on MacOS.
+       Run the following command to install the library:
+       ```bash
+       brew install libusb
+      ```
+      </Accordion>
+  </AccordionGroup>
+</Accordion>
 
 A successful installation will output the following message:
 
 ```bash
-Forge version 0.0.2 is successfully installed.
+foundryup-zksync: installed - forge 0.0.2
+foundryup-zksync: installed - cast 0.0.2
+foundryup-zksync: done!
 ```
 
   </Step>
@@ -96,13 +83,7 @@ Forge version 0.0.2 is successfully installed.
 
 ## 2. Create a new project
 
-First, change directory _out_ of the `foundry-zksync` directory.
-
-```bash
-cd ..
-```
-
-Create a new project with Forge and change directory into the project.
+Create a new project with `forge` and change directory into the project.
 
 ```bash
 forge init my-abstract-project && cd my-abstract-project
