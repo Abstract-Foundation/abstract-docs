@@ -33,6 +33,10 @@
     {
       "name": "Abstract Global Wallet",
       "url": "abstract-global-wallet"
+    },
+    {
+      "name": "Ecosystem",
+      "url": "ecosystem"
     }
   ],
   "navigation": [
@@ -117,12 +121,8 @@
       ]
     },
     {
-      "group": "Ecosystem",
-      "pages": [
-        "ecosystem/block-explorers",
-        "ecosystem/bridges",
-        "ecosystem/faucets"
-      ]
+      "group": "Tooling",
+      "pages": ["tooling/block-explorers", "tooling/bridges", "tooling/faucets"]
     },
     {
       "group": "Infrastructure",
@@ -186,6 +186,15 @@
           ]
         }
       ]
+    },
+    {
+      "group": "Ecosystem",
+      "pages": [
+        "ecosystem/indexers",
+        "ecosystem/interoperability",
+        "ecosystem/oracles",
+        "ecosystem/rpc-providers"
+      ]
     }
   ],
   "footerSocials": {
@@ -201,6 +210,18 @@
     {
       "source": "/how-abstract-works/abstract-global-wallet/architecture",
       "destination": "/abstract-global-wallet/architecture"
+    },
+    {
+      "source": "/ecosystem/block-explorers",
+      "destination": "/tooling/block-explorers"
+    },
+    {
+      "source": "/ecosystem/bridges",
+      "destination": "/tooling/bridges"
+    },
+    {
+      "source": "/ecosystem/faucets",
+      "destination": "/tooling/faucets"
     }
   ]
 }
