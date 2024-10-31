@@ -3,4 +3,34 @@ title: "Frequently Asked Questions"
 description: "Answers to common questions about Abstract Global Wallet."
 ---
 
-###
+### Who holds the private keys to the AGW?
+
+As described in the [how it works](/abstract-global-wallet/architecture) section, the
+private key of the EOA that is the approved signer of the AGW smart contract
+is generated and split into three shards.
+
+- **Device Share**: This shard is stored on the user&rsquo;s device. In a browser environment, it is stored inside the local storage of the Privy iframe.
+- **Auth Share**: This shard is encrypted and stored on Privy&rsquo;s servers. It is retrieved when the user logs in with their original login method.
+- **Recovery Share**: This shard is stored in a back up location of the user&rsquo;s choice, typically a cloud storage account such as Google Drive or iCloud.
+
+### Does the user need to create their AGW on the Abstract website?
+
+No, users don&rsquo;t need to leave your application to create their AGW, any application that integrates the wallet connection flow
+supports both creating a new AGW and connecting an existing AGW.
+
+For example, the [live demo](https://create-abstract-app.vercel.app/) showcases how both users without an existing AGW
+can create one from within the application and existing AGW users can connect their AGW to the application and begin approving transactions.
+
+### Who deploys the AGW smart contracts?
+
+A factory smart contract deploys each AGW smart contract. The generated EOA sends the transaction to deploy the AGW smart contract via the factory,
+and initializes the smart contract with itself as the approved signer.
+
+Using the [SDK](/abstract-global-wallet/getting-started), this transaction is sponsored by a [paymaster](/how-abstract-works/native-account-abstraction/paymasters),
+meaning users don&rsquo;t need to load their EOA with any funds to deploy the AGW smart contract to get started.
+
+### Does the AGW smart contract work on other chains?
+
+Abstract Global Wallet is built on top of [native account abstraction](/how-abstract-works/native-account-abstraction/overview);
+a feature unique to Abstract. While the smart contract code is EVM-compatible, the SDK is not chain-agnostic and only works on Abstract
+due to the technical differences between Abstract and other EVM-compatible chains.
