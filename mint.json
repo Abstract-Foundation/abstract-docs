@@ -122,7 +122,12 @@
     },
     {
       "group": "Tooling",
-      "pages": ["tooling/block-explorers", "tooling/bridges", "tooling/faucets"]
+      "pages": [
+        "tooling/block-explorers",
+        "tooling/bridges",
+        "tooling/faucets",
+        "tooling/deployed-contracts"
+      ]
     },
     {
       "group": "Infrastructure",
