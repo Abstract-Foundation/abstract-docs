@@ -169,23 +169,34 @@ You should now see the compiled smart contracts in the generated `zkout` directo
 Run the following command to deploy your smart contracts:
 
 ```bash
-forge create src/Counter.sol:Counter --account myKeystore --rpc-url https://api.testnet.abs.xyz --chain 11124 --zksync
+forge create src/Counter.sol:Counter \
+    --account myKeystore \
+    --rpc-url https://api.testnet.abs.xyz \
+    --chain 11124 \
+    --zksync \
+    --verify \
+    --verifier zksync \
+    --verifier-url https://api-explorer-verify.testnet.abs.xyz/contract_verification
 ```
 
-Ensure `myKeystore` _(in the above command)_ is the name of the keystore file you created in the previous step.
+Ensure `myKeystore` is the name of the keystore file you created in the previous step.
 
-If successful, your output should look similar to the following:
+If successful, the output should look similar to the following:
 
 ```bash
 Deployer: 0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d
 Deployed to: 0x1590522E5758a7A8DD00f212fe487AE94fE69dcf
 Transaction hash: 0xa7e2ecf1611fc01221678ac2c8919fe9c338b2aad9ac1ff4ae6f0d1711a62cf0
+[...]
+Verification was successful.
 ```
 
   </Step>
-  <Step title="Verify smart contract on the block explorer" icon="check">
+  <Step title="Verify an existing smart contract" icon="check">
 
-Verify your smart contracts so others can see the code on the [block explorer](/tooling/block-explorers):
+In the above step, we verified the smart contract immediately after deployment.
+
+To verify an existing smart contract on the [block explorer](/tooling/block-explorers), run the following command:
 
 ```bash
 forge verify-contract 0x1590522E5758a7A8DD00f212fe487AE94fE69dcf \
@@ -195,7 +206,7 @@ forge verify-contract 0x1590522E5758a7A8DD00f212fe487AE94fE69dcf \
     --zksync
 ```
 
-**Note**: Replace the contract address and the contract path with your own.
+_**Note**: Replace the contract path and address with your own._
 
   </Step>
 </Steps>
