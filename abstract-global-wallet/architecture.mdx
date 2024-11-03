@@ -1,31 +1,23 @@
 ---
-title: "Architecture"
+title: "How It Works"
 description: "Learn more about how Abstract Global Wallet works under the hood."
 ---
 
 Abstract Global Wallet makes use of [native account abstraction](/how-abstract-works/native-account-abstraction),
 by creating [smart contract wallets](/how-abstract-works/native-account-abstraction/smart-contract-wallets)
-for users that have higher levels of security and flexibility than traditional <Tooltip
-    tip="Externally Owned Accounts (EOAs) are traditional Ethereum
-        wallets that are controlled by a single private key."> EOA</Tooltip> wallets.
+for users that have more security and flexibility than traditional EOAs.
 
-Each AGW account has many powerful features, including multiple
-**<Tooltip tip="A Signer is used to sign transactions that are sent to 
-    the blockchain to make state changing operations.">signers</Tooltip>**,
-recovery mechanisms, [paymaster](/how-abstract-works/native-account-abstraction/paymasters) support, and more.
+Users can connect their Abstract Global Wallet to an application by logging in with their email, social account, or existing wallet.
+Once connected, applications can begin prompting users to approve transactions, which are executed from the
+user's smart contract wallet.
 
-<img
-  className="block dark:hidden"
-  src="/images/agw-diagram.jpeg"
-  alt="Abstract Global Wallet Architecture Light"
-/>
-
-<img
-  className="hidden dark:block"
-  src="/images/agw-diagram.jpeg"
-  alt="Abstract Global Wallet Architecture Dark"
-/>
-
+<Card
+  title="Try the AGW live demo"
+  icon="play"
+  href="https://create-abstract-app.vercel.app/"
+>
+  Try the live demo of Abstract Global Wallet to see it in action.
+</Card>
 
 ## How Abstract Global Wallet Works
 
@@ -45,16 +37,15 @@ provided by the AGW.
 
 <img
   className="block dark:hidden"
-  src="/images/abstract-global-wallet-2.png"
+  src="/images/agw-diagram.jpeg"
   alt="Abstract Global Wallet Architecture Light"
 />
 
 <img
   className="hidden dark:block"
-  src="/images/abstract-global-wallet-2.png"
+  src="/images/agw-diagram.jpeg"
   alt="Abstract Global Wallet Architecture Dark"
 />
-
 ### EOA Creation
 
 First, the user authenticates with their email, social account, or other login method and
