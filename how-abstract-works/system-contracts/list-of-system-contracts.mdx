@@ -11,6 +11,8 @@ whenever the VM accesses an `address`.
 The address is looked up in the `AccountCodeStorage` contract, if the associated value is non-zero (i.e. the address has code stored), this code hash
 is used by the VM for the account.
 
+**Contract Address:** `0x0000000000000000000000000000000000008002`
+
 <Card
   title="View the source code for AccountCodeStorage"
   href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/AccountCodeStorage.sol"
@@ -23,6 +25,8 @@ is used by the VM for the account.
 
 Learn more about the bootloader and this system contract in the
 [bootloader](/how-abstract-works/system-contracts/bootloader) section.
+
+**Contract Address:** `0x000000000000000000000000000000000000800c`
 
 <Card
   title="View the source code for BootloaderUtilities"
@@ -38,6 +42,8 @@ This contract is used to perform complex multi-step upgrades on the L2.
 It contains a single function, `upgrade`, which executes an upgrade of the L2
 by delegating calls to another contract.
 
+**Contract Address:** `0x000000000000000000000000000000000000800f`
+
 <Card
   title="View the source code for ComplexUpgrader"
   href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/ComplexUpgrader.sol"
@@ -52,6 +58,8 @@ This contract is used to compress the data that is published to the L1, specific
 
 - Compresses the deployed smart contract bytecodes.
 - Compresses the state diffs (and validates state diff compression).
+
+**Contract Address:** `0x000000000000000000000000000000000000800e`
 
 <Card
   title="View the source code for Compressor"
@@ -87,6 +95,8 @@ Before deployment, it ensures the code hash of the smart contract is known using
 See the [contract deployment](/how-abstract-works/evm-differences/contract-deployment) section
 for more details.
 
+**Contract Address:** `0x0000000000000000000000000000000000008006`
+
 <Card
   title="View the source code for ContractDeployer"
   href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/ContractDeployer.sol"
@@ -105,6 +115,8 @@ call a third function, `_relayCall` that relays the calldata to the
 [ContractDeployer](#contractdeployer) contract.
 
 You do not need to use this system contract directly, instead use [ContractDeployer](#contractdeployer).
+
+**Contract Address:** `0x0000000000000000000000000000000000010000`
 
 <Card
   title="View the source code for Create2Factory"
@@ -143,6 +155,8 @@ callable so that users can transfer ETH to it.
 For these contracts, the EmptyContract code is inserted upon <Tooltip tip="The first block of the blockchain">Genesis</Tooltip>.
 It is essentially a noop code, which does nothing and returns `success=1`.
 
+**Contract Address:** `0x0000000000000000000000000000000000000000`
+
 <Card
   title="View the source code for EmptyContract"
   href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/EmptyContract.sol"
@@ -156,6 +170,8 @@ It is essentially a noop code, which does nothing and returns `success=1`.
 This contract is responsible for [emitting events](https://docs.soliditylang.org/en/latest/contracts.html#events).
 It is not required to interact with this smart contract, the
 standard Solidity `emit` keyword can be used.
+
+**Contract Address:** `0x000000000000000000000000000000000000800d`
 
 <Card
   title="View the source code for EventWriter"
@@ -172,6 +188,8 @@ smart contracts with the same Solidity code but different constructor parameters
 
 It is not required to interact with this smart contract directly,
 as it is used via the compiler.
+
+**Contract Address:** `0x0000000000000000000000000000000000008005`
 
 <Card
   title="View the source code for ImmutableSimulator"
@@ -199,6 +217,8 @@ See the [contract deployment section](/how-abstract-works/evm-differences/contra
 
 </Accordion>
 
+**Contract Address:** `0x0000000000000000000000000000000000008004`
+
 <Card
   title="View the source code for KnownCodesStorage"
   href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/KnownCodesStorage.sol"
@@ -214,6 +234,8 @@ It is used by the [KnownCodesStorage](#knowncodesstorage) contract to publish th
 code hash of smart contracts to Ethereum.
 
 Learn more about what data is sent in the [contract deployment section](/how-abstract-works/evm-differences/contract-deployment) section.
+
+**Contract Address:** `0x0000000000000000000000000000000000008008`
 
 <Card
   title="View the source code for L1Messenger"
@@ -234,6 +256,8 @@ This is because the L2 does not have a set "native" token unlike Ethereum,
 so functions such as `transferFromTo`, `balanceOf`, `mint`, `withdraw`, etc. are
 implemented in this contract as if it were an ERC-20.
 
+**Contract Address:** `0x000000000000000000000000000000000000800a`
+
 <Card
   title="View the source code for L2BaseToken"
   href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/L2BaseToken.sol"
@@ -246,6 +270,8 @@ implemented in this contract as if it were an ERC-20.
 
 This contract calls the [L2BaseToken](#l2basetoken) contract&rsquo;s `transferFromTo` function to
 simulate the `msg.value` behaviour of Ethereum.
+
+**Contract Address:** `0x0000000000000000000000000000000000008009`
 
 <Card
   title="View the source code for MsgValueSimulator"
@@ -268,6 +294,8 @@ it also enforces that the nonce _is_ set as used before the transaction executio
 
 See more details in the [nonces](/how-abstract-works/evm-differences/nonces) section.
 
+**Contract Address:** `0x0000000000000000000000000000000000008003`
+
 <Card
   title="View the source code for NonceHolder"
   href="https://github.com/matter-labs/era-contracts/tree/main/system-contracts/contracts/NonceHolder.sol"
@@ -281,6 +309,8 @@ See more details in the [nonces](/how-abstract-works/evm-differences/nonces) sec
 This contract is responsible for creating [EIP-4844 blobs](https://www.eip4844.com/) and
 publishing them to Ethereum. Learn more in the
 [transaction lifecycle](/how-abstract-works/architecture/transaction-lifecycle) section.
+
+**Contract Address:** `0x0000000000000000000000000000000000008011`
 
 <Card
   title="View the source code for PubdataChunkPublisher"
@@ -297,6 +327,8 @@ such as block-scoped, transaction-scoped, or system-wide parameters.
 
 For example, variables such as `chainId`, `gasPrice`, `baseFee`, as well as system functions
 such as `setL2Block` and `setNewBatch` are stored in this contract.
+
+**Contract Address:** `0x000000000000000000000000000000000000800b`
 
 <Card
   title="View the source code for SystemContext"
