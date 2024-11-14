@@ -42,12 +42,10 @@ cd my-abstract-app
 ## 2. Set up a Thirdweb API key
 
 On the [thirdweb dashboard](https://thirdweb.com/dashboard), create your
-account (or sign in), and go to the
-[API keys](https://thirdweb.com/dashboard/settings/api-keys) page.
+account (or sign in), and copy your project&rsquo;s **Client ID** from the
+**Settings** section. Ensure `localhost` included in the allowed domains.
 
-Create a new API key with `localhost` included in the allowed domains, then copy your **client ID**.
-
-Create a `.env` file and add your client ID as an environment variable:
+Create an `.env.local` file and add your client ID as an environment variable:
 
 ```bash
 NEXT_PUBLIC_TEMPLATE_CLIENT_ID=your-client-id-here
