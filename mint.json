@@ -158,7 +158,7 @@
         "abstract-global-wallet/agw-react/overview",
         "abstract-global-wallet/agw-react/getting-started",
         {
-          "group": "Integrations",
+          "group": "Library Integrations",
           "pages": [
             "abstract-global-wallet/agw-react/integrating-with-connectkit",
             "abstract-global-wallet/agw-react/integrating-with-dynamic",
