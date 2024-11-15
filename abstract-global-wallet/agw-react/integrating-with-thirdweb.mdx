@@ -1,0 +1,82 @@
+---
+title: "Thirdweb"
+description: "Learn how to integrate Abstract Global Wallet with Thirdweb."
+---
+
+The `agw-react` package includes an option to include Abstract Global Wallet as a connection option in the thirdweb `ConnectButton` component.
+
+<Card
+  title="AGW + Thirdweb Example Repo"
+  icon="github"
+  href="https://github.com/Abstract-Foundation/examples/tree/main/agw-thirdweb-nextjs"
+>
+  Use our example repo to quickly get started with AGW and thirdweb.
+</Card>
+
+## Installation
+
+Install the required dependencies:
+
+```bash
+npm install @abstract-foundation/agw-react wagmi viem thirdweb
+```
+
+## Usage
+
+### 1. Configure the ThirdwebProvider
+
+Wrap your application in the [ThirdwebProvider](https://portal.thirdweb.com/react/v5/ThirdwebProvider) component.
+
+```tsx {1,9,11}
+import { ThirdwebProvider } from "thirdweb/react";
+
+export default function AbstractWalletWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <ThirdwebProvider>
+      {/* Your application components */}
+    </ThirdwebProvider>
+  );
+}
+```
+
+<Tip>
+  **Next.js App Router:** If you are using [Next.js App
+  Router](https://nextjs.org/docs), create a new component and add the `use
+  client` directive at the top of your file ([see
+  example](https://github.com/Abstract-Foundation/examples/blob/main/agw-thirdweb-nextjs/src/components/NextAbstractWalletProvider.tsx))
+  and wrap your application in this component ([see
+  example](https://github.com/Abstract-Foundation/examples/blob/main/agw-thirdweb-nextjs/src/app/layout.tsx#L51)).
+</Tip>
+
+### 2. Render the ConnectButton
+
+Render the [ConnectButton](https://portal.thirdweb.com/react/v5/ConnectButton) component anywhere in your application, and include `abstractWallet` in the `wallets` prop.
+
+```tsx
+import { abstractWallet } from "@abstract-foundation/agw-react/thirdweb";
+import { createThirdwebClient } from "thirdweb";
+import { abstractTestnet } from "thirdweb/chains";
+import { ConnectButton } from "thirdweb/react";
+
+export default function Home() {
+  const client = createThirdwebClient({
+    clientId: "your-thirdweb-client-id-here",
+  });
+
+  return (
+    <ConnectButton
+      client={client}
+      wallets={[abstractWallet()]}
+      // Optionally, configure gasless transactions via paymaster:
+      accountAbstraction={{
+        chain: abstractTestnet,
+        sponsorGas: true,
+      }}
+    />
+  );
+}
+```

@@ -1,10 +1,8 @@
 ---
-title: "Integrating with RainbowKit"
+title: "RainbowKit"
 description: "Learn how to integrate Abstract Global Wallet with RainbowKit."
 ---
 
-[RainbowKit](https://www.rainbowkit.com/) is a React library
-that makes it easy to add wallet connection to your dapp. It's intuitive, responsive and customizable.
 The `agw-react` package includes an option to include Abstract Global Wallet
 as a connection option in your [RainbowKit ConnectButton](https://www.rainbowkit.com/docs/connect-button).
 
@@ -18,10 +16,7 @@ as a connection option in your [RainbowKit ConnectButton](https://www.rainbowkit
 
 ## Installation
 
-Install the required dependencies: [@abstract-foundation/agw-react](/abstract-global-wallet/agw-react/overview),
-[@rainbow-me/rainbowkit](https://www.rainbowkit.com/docs/getting-started/installation),
-[wagmi](https://wagmi.sh/react/getting-started/installation), [viem](https://viem.sh/getting-started/installation),
-and [TanStack Query](https://tanstack.com/query/latest/docs/framework/react/installation).
+Install the required dependencies:
 
 ```bash
 npm install @abstract-foundation/agw-react @rainbow-me/rainbowkit wagmi viem@2.x @tanstack/react-query
@@ -37,9 +32,6 @@ import { abstractWallet } from "@abstract-foundation/agw-react/connectors";
 ```
 
 ## Usage
-
-1. Wrap your application in the wagmi, TanStack Query, and RainbowKit providers with the `abstractWallet` connector included as a connection option.
-2. Render the `ConnectButton`.
 
 ### 1. Configure the Providers
 
@@ -116,21 +108,7 @@ Render the `ConnectButton` from `@rainbow-me/rainbowkit` anywhere in your app.
 ```tsx
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
-export default function AbstractWalletWrapper() {
+export default function Home() {
   return <ConnectButton />;
 }
 ```
-
-It will add the **Abstract** section as an option for users to connect using Abstract Global Wallet:
-
-<img
-  className="block dark:hidden"
-  src="/images/agw-rainbowkit.png"
-  alt="Abstract Global Wallet in RainbowKit ConnectButton Light"
-/>
-
-<img
-  className="hidden dark:block"
-  src="/images/agw-rainbowkit.png"
-  alt="Abstract Global Wallet in RainbowKit ConnectButton Dark"
-/>

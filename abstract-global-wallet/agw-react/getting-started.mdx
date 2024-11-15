@@ -3,33 +3,45 @@ title: "Getting Started"
 description: "Learn how to integrate Abstract Global Wallet into your React application using the agw-react package."
 ---
 
-<Accordion title="Prerequisites">
-  Ensure you have the following installed on your machine: 
-  
-- [Node.js](https://nodejs.org/en/download/) v18.0.0 or later.
-
-</Accordion>
-
 ## Quickstart
 
-Starting a new project? Use our CLI to bootstrap a new project with Abstract Global Wallet configured inside a Next.js app.
+**Starting a new project?** Use our CLI to bootstrap a new project with Abstract Global Wallet.
 
 ```bash
 npx @abstract-foundation/create-abstract-app@latest my-app
 ```
 
-## Manual Setup
+## Library Integrations
 
-Alternatively, integrate AGW into an existing React app using the steps below.
+<CardGroup cols={2}>
+  <Card title="Native Integration" href="#native-integration">
+    Add AGW as the native wallet connection option to your React application.
+  </Card>
 
-<Card
-  title="YouTube Video: Get Started with the AGW SDK"
-  icon="youtube"
-  href="https://youtu.be/P5lvuBcmisU"
->
-  Follow a step-by-step video tutorial to integrate AGW into a React
-  application.
-</Card>
+  <Card title="Privy Integration" href="/abstract-global-wallet/agw-react/integrating-with-privy">
+    Integrate AGW into an existing Privy application.
+  </Card>
+  
+  <Card title="ConnectKit" href="/abstract-global-wallet/agw-react/integrating-with-connectkit">
+    Integrate AGW as a wallet connection option to an existing ConnectKit application.
+  </Card>
+
+  <Card title="Dynamic" href="/abstract-global-wallet/agw-react/integrating-with-dynamic">
+    Integrate AGW as a wallet connection option to an existing Dynamic application.
+  </Card>
+
+  <Card title="RainbowKit" href="/abstract-global-wallet/agw-react/integrating-with-rainbowkit">
+    Integrate AGW as a wallet connection option to an existing RainbowKit application.
+  </Card>
+
+  <Card title="Thirdweb" href="/abstract-global-wallet/agw-react/integrating-with-thirdweb">
+    Integrate AGW as a wallet connection option to an existing thirdweb application.
+  </Card>
+</CardGroup>
+
+## Native Integration
+
+Alternatively, integrate AGW into an existing React application using the steps below, or [<Icon icon="youtube" iconType="solid" /> watch the video tutorial](https://youtu.be/P5lvuBcmisU) for a step-by-step walkthrough.
 
 ### 1. Install agw-react
 
