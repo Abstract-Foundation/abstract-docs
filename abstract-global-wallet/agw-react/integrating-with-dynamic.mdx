@@ -3,7 +3,7 @@ title: "Dynamic"
 description: "Learn how to integrate Abstract Global Wallet with Dynamic."
 ---
 
-[Dynamic](https://www.dynamic.xyz/) enables you to add authentication and wallet functionality to your application. The `agw-react` package includes an option to include Abstract Global Wallet as a connection option in your Dynamic application.
+The `agw-react` package includes an option to include Abstract Global Wallet as a connection option in the Dynamic `DynamicWidget` component.
 
 <Card
   title="AGW + Dynamic Example Repo"
@@ -18,9 +18,89 @@ description: "Learn how to integrate Abstract Global Wallet with Dynamic."
 Install the required dependencies:
 
 ```bash
-npm install @abstract-foundation/agw-react @dynamic-labs/sdk-react
+npm install @abstract-foundation/agw-react @dynamic-labs/sdk-react-core @dynamic-labs/ethereum @dynamic-labs-connectors/abstract-global-wallet-evm viem
 ```
 
 ## Usage
 
-_Coming soon_
+### 1. Configure the DynamicContextProvider
+
+Wrap your application in the [DynamicContextProvider](https://docs.dynamic.xyz/react-sdk/components/dynamiccontextprovider) component:
+
+<CodeGroup>
+
+```tsx Providers
+import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
+import { AbstractEvmWalletConnectors } from "@dynamic-labs-connectors/abstract-global-wallet-evm";
+import { Chain } from "viem";
+import { abstractTestnet } from "viem/chains";
+
+export default function AbstractWalletWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <DynamicContextProvider
+      theme="auto"
+      settings={{
+        overrides: {
+          evmNetworks: [
+            toDynamicChain(
+              abstractTestnet,
+              "https://abstract-assets.abs.xyz/icons/light.png"
+            ),
+          ],
+        },
+        environmentId: "your-dynamic-environment-id",
+        walletConnectors: [AbstractEvmWalletConnectors],
+      }}
+    >
+      {children}
+    </DynamicContextProvider>
+  );
+}
+```
+
+```tsx Config
+import { EvmNetwork } from "@dynamic-labs/sdk-react-core";
+import { Chain } from "viem";
+import { abstractTestnet } from "viem/chains";
+
+export function toDynamicChain(chain: Chain, iconUrl: string): EvmNetwork {
+  return {
+    ...chain,
+    networkId: chain.id,
+    chainId: chain.id,
+    nativeCurrency: {
+      ...chain.nativeCurrency,
+      iconUrl: "https://app.dynamic.xyz/assets/networks/eth.svg",
+    },
+    iconUrls: [iconUrl],
+    blockExplorerUrls: [chain.blockExplorers?.default?.url],
+    rpcUrls: [...chain.rpcUrls.default.http],
+  } as EvmNetwork;
+}
+```
+
+</CodeGroup>
+
+<Tip>
+  **Next.js App Router:** If you are using [Next.js App
+  Router](https://nextjs.org/docs), create a new component and add the `use
+  client` directive at the top of your file ([see
+  example](https://github.com/Abstract-Foundation/examples/blob/main/agw-dynamic-nextjs/src/components/NextAbstractWalletProvider.tsx))
+  and wrap your application in this component.
+</Tip>
+
+### 2. Render the DynamicWidget
+
+Render the [DynamicWidget](https://docs.dynamic.xyz/react-sdk/components/dynamicwidget) component anywhere in your application:
+
+```tsx
+import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
+
+export default function Home() {
+  return <DynamicWidget />;
+}
+```
