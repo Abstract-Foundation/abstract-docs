@@ -1,5 +1,5 @@
 ---
-title: "Integrating with Privy"
+title: "Privy"
 description: "Learn how to integrate Privy with Abstract Global Wallet"
 ---
 
@@ -11,10 +11,19 @@ The `agw-react` package provides an `AbstractPrivyProvider` component,
 which wraps your application with the [PrivyProvider](https://docs.privy.io/reference/sdk/react-auth/functions/PrivyProvider) 
 as well as the Wagmi and TanStack Query providers; allowing you to use the features of each library with Abstract Global Wallet.
 
+## Installation
 
-This page assumes you have already created an app on the [Privy dashboard](https://docs.privy.io/guide/react/quickstart).
+Install the required dependencies:
 
-## 1. Enable Abstract Integration
+```bash
+npm install @abstract-foundation/agw-react @abstract-foundation/agw-client wagmi viem @tanstack/react-query
+```
+
+## Usage
+
+This section assumes you have already created an app on the [Privy dashboard](https://docs.privy.io/guide/react/quickstart).
+
+### 1. Enable Abstract Integration
 
 From the [Privy dashboard](https://dashboard.privy.io/),
 navigate to **Ecosystem** > **Integrations**.
@@ -27,7 +36,7 @@ Scroll down to find **Abstract** and toggle the switch to enable the integration
 />
 
 
-## 2. Setup the AbstractPrivyProvider
+### 2. Configure the AbstractPrivyProvider
 
 
 Wrap your application in the `AbstractPrivyProvider` component, providing your
@@ -46,7 +55,7 @@ const App = () => {
 };
 ```
 
-## 3. Login users
+### 3. Login users
 
 Use the `useAbstractPrivyLogin` hook to prompt users to login with Abstract Global Wallet.
 
@@ -65,7 +74,7 @@ function to authenticate users with their Abstract Global Wallet account.
 - The `link` function uses Privy's [linkCrossAppAccount](https://docs.privy.io/guide/react/cross-app/requester#linking) 
 function to allow authenticated users to link their existing account to an Abstract Global Wallet.
 
-## 4. Use hooks and functions
+### 4. Use hooks and functions
 
 Once the user has signed in, you can begin to use any of the `agw-react` hooks,
 such as [useWriteContractSponsored](/abstract-global-wallet/agw-react/hooks/useWriteContractSponsored)
