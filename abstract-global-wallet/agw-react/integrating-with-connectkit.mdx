@@ -3,7 +3,7 @@ title: "ConnectKit"
 description: "Learn how to integrate Abstract Global Wallet with ConnectKit."
 ---
 
-[ConnectKit](https://docs.family.co/connectkit) provides the fastest way to add a wallet connection flow to your Web3 app. The `agw-react` package includes an option to include Abstract Global Wallet as a connection option in your ConnectKit application.
+The `agw-react` package includes an option to include Abstract Global Wallet as a connection option in the ConnectKit `ConnectKitButton` component.
 
 <Card
   title="AGW + ConnectKit Example Repo"
@@ -18,9 +18,63 @@ description: "Learn how to integrate Abstract Global Wallet with ConnectKit."
 Install the required dependencies:
 
 ```bash
-npm install @abstract-foundation/agw-react connectkit viem wagmi
+npm install @abstract-foundation/agw-react wagmi viem connectkit @tanstack/react-query @rainbow-me/rainbowkit
 ```
 
 ## Usage
 
-_Coming soon_
+### 1. Configure the Providers
+
+Wrap your application in the required providers:
+
+<CodeGroup>
+
+```tsx Providers
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { WagmiProvider } from "wagmi";
+import { ConnectKitProvider } from "connectkit";
+
+const queryClient = new QueryClient();
+
+export default function AbstractWalletWrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <ConnectKitProvider>
+          {/* Your application components */}
+          {children}
+        </ConnectKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
+  );
+}
+```
+
+```tsx Wagmi Config
+import { createConfig, http } from "wagmi";
+import { abstractTestnet } from "viem/chains";
+import { abstractWalletConnector } from "@abstract-foundation/agw-react/connectors";
+
+export const config = createConfig({
+  connectors: [abstractWalletConnector()],
+  chains: [abstractTestnet],
+  transports: {
+    [abstractTestnet.id]: http(),
+  },
+  ssr: true,
+});
+```
+
+</CodeGroup>
+
+### 2. Render the ConnectKitButton
+
+Render the `ConnectKitButton` component anywhere in your application:
+
+```tsx
+import { ConnectKitButton } from "connectkit";
+
+export default function Home() {
+  return <ConnectKitButton />;
+}
+```
