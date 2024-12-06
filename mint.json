@@ -125,6 +125,12 @@
       "pages": [
         "tooling/block-explorers",
         "tooling/bridges",
+        {
+          "group": "Data Indexers",
+          "pages": [
+            "tooling/data-indexers/the-graph"
+          ]
+        },
         "tooling/faucets",
         "tooling/deployed-contracts"
       ]
