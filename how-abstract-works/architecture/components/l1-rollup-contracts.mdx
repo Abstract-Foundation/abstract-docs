@@ -17,26 +17,37 @@ These smart contracts work together to:
 - Facilitate communication between L1 and L2 to enable
   cross-chain messaging and bridging.
 
-<Card
-  title="View all L1 Rollup Contracts"
-  icon="file-contract"
-  href="https://docs.zksync.io/zk-stack/components/smart-contracts#diamond"
->
-  View the full list of smart contracts deployed on L1 that Abstract uses on the
-  ZK stack documentation.
-</Card>
+## List of Abstract Contracts
 
-## List of L1 Rollup Contracts
+Below is a list of the smart contracts that Abstract uses.
 
-Below is a list of the smart contracts deployed on L1 (Sepolia) that Abstract uses.
+### L1 Contracts
 
-| **Contract**            | **Address**                                                                                                                   |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| Governance              | [0x15d049e3d24fbcd53129bf7781a0c6a506690ff2](https://sepolia.etherscan.io/address/0x15d049e3d24fbcd53129bf7781a0c6a506690ff2) |
-| ERC20 bridge            | [0x2ae09702f77a4940621572fbcdae2382d44a2cba](https://sepolia.etherscan.io/address/0x2ae09702f77a4940621572fbcdae2382d44a2cba) |
-| Shared bridge L1 (1)    | [0x3e8b2fe58675126ed30d0d12dea2a9bda72d18ae](https://sepolia.etherscan.io/address/0x3e8b2fe58675126ed30d0d12dea2a9bda72d18ae) |
-| Shared bridge L1 (2)    | [0xec089e40c40b12dd4577e0c5381d877b613040ec](https://sepolia.etherscan.io/address/0xec089e40c40b12dd4577e0c5381d877b613040ec) |
-| Bridge Hub Proxy        | [0x35a54c8c757806eb6820629bc82d90e056394c92](https://sepolia.etherscan.io/address/0x35a54c8c757806eb6820629bc82d90e056394c92) |
-| State Transition Proxy  | [0x4e39e90746a9ee410a8ce173c7b96d3afed444a5](https://sepolia.etherscan.io/address/0x4e39e90746a9ee410a8ce173c7b96d3afed444a5) |
-| Transparent Proxy Admin | [0x0358baca94dcd7931b7ba7aaf8a5ac6090e143a5](https://sepolia.etherscan.io/address/0x0358baca94dcd7931b7ba7aaf8a5ac6090e143a5) |
-| Validator Timelock      | [0xd3876643180a79d0a56d0900c060528395f34453](https://sepolia.etherscan.io/address/0xd3876643180a79d0a56d0900c060528395f34453) |
+| **Contract**                                         | **Address**                                                                                                                   |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| L1 ETH Sender / Operator (Commits batches)           | [0x564D33DE40b1af31aAa2B726Eaf9Dafbaf763577](https://sepolia.etherscan.io/address/0x564D33DE40b1af31aAa2B726Eaf9Dafbaf763577) |
+| L1 ETH Sender / Operator (Prove and Execute batches) | [0xcf43bdB3115547833FFe4D33d864d25135012648](https://sepolia.etherscan.io/address/0xcf43bdB3115547833FFe4D33d864d25135012648) |
+| Governor Address (ChainAdmin owner)                  | [0x397aa1340B514cB3EF8F474db72B7e62C9159C63](https://sepolia.etherscan.io/address/0x397aa1340B514cB3EF8F474db72B7e62C9159C63) |
+| create2_factory_addr                                 | [0xce0042b868300000d44a59004da54a005ffdcf9f](https://sepolia.etherscan.io/address/0xce0042b868300000d44a59004da54a005ffdcf9f) |
+| create2_factory_salt                                 | `0x8c8c6108a96a14b59963a18367250dc2042dfe62da8767d72ffddb03f269ffcc`                                                          |
+| BridgeHub Proxy Address                              | [0x35a54c8c757806eb6820629bc82d90e056394c92](https://sepolia.etherscan.io/address/0x35a54c8c757806eb6820629bc82d90e056394c92) |
+| State Transition Proxy Address                       | [0x4e39e90746a9ee410a8ce173c7b96d3afed444a5](https://sepolia.etherscan.io/address/0x4e39e90746a9ee410a8ce173c7b96d3afed444a5) |
+| Transparent Proxy Admin Address                      | [0x0358baca94dcd7931b7ba7aaf8a5ac6090e143a5](https://sepolia.etherscan.io/address/0x0358baca94dcd7931b7ba7aaf8a5ac6090e143a5) |
+| Validator Timelock Address                           | [0xd3876643180a79d0a56d0900c060528395f34453](https://sepolia.etherscan.io/address/0xd3876643180a79d0a56d0900c060528395f34453) |
+| ERC20 Bridge L1 Address                              | [0x2ae09702f77a4940621572fbcdae2382d44a2cba](https://sepolia.etherscan.io/address/0x2ae09702f77a4940621572fbcdae2382d44a2cba) |
+| Shared Bridge L1 Address                             | [0x3e8b2fe58675126ed30d0d12dea2a9bda72d18ae](https://sepolia.etherscan.io/address/0x3e8b2fe58675126ed30d0d12dea2a9bda72d18ae) |
+| Default Upgrade Address                              | [0x27a7f18106281fe53d371958e8bc3f833694d24a](https://sepolia.etherscan.io/address/0x27a7f18106281fe53d371958e8bc3f833694d24a) |
+| Diamond Proxy Address                                | [0x8ad52ff836a30f063df51a00c99518880b8b36ac](https://sepolia.etherscan.io/address/0x8ad52ff836a30f063df51a00c99518880b8b36ac) |
+| Governance Address                                   | [0x15d049e3d24fbcd53129bf7781a0c6a506690ff2](https://sepolia.etherscan.io/address/0x15d049e3d24fbcd53129bf7781a0c6a506690ff2) |
+| Multicall3 Address                                   | [0xca11bde05977b3631167028862be2a173976ca11](https://sepolia.etherscan.io/address/0xca11bde05977b3631167028862be2a173976ca11) |
+| Verifier Address                                     | [0xac3a2dc46cea843f0a9d6554f8804aed18ff0795](https://sepolia.etherscan.io/address/0xac3a2dc46cea843f0a9d6554f8804aed18ff0795) |
+| Chain Admin Address                                  | [0xEec1E1cFaaF993B3AbE9D5e78954f5691e719838](https://sepolia.etherscan.io/address/0xEec1E1cFaaF993B3AbE9D5e78954f5691e719838) |
+
+### L2 Contracts
+
+| **Contract** | **Address**                                                                                                                   |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| ERC20 Bridge L2 Address | [0xec089e40c40b12dd4577e0c5381d877b613040ec](https://explorer.testnet.abs.xyz/address/0xec089e40c40b12dd4577e0c5381d877b613040ec) |
+| Shared Bridge L2 Address | [0xec089e40c40b12dd4577e0c5381d877b613040ec](https://explorer.testnet.abs.xyz/address/0xec089e40c40b12dd4577e0c5381d877b613040ec) |
+| Testnet Paymaster Address | [0xbe80eae2a968c257a0dc965c59d19606df0fb518](https://explorer.testnet.abs.xyz/address/0xbe80eae2a968c257a0dc965c59d19606df0fb518) |
+  
