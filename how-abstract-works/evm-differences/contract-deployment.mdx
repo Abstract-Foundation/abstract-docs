@@ -332,10 +332,10 @@ The process can be broken down into the following steps:
     Once the bootloader finishes calling the other system contracts to ensure the contract code hash is known,
     and the contract code is published to Ethereum,
     it continues executing the transaction as described in the 
-    [tranasction flow](/how-abstract-works/native-account-abstraction/transaction-flow) section.
+    [transaction flow](/how-abstract-works/native-account-abstraction/transaction-flow) section.
 
     This flow includes invoking the contract deployer account&rsquo;s `validateTransaction` and `executeTransaction` functions; which
-    will determine whether to deploy the contract and how to execute the deployment tranasction respectively.
+    will determine whether to deploy the contract and how to execute the deployment transaction respectively.
 
     Learn more about these functions on the [smart contract wallets](/how-abstract-works/native-account-abstraction/smart-contract-wallets) section, or
     view an example implementation in the [DefaultAccount](/how-abstract-works/system-contracts/list-of-system-contracts#defaultaccount).
