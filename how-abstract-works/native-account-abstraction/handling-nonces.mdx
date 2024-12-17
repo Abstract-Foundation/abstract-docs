@@ -3,7 +3,7 @@ title: "Handling Nonces"
 description: "Learn the best practices for handling nonces when building smart contract accounts on Abstract."
 ---
 
-As outlined in the [tranasction flow](/how-abstract-works/native-account-abstraction/transaction-flow), a call to `validateNonceUsage`
+As outlined in the [transaction flow](/how-abstract-works/native-account-abstraction/transaction-flow), a call to `validateNonceUsage`
 is made to the [NonceHolder](/how-abstract-works/system-contracts/list-of-system-contracts#nonceholder) system contract
 before each transaction starts, in order to check whether the provided nonce
 of a transaction has already been used or not.
