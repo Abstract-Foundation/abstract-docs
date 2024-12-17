@@ -18,13 +18,13 @@ to how close a transaction brought a batch to being **sealed** (i.e. full).
 
 ## Components
 
-Fees on Abstract therefore consist of both **off-chain** and **on-chain** components:
+Fees on Abstract therefore consist of both **off-chain** and **onchain** components:
 
-1. **Off-chain Fee**:
+1. **Offchain Fee**:
    - Fixed cost (approximately $0.001 per transaction).
    - Covers L2 state storage and zero-knowledge [proof generation](/how-abstract-works/architecture/components/prover-and-verifier#proof-generation).
    - Independent of transaction complexity.
-2. **On-chain Fee**:
+2. **Onchain Fee**:
    - Variable cost (influenced by Ethereum gas prices).
    - Covers [proof verification](/how-abstract-works/architecture/components/prover-and-verifier#proof-verification) and [publishing state](/how-abstract-works/architecture/transaction-lifecycle) on Ethereum.
 
@@ -32,9 +32,9 @@ Fees on Abstract therefore consist of both **off-chain** and **on-chain** compon
 
 | Aspect                  | Ethereum                                                    | Abstract                                                                                   |
 | ----------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| **Fee Composition**     | Entirely on-chain, consisting of base fee and priority fee. | Split between off-chain (fixed) and on-chain (variable) components.                        |
-| **Pricing Model**       | Dynamic, congestion-based model for base fee.               | Fixed off-chain component with a variable on-chain part influenced by Ethereum gas prices. |
-| **Data Efficiency**     | Publishes full transaction data.                            | Publishes only state deltas, significantly reducing on-chain data and costs.               |
+| **Fee Composition**     | Entirely onchain, consisting of base fee and priority fee. | Split between offchain (fixed) and onchain (variable) components.                        |
+| **Pricing Model**       | Dynamic, congestion-based model for base fee.               | Fixed offchain component with a variable onchain part influenced by Ethereum gas prices. |
+| **Data Efficiency**     | Publishes full transaction data.                            | Publishes only state deltas, significantly reducing onchain data and costs.               |
 | **Resource Allocation** | Each transaction independently consumes gas.                | Transactions share batch overhead, potentially leading to cost optimizations.              |
 | **Opcode Pricing**      | Each opcode has a specific gas cost.                        | Most opcodes have similar gas costs, simplifying estimation.                               |
 | **Refund Handling**     | Limited refund capabilities.                                | Smarter refund system for unused resources and overpayments.                               |
