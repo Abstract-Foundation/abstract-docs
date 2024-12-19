@@ -38,35 +38,26 @@ Run `foundryup-zksync` to install the latest versions of the `forge` and `cast` 
 foundryup-zksync
 ```
 
-<Accordion title="Common installation issues" icon="circle-exclamation">
-  
-  <AccordionGroup>
-      <Accordion title="Could not detect shell">
-      To add the `foundry` binary to your PATH, run the following command:
-      ```
-      export PATH="$PATH:/Users/<your-username-here>/.foundry/bin"
-      ```
-      Replace `<your-username-here>` with the correct path to your home directory.
-      </Accordion>
-      <Accordion title="Library not loaded: libusb" >
-       The [libusb](https://libusb.info/) library may need to be installed manually on MacOS.
-       Run the following command to install the library:
-       ```bash
-       brew install libusb
-      ```
-      </Accordion>
-  </AccordionGroup>
-</Accordion>
-
-A successful installation will output the following message:
-
-```bash
-foundryup-zksync: installed - forge 0.0.2
-foundryup-zksync: installed - cast 0.0.2
-foundryup-zksync: done!
-```
-
+  <Accordion title="Common installation issues" icon="circle-exclamation">
+    <AccordionGroup>
+        <Accordion title="Could not detect shell">
+        To add the `foundry` binary to your PATH, run the following command:
+        ```
+        export PATH="$PATH:/Users/<your-username-here>/.foundry/bin"
+        ```
+        Replace `<your-username-here>` with the correct path to your home directory.
+        </Accordion>
+        <Accordion title="Library not loaded: libusb" >
+        The [libusb](https://libusb.info/) library may need to be installed manually on MacOS.
+        Run the following command to install the library:
+        ```bash
+        brew install libusb
+        ```
+        </Accordion>
+    </AccordionGroup>
+  </Accordion>
   </Step>
+
   <Step title="Verify installation">
 
     A helpful command to check if the installation was successful is:
