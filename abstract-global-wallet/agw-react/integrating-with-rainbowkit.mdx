@@ -47,6 +47,7 @@ Wrap your application in the following providers:
 import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
+// + import config from your wagmi config
 
 const client = new QueryClient();
 
@@ -67,7 +68,7 @@ export default function AbstractWalletWrapper() {
 import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 import { abstractWallet } from "@abstract-foundation/agw-react/connectors";
 
-const connectors = connectorsForWallets(
+export const connectors = connectorsForWallets(
   [
     {
       groupName: "Abstract",
@@ -87,13 +88,18 @@ const connectors = connectorsForWallets(
 ```tsx Wagmi Config
 import { createConfig } from "wagmi";
 import { abstractTestnet } from "wagmi/chains";
-import { http } from "viem";
+import { createClient, http } from "viem";
+import { eip712WalletActions } from "viem/zksync";
+// + import connectors from your RainbowKit config
 
 export const config = createConfig({
   connectors,
   chains: [abstractTestnet],
-  transports: {
-    [abstractTestnet.id]: http(),
+  client({ chain }) {
+    return createClient({
+      chain,
+      transport: http(),
+    }).extend(eip712WalletActions());
   },
   ssr: true,
 });
