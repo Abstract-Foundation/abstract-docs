@@ -152,6 +152,7 @@ You should now see the compiled smart contracts in the generated `zkout` directo
     Enter your wallet&rsquo;s private key when prompted & provide a password to encrypt it.
 
     <Warning>We recommend not to use a private key associated with real funds. Create a new wallet for this step.</Warning>
+    <Warning>We recommend not to use a private key associated with real funds. Create a new wallet for this step.</Warning>
 
   </Step>
 
@@ -171,6 +172,8 @@ forge create src/Counter.sol:Counter \
 ```
 
 Ensure `myKeystore` is the name of the keystore file you created in the previous step.
+
+<Note>Or you can use `--private-key <YOU PRIVATE KEY>` instead of **`--account myKeystore`** as well.</Note>
 
 If successful, the output should look similar to the following:
 
