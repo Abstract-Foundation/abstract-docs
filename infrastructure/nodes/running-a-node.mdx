@@ -22,44 +22,35 @@ description: "Learn how to run your own Abstract node."
 
 ### Starting the Node
 
-- **For a Mainnet instance [Coming Soon]:**
-
-  ```bash
-  docker compose --file mainnet-external-node.yml up -d
-  ```
-
-- **For a Testnet instance:**
-
-  ```bash
-  docker compose --file testnet-external-node.yml up -d
-  ```
+```bash
+docker compose --file testnet-external-node.yml up -d
+```
 
 ### Reading Logs
 
 Change `<container name>` to `testnet-node-external-node-1`
+
 ```bash
 docker logs -f --tail=0 <container name>
 ```
-Alternatives `<container name>` : `testnet-node-prometheus-1` , `testnet-node-postgres-1` , `testnet-node-grafana-1`
+
+Container name options:
+
+- `testnet-node-external-node-1`
+- `testnet-node-postgres-1`
+- `testnet-node-generate-secrets-1`
+- `testnet-node-prometheus-1`
+- `testnet-node-grafana-1`
 
 ### Resetting the Node State
 
-- **For a Mainnet instance:**
-
-  ```bash
-  docker compose --file mainnet-external-node.yml down --volumes
-  ```
-
-- **For a Testnet instance:**
-
-  ```bash
-  docker compose --file testnet-external-node.yml down --volumes
-  ```
+```bash
+docker compose --file testnet-external-node.yml down --volumes
+```
 
 ### Monitoring Node Status
 
-Access the local Grafana dashboard to see the node status after recovery:
-[Local Grafana Dashboard](http://localhost:3000/d/0/external-node).
+Access the [local Grafana dashboard](http://localhost:3000/d/0/external-node) to see the node status after recovery.
 
 ### API Access
 
