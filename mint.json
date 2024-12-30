@@ -42,7 +42,11 @@
   "navigation": [
     {
       "group": "Overview",
-      "pages": ["overview", "what-is-abstract", "connect-to-abstract"]
+      "pages": [
+        "overview",
+        "what-is-abstract",
+        "connect-to-abstract"
+      ]
     },
     {
       "group": "Build on Abstract",
@@ -188,7 +192,6 @@
         "abstract-global-wallet/agw-client/createAbstractClient",
         "abstract-global-wallet/agw-client/getSmartAccountAddressFromInitialSigner",
         "abstract-global-wallet/agw-client/transformEIP1193Provider",
-
         {
           "group": "Actions",
           "pages": [
@@ -197,6 +200,15 @@
             "abstract-global-wallet/agw-client/actions/sendTransaction",
             "abstract-global-wallet/agw-client/actions/sendTransactionBatch",
             "abstract-global-wallet/agw-client/actions/writeContract"
+          ]
+        },
+        {
+          "group": "Session Keys",
+          "pages": [
+            "abstract-global-wallet/agw-client/session-keys/overview",
+            "abstract-global-wallet/agw-client/session-keys/createSession",
+            "abstract-global-wallet/agw-client/session-keys/toSessionClient",
+            "abstract-global-wallet/agw-client/session-keys/revokeSession"
           ]
         }
       ]

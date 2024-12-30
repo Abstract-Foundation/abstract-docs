@@ -1,0 +1,235 @@
+---
+title: "createSession"
+description: "Function to create a session key for the connected Abstract Global Wallet."
+---
+
+The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient) includes a `createSession` method that can be used to create a session key for the connected Abstract Global Wallet.
+
+Session keys allow you to delegate specific permissions to another signer for a limited time period.
+
+## Usage
+
+<CodeGroup>
+
+```tsx call-policies.ts
+// This example demonstrates how to create a session key for NFT minting on a specific contract.
+// The session key:
+// - Can only call the mint function on the specified NFT contract
+// - Has a lifetime gas fee limit of 1 ETH
+// - Expires after 24 hours
+
+import { agwClient } from "./config";
+import { LimitType } from "@abstract-foundation/agw-client/sessions";
+import { toFunctionSelector, parseEther } from "viem";
+import { privateKeyToAccount, generatePrivateKey } from "viem/accounts";
+
+// Generate a new session key pair
+const sessionPrivateKey = generatePrivateKey();
+const sessionSigner = privateKeyToAccount(sessionPrivateKey);
+
+const { session } = await agwClient.createSession({
+  session: {
+    signer: sessionSigner.address, // The address that will be allowed to sign transactions (session public key)
+    expiresAt: BigInt(Math.floor(Date.now() / 1000) + 60 * 60 * 24), // When the session key expires (24 hours)
+    feeLimit: {
+      limitType: LimitType.Lifetime, // The type of limit to apply:
+      limit: parseEther("1"), // The maximum amount allowed.
+      period: BigInt(0), // The time period in seconds for allowance limits. Set to 0 for Unlimited/Lifetime limits.
+    },
+    callPolicies: [
+      {
+        target: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA", // NFT contract
+        selector: toFunctionSelector("mint(address,uint256)"), // Function that can be called
+        valueLimit: {
+          limitType: LimitType.Unlimited,
+          limit: BigInt(0),
+          period: BigInt(0),
+        },
+        maxValuePerUse: BigInt(0),
+        constraints: [],
+      }
+    ],
+    transferPolicies: [],
+  },
+});
+```
+
+```tsx transfer-policies.ts
+// This example shows how to create a session key that can only transfer ETH to specific addresses.
+// It sets up two recipients with different limits: one with a daily allowance,
+// and another with a lifetime limit on total transfers.
+import { agwClient } from "./config";
+import { LimitType } from "@abstract-foundation/agw-client/sessions";
+import { parseEther } from "viem";
+import { privateKeyToAccount, generatePrivateKey } from "viem/accounts";
+
+// Generate a new session key pair
+const sessionPrivateKey = generatePrivateKey();
+const sessionSigner = privateKeyToAccount(sessionPrivateKey);
+
+const { session } = await agwClient.createSession({
+  session: {
+    signer: sessionSigner.address,
+    expiresAt: BigInt(Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7), // 1 week
+    feeLimit: {
+      limitType: LimitType.Lifetime,
+      limit: parseEther("0.1"),
+      period: BigInt(0),
+    },
+    callPolicies: [],
+    transferPolicies: [
+      {
+        target: "0x1234567890123456789012345678901234567890", // Allowed recipient 1
+        maxValuePerUse: parseEther("0.1"), // Max 0.1 ETH per transfer
+        valueLimit: {
+          limitType: LimitType.Allowance,
+          limit: parseEther("1"), // Max 1 ETH per day
+          period: BigInt(60 * 60 * 24), // 24 hours
+        },
+      },
+      {
+        target: "0x9876543210987654321098765432109876543210", // Allowed recipient 2
+        maxValuePerUse: parseEther("0.5"), // Max 0.5 ETH per transfer
+        valueLimit: {
+          limitType: LimitType.Lifetime,
+          limit: parseEther("2"), // Max 2 ETH total
+          period: BigInt(0),
+        },
+      }
+    ],
+  },
+});
+```
+
+```tsx config.ts
+import { createAbstractClient } from "@abstract-foundation/agw-client";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { abstractTestnet } from "viem/chains";
+
+// As an example, we are creating a new dummy account here for the signer.
+const randomPrivateKey = generatePrivateKey();
+const account = privateKeyToAccount(randomPrivateKey);
+
+export const agwClient = await createAbstractClient({
+  chain: abstractTestnet,
+  signer: account,
+});
+```
+
+</CodeGroup>
+
+## Parameters
+
+<ResponseField name="session" type="SessionConfig" required>
+  Configuration for the session key, including:
+
+  <Expandable title="Session Config Fields">
+    <ResponseField name="signer" type="Address" required>
+      The address that will be allowed to sign transactions (session public key).
+    </ResponseField>
+
+    <ResponseField name="expiresAt" type="bigint" required>
+      Unix timestamp when the session key expires.
+    </ResponseField>
+
+    <ResponseField name="feeLimit" type="Limit" required>
+      Maximum gas fees that can be spent using this session key.
+
+      <Expandable title="Limit Type">
+        <ResponseField name="limitType" type="LimitType" required>
+          The type of limit to apply:
+          - `LimitType.Unlimited` (0): No limit
+          - `LimitType.Lifetime` (1): Total limit over the session lifetime
+          - `LimitType.Allowance` (2): Limit per time period
+        </ResponseField>
+
+        <ResponseField name="limit" type="bigint" required>
+          The maximum amount allowed.
+        </ResponseField>
+
+        <ResponseField name="period" type="bigint" required>
+          The time period in seconds for allowance limits. Set to 0 for Unlimited/Lifetime limits.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="callPolicies" type="CallPolicy[]" required>
+      Array of policies defining which contract functions can be called.
+
+      <Expandable title="CallPolicy Type">
+        <ResponseField name="target" type="Address" required>
+          The contract address that can be called.
+        </ResponseField>
+
+        <ResponseField name="selector" type="Hash" required>
+          The function selector that can be called on the target contract.
+        </ResponseField>
+
+        <ResponseField name="valueLimit" type="Limit" required>
+          The limit on the amount of native tokens that can be sent with the call.
+        </ResponseField>
+
+        <ResponseField name="maxValuePerUse" type="bigint" required>
+          Maximum value that can be sent in a single transaction.
+        </ResponseField>
+
+        <ResponseField name="constraints" type="Constraint[]" required>
+          Array of constraints on function parameters.
+
+          <Expandable title="Constraint Type">
+            <ResponseField name="index" type="bigint" required>
+              The index of the parameter to constrain.
+            </ResponseField>
+
+            <ResponseField name="condition" type="ConstraintCondition" required>
+              The type of constraint:
+              - `Unconstrained` (0)
+              - `Equal` (1)
+              - `Greater` (2)
+              - `Less` (3)
+              - `GreaterEqual` (4)
+              - `LessEqual` (5)
+              - `NotEqual` (6)
+            </ResponseField>
+
+            <ResponseField name="refValue" type="Hash" required>
+              The reference value to compare against.
+            </ResponseField>
+
+            <ResponseField name="limit" type="Limit" required>
+              The limit to apply to this parameter.
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="transferPolicies" type="TransferPolicy[]" required>
+      Array of policies defining transfer limits for simple value transfers.
+
+      <Expandable title="TransferPolicy Type">
+        <ResponseField name="target" type="Address" required>
+          The address that can receive transfers.
+        </ResponseField>
+
+        <ResponseField name="maxValuePerUse" type="bigint" required>
+          Maximum value that can be sent in a single transfer.
+        </ResponseField>
+
+        <ResponseField name="valueLimit" type="Limit" required>
+          The total limit on transfers to this address.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Returns
+
+<ResponseField name="transactionHash" type="Hash | undefined">
+  The transaction hash if a transaction was needed to enable sessions.
+</ResponseField>
+
+<ResponseField name="session" type="SessionConfig">
+  The created session configuration.
+</ResponseField>
