@@ -3,7 +3,7 @@ title: "toSessionClient"
 description: "Function to create an AbstractClient using a session key."
 ---
 
-The `toSessionClient` creates a new instance of the [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient) instantiated with the session key as the signer, allowing you to submit transactions and perform action (e.g. [writeContract](/abstract-global-wallet/agw-client/actions/writeContract)) from a session key.
+The `toSessionClient` function creates a new `SessionClient` instance that can submit transactions and perform actions (e.g. [writeContract](/abstract-global-wallet/agw-client/actions/writeContract)) from the Abstract Global wallet signed by a session key.
 
 If a transaction violates any of the session key&rsquo;s policies, it will be rejected.
 

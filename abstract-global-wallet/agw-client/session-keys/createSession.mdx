@@ -58,6 +58,7 @@ const { session } = await agwClient.createSession({
 // This example shows how to create a session key that can only transfer ETH to specific addresses.
 // It sets up two recipients with different limits: one with a daily allowance,
 // and another with a lifetime limit on total transfers.
+
 import { agwClient } from "./config";
 import { LimitType } from "@abstract-foundation/agw-client/sessions";
 import { parseEther } from "viem";
