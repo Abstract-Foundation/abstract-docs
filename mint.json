@@ -208,7 +208,7 @@
             "abstract-global-wallet/agw-client/session-keys/overview",
             "abstract-global-wallet/agw-client/session-keys/createSession",
             "abstract-global-wallet/agw-client/session-keys/toSessionClient",
-            "abstract-global-wallet/agw-client/session-keys/revokeSession"
+            "abstract-global-wallet/agw-client/session-keys/revokeSessions"
           ]
         }
       ]
