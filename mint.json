@@ -220,7 +220,8 @@
         "ecosystem/indexers",
         "ecosystem/interoperability",
         "ecosystem/oracles",
-        "ecosystem/rpc-providers"
+        "ecosystem/rpc-providers",
+        "ecosystem/paymasters"
       ]
     }
   ],
