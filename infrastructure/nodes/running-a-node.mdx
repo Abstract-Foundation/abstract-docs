@@ -11,55 +11,43 @@ description: "Learn how to run your own Abstract node."
 
 ## Setup Instructions
 
-1. Clone the Abstract node repository and navigate to `external-node/`:
+Clone the Abstract node repository and navigate to `external-node/`:
 
-   ```bash
-   git clone https://github.com/Abstract-Foundation/abstract-node
-   cd abstract-node/external-node
-   ```
+```bash
+git clone https://github.com/Abstract-Foundation/abstract-node
+cd abstract-node/external-node
+```
 
 ## Running an Abstract Node Locally
 
 ### Starting the Node
 
-- **For a Mainnet instance [Coming Soon]:**
-
-  ```bash
-  docker-compose --file mainnet-external-node.yml up -d
-  ```
-
-- **For a Testnet instance:**
-
-  ```bash
-  docker-compose --file testnet-external-node.yml up -d
-  ```
+```bash
+docker compose --file testnet-external-node.yml up -d
+```
 
 ### Reading Logs
 
-Change `<container name>` to `external-node-external-node-1`
 ```bash
-docker logs -f --tail 100 <container name>
+docker logs -f --tail=0 <container name>
 ```
-Alternatives `<container name>` : `external-node-prometheus-1` , `external-node-postgres-1` , `external-node-grafana-1`
+
+Container name options:
+
+- `testnet-node-external-node-1`
+- `testnet-node-postgres-1`
+- `testnet-node-prometheus-1`
+- `testnet-node-grafana-1`
 
 ### Resetting the Node State
 
-- **For a Mainnet instance:**
-
-  ```bash
-  docker-compose --file mainnet-external-node.yml down --volumes
-  ```
-
-- **For a Testnet instance:**
-
-  ```bash
-  docker-compose --file testnet-external-node.yml down --volumes
-  ```
+```bash
+docker compose --file testnet-external-node.yml down --volumes
+```
 
 ### Monitoring Node Status
 
-Access the local Grafana dashboard to see the node status after recovery:
-[Local Grafana Dashboard](http://localhost:3000/d/0/external-node).
+Access the [local Grafana dashboard](http://localhost:3000/d/0/external-node) to see the node status after recovery.
 
 ### API Access
 
@@ -72,7 +60,7 @@ Access the local Grafana dashboard to see the node status after recovery:
 this period, the API server will not serve any requests.
 - **Historical Data:** For access to historical transaction data, consider recovery from DB dumps. Refer to the Advanced Setup section for more details.
 - **DB Dump:** For nodes that operate from a DB dump, which allows starting an Abstract node with a full historical
-transactions history, refer to the documentation on running from DB dumps at [03_running.md](https://github.com/matter-labs/zksync-era/blob/main/docs/guides/external-node/03_running.md).
+transactions history, refer to the documentation on running from DB dumps at [03_running.md](https://github.com/matter-labs/zksync-era/blob/78af2bf786bb4f7a639fef9fd169594101818b79/docs/src/guides/external-node/03_running.md).
 
 ## System Requirements
 

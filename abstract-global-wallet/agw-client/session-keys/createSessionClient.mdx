@@ -1,0 +1,71 @@
+---
+title: "createSessionClient"
+description: "Function to create a new SessionClient without an existing AbstractClient."
+---
+
+The `createSessionClient` function creates a new `SessionClient` instance directly, without requiring an existing [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient).
+If you have an existing [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient), use the [toSessionClient](/abstract-global-wallet/agw-client/session-keys/toSessionClient) method instead.
+
+## Usage
+
+<CodeGroup>
+
+```tsx example.ts
+import { createSessionClient } from "@abstract-foundation/agw-client/sessions";
+import { abstractTestnet } from "viem/chains";
+import { http } from "viem";
+import { privateKeyToAccount, generatePrivateKey } from "viem/accounts";
+
+// The session signer (from createSession)
+const sessionPrivateKey = generatePrivateKey();
+const sessionSigner = privateKeyToAccount(sessionPrivateKey);
+
+// Create a session client directly
+const sessionClient = createSessionClient({
+  account: "0x1234...", // The Abstract Global Wallet address
+  chain: abstractTestnet,
+  signer: sessionSigner,
+  session: {
+    // ... See createSession docs for session configuration options
+  },
+  transport: http(), // Optional - defaults to http()
+});
+
+// Use the session client to make transactions
+const hash = await sessionClient.writeContract({
+  address: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA",
+  abi: parseAbi(["function mint(address,uint256) external"]),
+  functionName: "mint",
+  args: [address, BigInt(1)],
+});
+```
+
+</CodeGroup>
+
+## Parameters
+
+<ResponseField name="account" type="Account | Address" required>
+  The Abstract Global Wallet address or Account object that the session key will act on behalf of.
+</ResponseField>
+
+<ResponseField name="chain" type="ChainEIP712" required>
+  The chain configuration object that supports EIP-712.
+</ResponseField>
+
+<ResponseField name="signer" type="Account" required>
+  The session key account that will be used to sign transactions. Must match the signer address in the session configuration.
+</ResponseField>
+
+<ResponseField name="session" type="SessionConfig" required>
+  The session configuration created by [createSession](/abstract-global-wallet/agw-client/session-keys/createSession).
+</ResponseField>
+
+<ResponseField name="transport" type="Transport">
+  The transport configuration for connecting to the network. Defaults to HTTP if not provided.
+</ResponseField>
+
+## Returns
+
+<ResponseField name="sessionClient" type="SessionClient">
+  A new SessionClient instance that uses the session key for signing transactions. All transactions will be validated against the session's policies.
+</ResponseField>

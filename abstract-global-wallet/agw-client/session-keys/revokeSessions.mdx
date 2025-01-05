@@ -1,0 +1,84 @@
+---
+title: "revokeSessions"
+description: "Function to revoke session keys from the connected Abstract Global Wallet."
+---
+
+The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient) includes a `revokeSessions` method that can be used to revoke session keys from the connected Abstract Global Wallet.
+
+This allows you to invalidate existing session keys, preventing them from being used for future transactions.
+
+## Usage
+
+Revoke session(s) by providing either:
+
+- The session configuration object(s) (see [parameters](#parameters)).
+- The transaction hash(es) returned by [createSession](/abstract-global-wallet/agw-client/session-keys/createSession).
+
+<CodeGroup>
+
+```tsx example.ts
+import { agwClient } from "./config";
+
+// Revoke a single session by passing the session configuration
+const { transactionHash } = await agwClient.revokeSessions({
+  session: existingSession, 
+});
+
+// Revoke multiple sessions at once
+const { transactionHash } = await agwClient.revokeSessions({
+  session: [existingSession1, existingSession2], 
+});
+
+// Revoke sessions using their creation transaction hashes
+const { transactionHash } = await agwClient.revokeSessions({
+  session: "0x1234...", 
+});
+
+// Revoke multiple sessions using their creation transaction hashes
+const { transactionHash } = await agwClient.revokeSessions({
+  session: ["0x1234...", "0x5678..."], 
+});
+
+// You can combine both session configuration and creation transaction hashes in the same call
+const { transactionHash } = await agwClient.revokeSessions({
+  session: [existingSession, "0x1234..."], 
+});
+```
+
+```tsx config.ts
+import { createAbstractClient } from "@abstract-foundation/agw-client";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { abstractTestnet } from "viem/chains";
+
+// As an example, we are creating a new dummy account here for the signer.
+const randomPrivateKey = generatePrivateKey(); // Make a random private key
+const account = privateKeyToAccount(randomPrivateKey); // Use that to create a signer
+
+export const agwClient = await createAbstractClient({
+  chain: abstractTestnet,
+  signer: account, // The "owner" (initial approved signer) of the AGW smart contract wallet.
+});
+```
+
+</CodeGroup>
+
+## Parameters
+
+<ResponseField name="session" type="SessionConfig | Hash | (SessionConfig | Hash)[]" required>
+  The session(s) to revoke. Can be provided in three formats:
+  
+- A single `SessionConfig` object
+
+- A single session key creation transaction hash from [createSession](/abstract-global-wallet/agw-client/session-keys/createSession).
+
+- An array of `SessionConfig` objects and/or session key creation transaction hashes.
+
+See [createSession](/abstract-global-wallet/agw-client/session-keys/createSession) for more information on the `SessionConfig` object.
+
+</ResponseField>
+
+## Returns
+
+<ResponseField name="transactionHash" type="Hash">
+  The transaction hash of the revocation transaction.
+</ResponseField>

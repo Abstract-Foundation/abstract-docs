@@ -168,7 +168,7 @@ You should now see the compiled smart contracts in the generated `artifacts-zk` 
   </Step>
 
   <Step title="Add your private key" icon="key">
-    Create a new [configuration variable](https://hardhat.org/hardhat-runner/docs/guides/configuration-variables) 
+    Create a new [configuration variable](https://hardhat.org/hardhat-runner/docs/guides/configuration-variables)
     called `DEPLOYER_PRIVATE_KEY`.
 
     ```bash
@@ -185,7 +185,7 @@ You should now see the compiled smart contracts in the generated `artifacts-zk` 
 
   </Step>
 
-  <Step title="Write the deployment script" icon="code">    
+  <Step title="Write the deployment script" icon="code">
     Create a new [Hardhat script](https://hardhat.org/hardhat-runner/docs/advanced/scripts) located at `/deploy/deploy.ts`:
 
     ```bash
@@ -242,7 +242,7 @@ HelloAbstract was deployed to YOUR_CONTRACT_ADDRESS
 
   </Step>
   <Step title="Verify your smart contract on the block explorer" icon="check">
-  Verifying your smart contract is helpful for others to view the code and 
+  Verifying your smart contract is helpful for others to view the code and
   interact with it from a [block explorer](/tooling/block-explorers).
 To verify your smart contract, run the following command:
 
@@ -251,11 +251,9 @@ npx hardhat verify --network abstractTestnet YOUR_CONTRACT_ADDRESS
 ```
 
 **Note**: Replace `YOUR_CONTRACT_ADDRESS` with the address of your deployed smart contract.
-
 If successful, your output should look similar to the following:
 
 ```bash
-npx hardhat verify --network abstractTestnet YOUR_CONTRACT_ADDRESS
 Your verification ID is: 123
 Contract successfully verified on ZKsync block explorer!
 ```

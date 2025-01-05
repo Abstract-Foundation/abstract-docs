@@ -1,0 +1,62 @@
+---
+title: "toSessionClient"
+description: "Function to create an AbstractClient using a session key."
+---
+
+The `toSessionClient` function creates a new `SessionClient` instance that can submit transactions and perform actions (e.g. [writeContract](/abstract-global-wallet/agw-client/actions/writeContract)) from the Abstract Global wallet signed by a session key.
+
+If a transaction violates any of the session key&rsquo;s policies, it will be rejected.
+
+## Usage
+
+<CodeGroup>
+
+```tsx example.ts
+import { agwClient } from "./config";
+import { parseAbi } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+
+// Use the session signer and configuration from createSession
+const sessionClient = agwClient.toSessionClient(sessionSigner, session);
+
+// The session client will enforce all policies defined in the session
+const hash = await sessionClient.writeContract({
+  address: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA",
+  abi: parseAbi(["function mint(address,uint256) external"]),
+  functionName: "mint",
+  args: [address, BigInt(1)],
+});
+```
+
+```tsx config.ts
+import { createAbstractClient } from "@abstract-foundation/agw-client";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { abstractTestnet } from "viem/chains";
+
+// As an example, we are creating a new dummy account here for the signer.
+const randomPrivateKey = generatePrivateKey();
+const account = privateKeyToAccount(randomPrivateKey);
+
+export const agwClient = await createAbstractClient({
+  chain: abstractTestnet,
+  signer: account,
+});
+```
+
+</CodeGroup>
+
+## Parameters
+
+<ResponseField name="sessionSigner" type="Account" required>
+  The account that will be used to sign transactions. This must match the signer address specified in the session configuration.
+</ResponseField>
+
+<ResponseField name="session" type="SessionConfig" required>
+  The session configuration created by [createSession](/abstract-global-wallet/agw-client/session-keys/createSession).
+</ResponseField>
+
+## Returns
+
+<ResponseField name="sessionClient" type="AbstractClient">
+  A new AbstractClient instance that uses the session key for signing transactions. All transactions will be validated against the session's policies.
+</ResponseField>
