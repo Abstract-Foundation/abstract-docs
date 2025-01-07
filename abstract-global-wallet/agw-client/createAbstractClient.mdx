@@ -13,12 +13,14 @@ in the server-side environment of your application.
 
 ```tsx
 import { createAbstractClient } from "@abstract-foundation/agw-client";
+import type { AbstractClient } from "@abstract-foundation/agw-client"; // Optional
 ```
 
 ## Usage
 
 ```tsx
 import { createAbstractClient } from "@abstract-foundation/agw-client";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { abstractTestnet } from "viem/chains";
 
 // As an example, we are creating a new dummy account here for the signer.
