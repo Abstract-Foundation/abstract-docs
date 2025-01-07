@@ -5,8 +5,6 @@ description: "Function to create a session key for the connected Abstract Global
 
 The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient) includes a `createSession` method that can be used to create a session key for the connected Abstract Global Wallet.
 
-Session keys allow you to delegate specific permissions to another signer for a limited time period.
-
 ## Usage
 
 <CodeGroup>
@@ -24,8 +22,8 @@ import { toFunctionSelector, parseEther } from "viem";
 import { privateKeyToAccount, generatePrivateKey } from "viem/accounts";
 
 // Generate a new session key pair
-const sessionPrivateKey = generatePrivateKey();
-const sessionSigner = privateKeyToAccount(sessionPrivateKey);
+const sessionPrivateKey = generatePrivateKey(); // Generate a random private key
+const sessionSigner = privateKeyToAccount(sessionPrivateKey); // Use that to create a signer  
 
 const { session } = await agwClient.createSession({
   session: {

@@ -170,14 +170,12 @@
       "group": "Abstract Client",
       "pages": [
         "abstract-global-wallet/agw-react/AbstractWalletProvider",
-        "abstract-global-wallet/agw-client/createAbstractClient",
+        "abstract-global-wallet/agw-react/hooks/useLoginWithAbstract",
         "abstract-global-wallet/agw-react/hooks/useAbstractClient",
         "abstract-global-wallet/agw-react/hooks/useGlobalWalletSignerAccount",
-        "abstract-global-wallet/agw-react/hooks/useGlobalWalletSignerClient",
-        "abstract-global-wallet/agw-react/hooks/useLoginWithAbstract"
+        "abstract-global-wallet/agw-react/hooks/useGlobalWalletSignerClient"
       ]
     },
-   
     {
       "group": "Wallet Actions",
       "pages": [

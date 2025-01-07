@@ -2,3 +2,74 @@
 title: "useRevokeSessions"
 description: Hook for revoking session keys.
 ---
+
+Use the `useRevokeSessions` hook to revoke session keys from the connected Abstract Global Wallet, preventing the session keys from being able to execute any further transactions.
+
+## Import
+
+```tsx
+import { useRevokeSessions } from "@abstract-foundation/agw-react";
+```
+
+## Usage
+
+```tsx
+import { useRevokeSessions } from "@abstract-foundation/agw-react";
+import type { SessionConfig } from "@abstract-foundation/agw-client/sessions";
+
+export default function RevokeSessionExample() {
+  const { revokeSessionsAsync } = useRevokeSessions();
+
+  async function handleRevokeSession() {
+    // Revoke a single session using its configuration
+    await revokeSessionsAsync({
+      sessions: existingSessionConfig,
+    });
+
+    // Revoke a single session using its creation transaction hash
+    await revokeSessionsAsync({
+      sessions: "0x1234...", 
+    });
+
+    // Revoke multiple sessions
+    await revokeSessionsAsync({
+      sessions: [
+        existingSessionConfig,
+        "0x1234...",
+        anotherSessionConfig
+      ],
+    });
+  }
+
+  return <button onClick={handleRevokeSession}>Revoke Sessions</button>;
+}
+```
+
+## Returns
+
+<ResponseField name="revokeSessions" type="function">
+  Function to revoke session keys. Accepts a `RevokeSessionsArgs` object containing:
+
+  The session(s) to revoke. Can be provided as an array of:
+
+- Session configuration objects
+- Transaction hashes of when the sessions were created
+- A mix of both session configs and transaction hashes
+
+</ResponseField>
+
+<ResponseField name="revokeSessionsAsync" type="function">
+  Async function to revoke session keys. Takes the same parameters as `revokeSessions`.
+</ResponseField>
+
+<ResponseField name="isPending" type="boolean">
+  Whether the session revocation is in progress.
+</ResponseField>
+
+<ResponseField name="isError" type="boolean">
+  Whether the session revocation resulted in an error.
+</ResponseField>
+
+<ResponseField name="error" type="Error | null">
+  Error object if the session revocation failed.
+</ResponseField>

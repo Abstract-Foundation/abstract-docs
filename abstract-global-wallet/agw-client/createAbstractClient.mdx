@@ -6,18 +6,19 @@ description: "Function to create an instance of the Abstract Global Wallet clien
 Use the `createAbstractClient` function to initialize an `AbstractClient` instance, which provides a set
 of actions and methods to make use of the Abstract Global Wallet.
 
+This is useful if you need to create a new `AbstractClient` instance when you already have a signer, such as
+in the server-side environment of your application.
+
 ## Import
 
 ```tsx
 import { createAbstractClient } from "@abstract-foundation/agw-client";
-import type { AbstractClient } from "@abstract-foundation/agw-client"; // Optional
 ```
 
 ## Usage
 
 ```tsx
 import { createAbstractClient } from "@abstract-foundation/agw-client";
-import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { abstractTestnet } from "viem/chains";
 
 // As an example, we are creating a new dummy account here for the signer.
