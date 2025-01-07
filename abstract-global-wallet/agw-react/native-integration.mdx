@@ -3,12 +3,12 @@ title: "Native Integration"
 description: "Learn how to integrate Abstract Global Wallet with React."
 ---
 
-Integrate AGW into an existing React application using the steps below, or 
+Integrate AGW into an existing React application using the steps below, or
 [<Icon icon="youtube" iconType="solid" /> watch the video tutorial](https://youtu.be/P5lvuBcmisU) for a step-by-step walkthrough.
 
-### 1. Install agw-react
+### 1. Install Abstract Global Wallet
 
-To install the `agw-react package`, run the following command:
+Install the required dependencies:
 
 ```bash
 npm install @abstract-foundation/agw-react @abstract-foundation/agw-client wagmi viem@2.x @tanstack/react-query
@@ -50,11 +50,9 @@ The `AbstractWalletProvider` wraps your application in both the [WagmiProvider](
 [QueryClientProvider](https://tanstack.com/query/latest/docs/framework/react/reference/QueryClientProvider),
 meaning you can use the hooks and features of these libraries within your application.
 
-### 3. Use React Hooks
+### 3. Login with AGW
 
-With the provider setup, you can now use any of the available [hooks](/abstract-global-wallet/agw-react/hooks/useAbstractClient)
-from the `agw-react` package inside
-any component within your application. To prompt the user to sign in with AGW, use the
+With the provider setup, prompt users to sign in to your application with their Abstract Global Wallet using the
 [useLoginWithAbstract](/abstract-global-wallet/agw-react/hooks/useLoginWithAbstract) hook.
 
 ```tsx
@@ -68,16 +66,68 @@ export default function SignIn() {
 }
 ```
 
-### 4. Use wagmi hooks
+### 4. Use the Wallet
 
-Once the user has signed in, you can begin to use any of the `agw-react` hooks,
-such as [useWriteContractSponsored](/abstract-global-wallet/agw-react/hooks/useWriteContractSponsored)
-as well as all of the existing [wagmi hooks](https://wagmi.sh/react/api/hooks); such as [useAccount](https://wagmi.sh/react/api/hooks/useAccount),
-[useBalance](https://wagmi.sh/react/api/hooks/useBalance), etc.
+With the AGW connected, prompt the user to approve sending transactions from their wallet.
 
-All transactions will be sent from the connected AGW smart contract wallet (i.e. the `tx.from` address will be the AGW smart contract wallet address).
+- Use the [Abstract Client](/abstract-global-wallet/agw-react/hooks/useAbstractClient) or Abstract hooks for:
+  - Wallet actions. e.g. [sendTransaction](/abstract-global-wallet/agw-client/actions/sendTransaction), [deployContract](/abstract-global-wallet/agw-client/actions/deployContract),
+  [writeContract](/abstract-global-wallet/agw-client/actions/writeContract) etc.
+  - Smart contract wallet features. e.g. [gas-sponsored transactions](/abstract-global-wallet/agw-react/hooks/useWriteContractSponsored), [session keys](/abstract-global-wallet/agw-client/session-keys/overview), [transaction batches](/abstract-global-wallet/agw-client/actions/sendTransactionBatch).
+- Use [Wagmi](https://wagmi.sh/) hooks and [Viem](https://viem.sh/) functions for generic blockchain interactions, for example:
+  - Reading data, e.g. Wagmi&rsquo;s [useAccount](https://wagmi.sh/react/api/hooks/useAccount) and [useBalance](https://wagmi.sh/react/api/hooks/useBalance) hooks.
+  - Writing data, e.g. Wagmi&rsquo;s [useSignMessage](https://wagmi.sh/react/api/hooks/useSignMessage) and Viem&rsquo;s [verifyMessage](https://viem.sh/docs/actions/public/verifyMessage.html).
 
-```tsx
+<CodeGroup>
+
+```tsx Abstract Client
+import { useAbstractClient } from "@abstract-foundation/agw-react";
+
+export default function SendTransactionButton() {
+    // Option 1: Access and call methods directly
+    const { data: client } = useAbstractClient();
+
+    async function sendTransaction() {
+        if (!client) return;
+
+        // Submits a transaction from the connected AGW smart contract wallet.
+        const hash = await client.sendTransaction({
+            to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
+            data: "0x69",
+        });
+    }
+
+    return <button onClick={sendTransaction}>Send Transaction</button>;
+}
+```
+
+```tsx Abstract Hooks
+import { useWriteContractSponsored } from "@abstract-foundation/agw-react";
+import { parseAbi } from "viem";
+import { getGeneralPaymasterInput } from "viem/zksync";
+
+export default function SendTransaction() {
+    const { writeContractSponsoredAsync } = useWriteContractSponsored();
+
+    async function sendSponsoredTransaction() {
+        const hash = await writeContractSponsoredAsync({
+            abi: parseAbi(["function mint(address to, uint256 amount)"]),
+            address: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA",
+            functionName: "mint",
+            args: ["0x273B3527BF5b607dE86F504fED49e1582dD2a1C6", BigInt(1)],
+            paymaster: "0x5407B5040dec3D339A9247f3654E59EEccbb6391",
+            paymasterInput: getGeneralPaymasterInput({
+                innerInput: "0x",
+            }),
+        });
+    }
+
+    return <button onClick={sendSponsoredTransaction}>Send Sponsored Transaction</button>
+}
+
+```
+
+```tsx Wagmi Hooks
 import { useAccount, useSendTransaction } from "wagmi";
 
 export default function SendTransactionWithWagmi() {
@@ -100,28 +150,4 @@ export default function SendTransactionWithWagmi() {
 }
 ```
 
-### 5. Use the client directly
-
-The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient)
-also exposes a set of [actions](/abstract-global-wallet/agw-client/actions/deployContract)
-you can use to interact with the wallet, including
-[deploying a contract](/abstract-global-wallet/agw-client/actions/deployContract),
-[sending a transaction](/abstract-global-wallet/agw-client/actions/sendTransaction),
-or [calling a contract function](/abstract-global-wallet/agw-client/actions/writeContract).
-
-```tsx
-import { useGlobalWalletSignerClient } from "@abstract-foundation/agw-react";
-
-export default function SendTransaction() {
-  const { data: client } = useGlobalWalletSignerClient();
-
-  async function submitTransaction() {
-    const hash = await client.sendTransaction({
-      to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
-      data: "0x69",
-    });
-  }
-
-  return <button onClick={submitTransaction}>Submit Transaction</button>;
-}
-```
+</CodeGroup>
