@@ -1,0 +1,153 @@
+---
+title: "Native Integration"
+description: "Learn how to integrate Abstract Global Wallet with React."
+---
+
+Integrate AGW into an existing React application using the steps below, or
+[<Icon icon="youtube" iconType="solid" /> watch the video tutorial](https://youtu.be/P5lvuBcmisU) for a step-by-step walkthrough.
+
+### 1. Install Abstract Global Wallet
+
+Install the required dependencies:
+
+```bash
+npm install @abstract-foundation/agw-react @abstract-foundation/agw-client wagmi viem@2.x @tanstack/react-query
+```
+
+### 2. Setup the AbstractWalletProvider
+
+Wrap your application in the `AbstractWalletProvider` component to enable the use of the package's hooks and components
+throughout your application.
+
+```tsx
+import { AbstractWalletProvider } from "@abstract-foundation/agw-react";
+
+const config = {
+  testnet: true, // Required
+  // Optionally, provide your own RPC URL (learn more: https://viem.sh/docs/clients/transports/http.html)
+  // transport: http("https://your.abstract.node.example.com/rpc") // Optional
+};
+
+const App = () => {
+  return (
+    <AbstractWalletProvider config={config}>
+      {/* Your application components */}
+    </AbstractWalletProvider>
+  );
+};
+```
+
+<Tip>
+  **Next.js App Router:** If you are using [Next.js App
+  Router](https://nextjs.org/docs), create a new component and add the `use
+  client` directive at the top of your file ([see
+  example](https://github.com/Abstract-Foundation/examples/blob/main/agw-nextjs/src/components/NextAbstractWalletProvider.tsx))
+  and wrap your application in this component ([see
+  example](https://github.com/Abstract-Foundation/examples/blob/main/agw-nextjs/src/app/layout.tsx#L48-L54)).
+</Tip>
+
+The `AbstractWalletProvider` wraps your application in both the [WagmiProvider](https://wagmi.sh/react/api/WagmiProvider) and
+[QueryClientProvider](https://tanstack.com/query/latest/docs/framework/react/reference/QueryClientProvider),
+meaning you can use the hooks and features of these libraries within your application.
+
+### 3. Login with AGW
+
+With the provider setup, prompt users to sign in to your application with their Abstract Global Wallet using the
+[useLoginWithAbstract](/abstract-global-wallet/agw-react/hooks/useLoginWithAbstract) hook.
+
+```tsx
+import { useLoginWithAbstract } from "@abstract-foundation/agw-react";
+
+export default function SignIn() {
+  // login function to prompt the user to sign in with AGW.
+  const { login } = useLoginWithAbstract();
+
+  return <button onClick={login}>Connect with AGW</button>;
+}
+```
+
+### 4. Use the Wallet
+
+With the AGW connected, prompt the user to approve sending transactions from their wallet.
+
+- Use the [Abstract Client](/abstract-global-wallet/agw-react/hooks/useAbstractClient) or Abstract hooks for:
+  - Wallet actions. e.g. [sendTransaction](/abstract-global-wallet/agw-client/actions/sendTransaction), [deployContract](/abstract-global-wallet/agw-client/actions/deployContract),
+  [writeContract](/abstract-global-wallet/agw-client/actions/writeContract) etc.
+  - Smart contract wallet features. e.g. [gas-sponsored transactions](/abstract-global-wallet/agw-react/hooks/useWriteContractSponsored), [session keys](/abstract-global-wallet/agw-client/session-keys/overview), [transaction batches](/abstract-global-wallet/agw-client/actions/sendTransactionBatch).
+- Use [Wagmi](https://wagmi.sh/) hooks and [Viem](https://viem.sh/) functions for generic blockchain interactions, for example:
+  - Reading data, e.g. Wagmi&rsquo;s [useAccount](https://wagmi.sh/react/api/hooks/useAccount) and [useBalance](https://wagmi.sh/react/api/hooks/useBalance) hooks.
+  - Writing data, e.g. Wagmi&rsquo;s [useSignMessage](https://wagmi.sh/react/api/hooks/useSignMessage) and Viem&rsquo;s [verifyMessage](https://viem.sh/docs/actions/public/verifyMessage.html).
+
+<CodeGroup>
+
+```tsx Abstract Client
+import { useAbstractClient } from "@abstract-foundation/agw-react";
+
+export default function SendTransactionButton() {
+    // Option 1: Access and call methods directly
+    const { data: client } = useAbstractClient();
+
+    async function sendTransaction() {
+        if (!client) return;
+
+        // Submits a transaction from the connected AGW smart contract wallet.
+        const hash = await client.sendTransaction({
+            to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
+            data: "0x69",
+        });
+    }
+
+    return <button onClick={sendTransaction}>Send Transaction</button>;
+}
+```
+
+```tsx Abstract Hooks
+import { useWriteContractSponsored } from "@abstract-foundation/agw-react";
+import { parseAbi } from "viem";
+import { getGeneralPaymasterInput } from "viem/zksync";
+
+export default function SendTransaction() {
+    const { writeContractSponsoredAsync } = useWriteContractSponsored();
+
+    async function sendSponsoredTransaction() {
+        const hash = await writeContractSponsoredAsync({
+            abi: parseAbi(["function mint(address to, uint256 amount)"]),
+            address: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA",
+            functionName: "mint",
+            args: ["0x273B3527BF5b607dE86F504fED49e1582dD2a1C6", BigInt(1)],
+            paymaster: "0x5407B5040dec3D339A9247f3654E59EEccbb6391",
+            paymasterInput: getGeneralPaymasterInput({
+                innerInput: "0x",
+            }),
+        });
+    }
+
+    return <button onClick={sendSponsoredTransaction}>Send Sponsored Transaction</button>
+}
+
+```
+
+```tsx Wagmi Hooks
+import { useAccount, useSendTransaction } from "wagmi";
+
+export default function SendTransactionWithWagmi() {
+  const { address, status } = useAccount();
+  const { sendTransaction, isPending } = useSendTransaction();
+
+  return (
+    <button
+      onClick={() =>
+        sendTransaction({
+          to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
+          data: "0x69",
+        })
+      }
+      disabled={isPending || status !== "connected"}
+    >
+      {isPending ? "Sending..." : "Send Transaction"}
+    </button>
+  );
+}
+```
+
+</CodeGroup>
