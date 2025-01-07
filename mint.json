@@ -174,7 +174,7 @@
         "abstract-global-wallet/agw-client/createAbstractClient",
         "abstract-global-wallet/agw-react/hooks/useAbstractClient",
         "abstract-global-wallet/agw-react/hooks/useGlobalWalletSignerAccount",
-        "abstract-global-wallet/agw-react/hooks/useGlobalWalletSignerClient",
+        "abstract-global-wallet/agw-react/hooks/useGlobalWalletSignerClient"
       ]
     },
     {
