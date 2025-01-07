@@ -156,62 +156,56 @@
       ]
     },
     {
-      "group": "agw-react",
-      "icon": "react",
+      "group": "Library Integrations",
       "pages": [
-        "abstract-global-wallet/agw-react/overview",
-        "abstract-global-wallet/agw-react/getting-started",
-        {
-          "group": "Library Integrations",
-          "pages": [
-            "abstract-global-wallet/agw-react/integrating-with-connectkit",
-            "abstract-global-wallet/agw-react/integrating-with-dynamic",
-            "abstract-global-wallet/agw-react/integrating-with-privy",
-            "abstract-global-wallet/agw-react/integrating-with-rainbowkit",
-            "abstract-global-wallet/agw-react/integrating-with-thirdweb"
-          ]
-        },
-        "abstract-global-wallet/agw-react/AbstractWalletProvider",
-        {
-          "group": "Hooks",
-          "pages": [
-            "abstract-global-wallet/agw-react/hooks/useAbstractClient",
-            "abstract-global-wallet/agw-react/hooks/useGlobalWalletSignerAccount",
-            "abstract-global-wallet/agw-react/hooks/useGlobalWalletSignerClient",
-            "abstract-global-wallet/agw-react/hooks/useLoginWithAbstract",
-            "abstract-global-wallet/agw-react/hooks/useWriteContractSponsored"
-          ]
-        }
+        "abstract-global-wallet/agw-react/native-integration",
+        "abstract-global-wallet/agw-react/integrating-with-connectkit",
+        "abstract-global-wallet/agw-react/integrating-with-dynamic",
+        "abstract-global-wallet/agw-react/integrating-with-privy",
+        "abstract-global-wallet/agw-react/integrating-with-rainbowkit",
+        "abstract-global-wallet/agw-react/integrating-with-thirdweb"
       ]
     },
     {
-      "group": "agw-client",
+      "group": "Abstract Client",
       "pages": [
-        "abstract-global-wallet/agw-client/overview",
-        "abstract-global-wallet/agw-client/getting-started",
+        "abstract-global-wallet/agw-react/AbstractWalletProvider",
         "abstract-global-wallet/agw-client/createAbstractClient",
+        "abstract-global-wallet/agw-react/hooks/useAbstractClient",
+        "abstract-global-wallet/agw-react/hooks/useGlobalWalletSignerAccount",
+        "abstract-global-wallet/agw-react/hooks/useGlobalWalletSignerClient",
+        "abstract-global-wallet/agw-react/hooks/useLoginWithAbstract"
+      ]
+    },
+   
+    {
+      "group": "Wallet Actions",
+      "pages": [
+        "abstract-global-wallet/agw-client/actions/deployContract",
+        "abstract-global-wallet/agw-client/actions/signTransaction",
+        "abstract-global-wallet/agw-client/actions/sendTransaction",
+        "abstract-global-wallet/agw-client/actions/sendTransactionBatch",
+        "abstract-global-wallet/agw-client/actions/writeContract",
+        "abstract-global-wallet/agw-react/hooks/useWriteContractSponsored"
+      ]
+    },
+    {
+      "group": "Session Keys",
+      "pages": [
+        "abstract-global-wallet/agw-client/session-keys/overview",
+        "abstract-global-wallet/agw-client/session-keys/createSession",
+        "abstract-global-wallet/agw-react/hooks/useCreateSession",
+        "abstract-global-wallet/agw-client/session-keys/createSessionClient",
+        "abstract-global-wallet/agw-client/session-keys/toSessionClient",
+        "abstract-global-wallet/agw-client/session-keys/revokeSessions",
+        "abstract-global-wallet/agw-react/hooks/useRevokeSessions"
+      ]
+    },
+    {
+      "group": "Utils",
+      "pages": [
         "abstract-global-wallet/agw-client/getSmartAccountAddressFromInitialSigner",
-        "abstract-global-wallet/agw-client/transformEIP1193Provider",
-        {
-          "group": "Actions",
-          "pages": [
-            "abstract-global-wallet/agw-client/actions/deployContract",
-            "abstract-global-wallet/agw-client/actions/signTransaction",
-            "abstract-global-wallet/agw-client/actions/sendTransaction",
-            "abstract-global-wallet/agw-client/actions/sendTransactionBatch",
-            "abstract-global-wallet/agw-client/actions/writeContract"
-          ]
-        },
-        {
-          "group": "Session Keys",
-          "pages": [
-            "abstract-global-wallet/agw-client/session-keys/overview",
-            "abstract-global-wallet/agw-client/session-keys/createSession",
-            "abstract-global-wallet/agw-client/session-keys/createSessionClient",
-            "abstract-global-wallet/agw-client/session-keys/toSessionClient",
-            "abstract-global-wallet/agw-client/session-keys/revokeSessions"
-          ]
-        }
+        "abstract-global-wallet/agw-client/transformEIP1193Provider"
       ]
     },
     {

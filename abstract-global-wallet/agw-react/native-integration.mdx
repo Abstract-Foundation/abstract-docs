@@ -1,107 +1,17 @@
 ---
-title: "Getting Started"
-description: "Learn how to integrate Abstract Global Wallet into your React application using the agw-react package."
+title: "Native Integration"
+description: "Learn how to integrate Abstract Global Wallet with React."
 ---
 
-## Quickstart
-
-**Starting a new project?** Use our CLI to bootstrap a new project with Abstract Global Wallet.
-
-```bash
-npx @abstract-foundation/create-abstract-app@latest my-app
-```
-
-## Library Integrations
-
-<CardGroup cols={2}>
-  <Card
-    title="Native Integration"
-    href="/abstract-global-wallet/agw-react/native-integration"
-    icon={
-      <img
-        src="https://raw.githubusercontent.com/Abstract-Foundation/abstract-docs/main/images/abs-green.png"
-        alt="Native"
-      />
-    }
-  >
-    Add AGW as the native wallet connection option to your React application.
-  </Card>
-  <Card
-    title="Privy"
-    href="/abstract-global-wallet/agw-react/integrating-with-privy"
-    icon={
-      <img
-        src="https://raw.githubusercontent.com/Abstract-Foundation/abstract-docs/main/images/privy-green.png"
-        alt="Privy"
-      />
-    }
-  >
-    Integrate AGW into an existing Privy application.
-  </Card>
-  <Card
-    title="ConnectKit"
-    href="/abstract-global-wallet/agw-react/integrating-with-connectkit"
-    icon={
-      <img
-        src="https://raw.githubusercontent.com/Abstract-Foundation/abstract-docs/main/images/connectkit-green.png"
-        alt="ConnectKit"
-      />
-    }
-  >
-    Integrate AGW as a wallet connection option to an existing ConnectKit
-    application.
-  </Card>
-  <Card
-    title="Dynamic"
-    href="/abstract-global-wallet/agw-react/integrating-with-dynamic"
-    icon={
-      <img
-        src="https://raw.githubusercontent.com/Abstract-Foundation/abstract-docs/main/images/dynamic-green.png"
-        alt="Dynamic"
-      />
-    }
-  >
-    Integrate AGW as a wallet connection option to an existing Dynamic
-    application.
-  </Card>
-  <Card
-    title="RainbowKit"
-    href="/abstract-global-wallet/agw-react/integrating-with-rainbowkit"
-    icon={
-      <img
-        src="https://raw.githubusercontent.com/Abstract-Foundation/abstract-docs/main/images/rainbowkit-green.png"
-        alt="RainbowKit"
-      />
-    }
-  >
-    Integrate AGW as a wallet connection option to an existing RainbowKit
-    application.
-  </Card>
-  <Card
-    title="Thirdweb"
-    href="/abstract-global-wallet/agw-react/integrating-with-thirdweb"
-    icon={
-      <img
-        src="https://raw.githubusercontent.com/Abstract-Foundation/abstract-docs/main/images/thirdweb-green.png"
-        alt="Thirdweb"
-      />
-    }
-  >
-    Integrate AGW as a wallet connection option to an existing thirdweb
-    application.
-  </Card>
-</CardGroup>
-
-## Native Integration
-
-Alternatively, integrate AGW into an existing React application using the steps below, or [<Icon icon="youtube" iconType="solid" /> watch the video tutorial](https://youtu.be/P5lvuBcmisU) for a step-by-step walkthrough.
+Integrate AGW into an existing React application using the steps below, or 
+[<Icon icon="youtube" iconType="solid" /> watch the video tutorial](https://youtu.be/P5lvuBcmisU) for a step-by-step walkthrough.
 
 ### 1. Install agw-react
 
 To install the `agw-react package`, run the following command:
 
 ```bash
-npm install @abstract-foundation/agw-react wagmi viem@2.x @tanstack/react-query
+npm install @abstract-foundation/agw-react @abstract-foundation/agw-client wagmi viem@2.x @tanstack/react-query
 ```
 
 ### 2. Setup the AbstractWalletProvider
