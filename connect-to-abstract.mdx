@@ -1,34 +1,34 @@
 ---
-title: "Connect to Abstract"
-description: "Add Abstract to your wallet or development environment to get started."
+judul: "Koneksi ke Abstract"
+deksripsi: "Tambahkan Abstract ke dompet atau lingkungan pengembangan Anda untuk memulai."
 ---
 
-Use the information below to connect and submit transactions to Abstract.
+Gunakan informasi di bawah ini untuk menghubungkan dan mengirim transaksi ke Abstract.
 
 ## Testnet
 
-| Property            | Description                                                         |
+| Properti           | Deskripsi                                                           |
 | ------------------- | ------------------------------------------------------------------- |
-| Name                | Abstract Testnet                                                    |
-| Description         | The public testnet for Abstract.                                    |
+| Nama                | Abstract Testnet                                                    |
+| Deskripsi           | Testnet publik untuk Abstract.                                      |
 | Chain ID            | `11124`                                                             |
-| RPC URL             | `https://api.testnet.abs.xyz`                                       |
-| RPC URL (Websocket) | `wss://api.testnet.abs.xyz/ws`                                       |
-| Explorer            | `https://explorer.testnet.abs.xyz`                                  |
-| Verify URL          | `https://api-explorer-verify.testnet.abs.xyz/contract_verification` |
-| Currency Symbol     | ETH                                                                 |
+| URL RPC             | `https://api.testnet.abs.xyz`                                       |
+| URL RPC (Websocket) | `wss://api.testnet.abs.xyz/ws`                                      |
+| Penjelajah          | `https://explorer.testnet.abs.xyz`                                  |
+| URL Verifikasi      | `https://api-explorer-verify.testnet.abs.xyz/contract_verification` |
+| Simbol Mata Uang    | ETH                                                                 |
 
 <Tip>
-  Click the button below to connect your wallet to the Abstract Testnet.
+  Klik tombol di bawah ini untuk menghubungkan dompet Anda ke Abstract Testnet.
   <ConnectWallet />
 </Tip>
 
-Once connected, use a [bridge](/tooling/bridges) or
-[faucet](/tooling/faucets) to get testnet funds into your wallet.
+Setelah terhubung, gunakan [jembatan](/tooling/bridges) atau
+[faucet](/tooling/faucets) untuk mendapatkan dana testnet ke dalam dompet Anda.
 
 ## Mainnet
 
-Abstract Mainnet is coming soon.
+Abstract Mainnet akan segera hadir.
 
 export const ConnectWallet = ({ title }) => {
   if (typeof document === "undefined") {
