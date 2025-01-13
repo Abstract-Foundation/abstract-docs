@@ -1,0 +1,60 @@
+name: Bug report
+description: File a bug report to help us improve
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! Please fill out as much as you can, the more details the better we can help to resolve the issue.
+  - type: dropdown
+    id: project
+    attributes:
+      label: 🧰 Project
+      description: Which project is this bug related to?
+      options:
+        - Contracts
+        - Auth Server
+        - SDK
+        - Examples
+      default: 0
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Description
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 🔄 Reproduction steps
+      description: Steps to reproduce the behavior.
+  - type: textarea
+    id: expected
+    attributes:
+      label: 🤔 Expected behavior
+      description: What did you expect to happen.
+  - type: textarea
+    id: actual
+    attributes:
+      label: 😯 Actual behavior
+      description: What actually happened.
+  - type: textarea
+    id: environment
+    attributes:
+      label: 🖥 Environment
+      description: Please provide relevant details about the environment you experienced the bug in.
+  - type: textarea
+    id: additional
+    attributes:
+      label: 📋 Additional context
+      description: Add any other context about the problem here. If applicable, add screenshots to help explain.
+  - type: textarea
+    id: logs
+    attributes:
+      label: 📎 Logs
+      description: If applicable, add logs to help explain the problem.
+      render: shell
