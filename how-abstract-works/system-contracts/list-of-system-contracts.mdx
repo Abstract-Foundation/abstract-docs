@@ -128,7 +128,7 @@ You do not need to use this system contract directly, instead use [ContractDeplo
 
 ## DefaultAccount
 
-This contract is built to simulate the behaviour of an EOA (Externally Owned Account) on the L2.
+This contract is built to simulate the behavior of an EOA (Externally Owned Account) on the L2.
 It is intended to act the same as an EOA would on Ethereum, enabling Abstract to support EOA wallets,
 despite all accounts on Abstract being smart contracts.
 
@@ -250,7 +250,7 @@ Learn more about what data is sent in the [contract deployment section](/how-abs
 This contract holds the balances of ETH for all accounts on the L2 and updates them
 whenever other system contracts such as the [Bootloader](/how-abstract-works/system-contracts/bootloader),
 [ContractDeployer](#contractdeployer), or [MsgValueSimulator](#msgvaluesimulator) perform
-balance changes while simulating the `msg.value` behaviour of Ethereum.
+balance changes while simulating the `msg.value` behavior of Ethereum.
 
 This is because the L2 does not have a set "native" token unlike Ethereum,
 so functions such as `transferFromTo`, `balanceOf`, `mint`, `withdraw`, etc. are
@@ -269,7 +269,7 @@ implemented in this contract as if it were an ERC-20.
 ## MsgValueSimulator
 
 This contract calls the [L2BaseToken](#l2basetoken) contract&rsquo;s `transferFromTo` function to
-simulate the `msg.value` behaviour of Ethereum.
+simulate the `msg.value` behavior of Ethereum.
 
 **Contract Address:** `0x0000000000000000000000000000000000008009`
 
