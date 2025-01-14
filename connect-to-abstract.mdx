@@ -14,8 +14,9 @@ Use the information below to connect and submit transactions to Abstract.
 | Chain ID            | `11124`                                                             |
 | RPC URL             | `https://api.testnet.abs.xyz`                                       |
 | RPC URL (Websocket) | `wss://api.testnet.abs.xyz/ws`                                       |
-| Explorer            | `https://explorer.testnet.abs.xyz`                                  |
-| Verify URL          | `https://api-explorer-verify.testnet.abs.xyz/contract_verification` |
+| Explorer            | `https://sepolia.abscan.org/`                                  |
+| Verify URL - Etherscan          | `https://api-sepolia.abscan.org/api`                    |
+| Verify URL - Blockscout          | `https://api-explorer-verify.testnet.abs.xyz/contract_verification` |
 | Currency Symbol     | ETH                                                                 |
 
 <Tip>
@@ -141,7 +142,7 @@ export const ConnectWallet = ({ title }) => {
                         decimals: 18
                       },
                       rpcUrls: [ABSTRACT_RPC_URL],
-                      blockExplorerUrls: ['https://explorer.testnet.abs.xyz']
+                      blockExplorerUrls: ['https://sepolia.abscan.org']
                     }],
                   });
                   await checkNetwork();
