@@ -32,7 +32,7 @@ export default function CreateSessionExample() {
         expiresAt: BigInt(Math.floor(Date.now() / 1000) + 60 * 60 * 24), // 24 hours
         feeLimit: {
           limitType: LimitType.Lifetime,
-          limit: parseEther("1"), // 1 ETH lifetime gas limit
+          limit: parseEther("1").toBigInt(), // 1 ETH lifetime gas limit
           period: BigInt(0),
         },
         callPolicies: [
