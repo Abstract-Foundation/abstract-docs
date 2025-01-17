@@ -43,7 +43,7 @@ Since all accounts on Abstract are smart contracts, all transactions go through 
   
     1. `validateTransaction`: Determine whether or not to execute the transaction. 
     Typically, some kind of checks are performed in this step to restrict who can use the account.
-    2. `executeTransaction`: Execute the transaction if validation passed.
+    2. `executeTransaction`: Execute the transaction if validation is passed.
     3. Either `payForTransaction` or `prepareForPaymaster`: Pay the gas fee or request a paymaster to pay the gas fee for this transaction.
   
     The `msg.sender` is set as the bootloader&rsquo;s contract address for these function calls.
