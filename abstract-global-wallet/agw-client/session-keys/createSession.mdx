@@ -16,40 +16,48 @@ The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient) in
 // - Has a lifetime gas fee limit of 1 ETH
 // - Expires after 24 hours
 
-import { agwClient } from "./config";
+import { useAbstractClient } from "@abstract-foundation/agw-react";
 import { LimitType } from "@abstract-foundation/agw-client/sessions";
 import { toFunctionSelector, parseEther } from "viem";
 import { privateKeyToAccount, generatePrivateKey } from "viem/accounts";
 
 // Generate a new session key pair
-const sessionPrivateKey = generatePrivateKey(); // Generate a random private key
-const sessionSigner = privateKeyToAccount(sessionPrivateKey); // Use that to create a signer  
+const sessionPrivateKey = generatePrivateKey();
+const sessionSigner = privateKeyToAccount(sessionPrivateKey);
 
-const { session } = await agwClient.createSession({
-  session: {
-    signer: sessionSigner.address, // The address that will be allowed to sign transactions (session public key)
-    expiresAt: BigInt(Math.floor(Date.now() / 1000) + 60 * 60 * 24), // When the session key expires (24 hours)
-    feeLimit: {
-      limitType: LimitType.Lifetime, // The type of limit to apply:
-      limit: parseEther("1"), // The maximum amount allowed.
-      period: BigInt(0), // The time period in seconds for allowance limits. Set to 0 for Unlimited/Lifetime limits.
-    },
-    callPolicies: [
-      {
-        target: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA", // NFT contract
-        selector: toFunctionSelector("mint(address,uint256)"), // Function that can be called
-        valueLimit: {
-          limitType: LimitType.Unlimited,
-          limit: BigInt(0),
+export default function CreateSession() {
+  const { data: agwClient } = useAbstractClient();
+
+  async function createSession() {
+    if (!agwClient) return;
+
+    const { session } = await agwClient.createSession({
+      session: {
+        signer: sessionSigner.address,
+        expiresAt: BigInt(Math.floor(Date.now() / 1000) + 60 * 60 * 24),
+        feeLimit: {
+          limitType: LimitType.Lifetime,
+          limit: parseEther("1"),
           period: BigInt(0),
         },
-        maxValuePerUse: BigInt(0),
-        constraints: [],
-      }
-    ],
-    transferPolicies: [],
-  },
-});
+        callPolicies: [
+          {
+            target: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA", // NFT contract
+            selector: toFunctionSelector("mint(address,uint256)"),
+            valueLimit: {
+              limitType: LimitType.Unlimited,
+              limit: BigInt(0),
+              period: BigInt(0),
+            },
+            maxValuePerUse: BigInt(0),
+            constraints: [],
+          }
+        ],
+        transferPolicies: [],
+      },
+    });
+  }
+}
 ```
 
 ```tsx transfer-policies.ts
@@ -57,7 +65,7 @@ const { session } = await agwClient.createSession({
 // It sets up two recipients with different limits: one with a daily allowance,
 // and another with a lifetime limit on total transfers.
 
-import { agwClient } from "./config";
+import { useAbstractClient } from "@abstract-foundation/agw-react";
 import { LimitType } from "@abstract-foundation/agw-client/sessions";
 import { parseEther } from "viem";
 import { privateKeyToAccount, generatePrivateKey } from "viem/accounts";
@@ -66,53 +74,46 @@ import { privateKeyToAccount, generatePrivateKey } from "viem/accounts";
 const sessionPrivateKey = generatePrivateKey();
 const sessionSigner = privateKeyToAccount(sessionPrivateKey);
 
-const { session } = await agwClient.createSession({
-  session: {
-    signer: sessionSigner.address,
-    expiresAt: BigInt(Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7), // 1 week
-    feeLimit: {
-      limitType: LimitType.Lifetime,
-      limit: parseEther("0.1"),
-      period: BigInt(0),
-    },
-    callPolicies: [],
-    transferPolicies: [
-      {
-        target: "0x1234567890123456789012345678901234567890", // Allowed recipient 1
-        maxValuePerUse: parseEther("0.1"), // Max 0.1 ETH per transfer
-        valueLimit: {
-          limitType: LimitType.Allowance,
-          limit: parseEther("1"), // Max 1 ETH per day
-          period: BigInt(60 * 60 * 24), // 24 hours
-        },
-      },
-      {
-        target: "0x9876543210987654321098765432109876543210", // Allowed recipient 2
-        maxValuePerUse: parseEther("0.5"), // Max 0.5 ETH per transfer
-        valueLimit: {
+export default function CreateSession() {
+  const { data: agwClient } = useAbstractClient();
+
+  async function createSession() {
+    if (!agwClient) return;
+
+    const { session } = await agwClient.createSession({
+      session: {
+        signer: sessionSigner.address,
+        expiresAt: BigInt(Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7), // 1 week
+        feeLimit: {
           limitType: LimitType.Lifetime,
-          limit: parseEther("2"), // Max 2 ETH total
+          limit: parseEther("0.1"),
           period: BigInt(0),
         },
-      }
-    ],
-  },
-});
-```
-
-```tsx config.ts
-import { createAbstractClient } from "@abstract-foundation/agw-client";
-import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { abstractTestnet } from "viem/chains";
-
-// As an example, we are creating a new dummy account here for the signer.
-const randomPrivateKey = generatePrivateKey();
-const account = privateKeyToAccount(randomPrivateKey);
-
-export const agwClient = await createAbstractClient({
-  chain: abstractTestnet,
-  signer: account,
-});
+        callPolicies: [],
+        transferPolicies: [
+          {
+            target: "0x1234567890123456789012345678901234567890", // Allowed recipient 1
+            maxValuePerUse: parseEther("0.1"), // Max 0.1 ETH per transfer
+            valueLimit: {
+              limitType: LimitType.Allowance,
+              limit: parseEther("1"), // Max 1 ETH per day
+              period: BigInt(60 * 60 * 24), // 24 hours
+            },
+          },
+          {
+            target: "0x9876543210987654321098765432109876543210", // Allowed recipient 2
+            maxValuePerUse: parseEther("0.5"), // Max 0.5 ETH per transfer
+            valueLimit: {
+              limitType: LimitType.Lifetime,
+              limit: parseEther("2"), // Max 2 ETH total
+              period: BigInt(0),
+            },
+          }
+        ],
+      },
+    });
+  }
+}
 ```
 
 </CodeGroup>

@@ -10,53 +10,42 @@ in a single call using the connected Abstract Global Wallet.
 <Card
   title="YouTube Tutorial: Send Batch Transactions with AGW"
   icon="youtube"
-  href="https://youtu.be/CTuhS5hVCe0"
+  href="<https://youtu.be/CTuhS5hVCe0>"
 >
   Watch our video tutorials to learn more about building on Abstract.
 </Card>
 
 ## Usage
 
-<CodeGroup>
-
 ```tsx example.ts
-import { agwClient } from "./config";
+import { useAbstractClient } from "@abstract-foundation/agw-react";
 import { getGeneralPaymasterInput } from "viem/zksync";
 
-const transactionHash = await agwClient.sendTransactionBatch({
-  calls: [
-    {
-      to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
-      data: "0x69",
-    },
-    {
-      to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
-      data: "0x1337",
-    },
-  ],
-  paymaster: "0x5407B5040dec3D339A9247f3654E59EEccbb6391",
-  paymasterInput: getGeneralPaymasterInput({
-    innerInput: "0x",
-  }),
-});
+export default function SendTransactionBatch() {
+  const { data: agwClient } = useAbstractClient();
+
+  async function sendTransactionBatch() {
+    if (!agwClient) return;
+
+    const hash = await agwClient.sendTransactionBatch({
+      calls: [
+        {
+          to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
+          data: "0x69",
+        },
+        {
+          to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
+          data: "0x1337",
+        },
+      ],
+      paymaster: "0x5407B5040dec3D339A9247f3654E59EEccbb6391",
+      paymasterInput: getGeneralPaymasterInput({
+        innerInput: "0x",
+      }),
+    });
+  }
+}
 ```
-
-```tsx config.ts
-import { createAbstractClient } from "@abstract-foundation/agw-client";
-import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { abstractTestnet } from "viem/chains";
-
-// As an example, we are creating a new dummy account here for the signer.
-const randomPrivateKey = generatePrivateKey(); // Make a random private key
-const account = privateKeyToAccount(randomPrivateKey); // Use that to create a signer
-
-export const agwClient = await createAbstractClient({
-  chain: abstractTestnet,
-  signer: account, // The "owner" (initial approved signer) of the AGW smart contract wallet.
-});
-```
-
-</CodeGroup>
 
 ## Parameters
 

@@ -14,53 +14,42 @@ Revoke session(s) by providing either:
 - The session configuration object(s) (see [parameters](#parameters)).
 - The transaction hash(es) returned by [createSession](/abstract-global-wallet/agw-client/session-keys/createSession).
 
-<CodeGroup>
+```tsx
+import { useAbstractClient } from "@abstract-foundation/agw-react";
 
-```tsx example.ts
-import { agwClient } from "./config";
+export default function RevokeSessions() {
+  const { data: agwClient } = useAbstractClient();
 
-// Revoke a single session by passing the session configuration
-const { transactionHash } = await agwClient.revokeSessions({
-  session: existingSession, 
-});
+  async function revokeSessions() {
+    if (!agwClient) return;
 
-// Revoke multiple sessions at once
-const { transactionHash } = await agwClient.revokeSessions({
-  session: [existingSession1, existingSession2], 
-});
+    // Revoke a single session by passing the session configuration
+    const { transactionHash } = await agwClient.revokeSessions({
+      session: existingSession, 
+    });
 
-// Revoke sessions using their creation transaction hashes
-const { transactionHash } = await agwClient.revokeSessions({
-  session: "0x1234...", 
-});
+    // Or - revoke multiple sessions at once
+    const { transactionHash } = await agwClient.revokeSessions({
+      session: [existingSession1, existingSession2], 
+    });
 
-// Revoke multiple sessions using their creation transaction hashes
-const { transactionHash } = await agwClient.revokeSessions({
-  session: ["0x1234...", "0x5678..."], 
-});
+    // Or - revoke sessions using their creation transaction hashes
+    const { transactionHash } = await agwClient.revokeSessions({
+      session: "0x1234...", 
+    });
 
-// You can combine both session configuration and creation transaction hashes in the same call
-const { transactionHash } = await agwClient.revokeSessions({
-  session: [existingSession, "0x1234..."], 
-});
+    // Or - revoke multiple sessions using their creation transaction hashes
+    const { transactionHash } = await agwClient.revokeSessions({
+      session: ["0x1234...", "0x5678..."], 
+    });
+
+    // Or - revoke multiple sessions using both session configuration and creation transaction hashes in the same call
+    const { transactionHash } = await agwClient.revokeSessions({
+      session: [existingSession, "0x1234..."], 
+    });
+  }
+}
 ```
-
-```tsx config.ts
-import { createAbstractClient } from "@abstract-foundation/agw-client";
-import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { abstractTestnet } from "viem/chains";
-
-// As an example, we are creating a new dummy account here for the signer.
-const randomPrivateKey = generatePrivateKey(); // Make a random private key
-const account = privateKeyToAccount(randomPrivateKey); // Use that to create a signer
-
-export const agwClient = await createAbstractClient({
-  chain: abstractTestnet,
-  signer: account, // The "owner" (initial approved signer) of the AGW smart contract wallet.
-});
-```
-
-</CodeGroup>
 
 ## Parameters
 

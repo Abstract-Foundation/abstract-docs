@@ -10,33 +10,23 @@ Transactions are signed by the approved signer account (EOA) of the Abstract Glo
 
 ## Usage
 
-<CodeGroup>
+```tsx
+import { useAbstractClient } from "@abstract-foundation/agw-react";
 
-```tsx example.ts
-import { agwClient } from "./config";
+export default function SendTransaction() {
+  const { data: agwClient } = useAbstractClient();
 
-const transactionHash = await agwClient.sendTransaction({
-  to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
-  data: "0x69",
-});
+  async function sendTransaction() {
+    if (!agwClient) return;
+    
+    const hash = await agwClient.sendTransaction({
+      to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
+      data: "0x69",
+    });
+  }
+
+}
 ```
-
-```tsx config.ts
-import { createAbstractClient } from "@abstract-foundation/agw-client";
-import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { abstractTestnet } from "viem/chains";
-
-// As an example, we are creating a new dummy account here for the signer.
-const randomPrivateKey = generatePrivateKey(); // Make a random private key
-const account = privateKeyToAccount(randomPrivateKey); // Use that to create a signer
-
-export const agwClient = await createAbstractClient({
-  chain: abstractTestnet,
-  signer: account, // The "owner" (initial approved signer) of the AGW smart contract wallet.
-});
-```
-
-</CodeGroup>
 
 ## Parameters
 

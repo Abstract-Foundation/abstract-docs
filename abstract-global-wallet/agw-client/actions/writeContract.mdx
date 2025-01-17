@@ -8,36 +8,25 @@ includes a `writeContract` method that can be used to call functions on a smart 
 
 ## Usage
 
-<CodeGroup>
-
-```tsx example.ts
-import { agwClient } from "./config";
+```tsx
+import { useAbstractClient } from "@abstract-foundation/agw-react";
 import { parseAbi } from "viem";
 
-const transactionHash = await agwClient.writeContract({
-  abi: parseAbi(["function mint(address,uint256) external"]), // Your contract ABI
-  address: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA",
-  functionName: "mint",
-  args: ["0x273B3527BF5b607dE86F504fED49e1582dD2a1C6", BigInt(1)],
-});
+export default function WriteContract() {
+  const { data: agwClient } = useAbstractClient();
+
+  async function writeContract() {
+    if (!agwClient) return;
+
+    const transactionHash = await agwClient.writeContract({
+      abi: parseAbi(["function mint(address,uint256) external"]), // Your contract ABI
+      address: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA",
+      functionName: "mint",
+      args: ["0x273B3527BF5b607dE86F504fED49e1582dD2a1C6", BigInt(1)],
+    });
+  }
+}
 ```
-
-```tsx config.ts
-import { createAbstractClient } from "@abstract-foundation/agw-client";
-import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { abstractTestnet } from "viem/chains";
-
-// As an example, we are creating a new dummy account here for the signer.
-const randomPrivateKey = generatePrivateKey(); // Make a random private key
-const account = privateKeyToAccount(randomPrivateKey); // Use that to create a signer
-
-export const agwClient = await createAbstractClient({
-  chain: abstractTestnet,
-  signer: account, // The "owner" (initial approved signer) of the AGW smart contract wallet.
-});
-```
-
-</CodeGroup>
 
 ## Parameters
 
