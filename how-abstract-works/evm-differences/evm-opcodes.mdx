@@ -3,7 +3,7 @@ title: "EVM Opcodes"
 description: "Learn how Abstract differs from Ethereum's EVM opcodes."
 ---
 
-This page outlines what opcodes differ in behaviour between Abstract and Ethereum.
+This page outlines what opcodes differ in behavior between Abstract and Ethereum.
 
 It is a fork of the [ZKsync EVM Instructions](https://docs.zksync.io/build/developer-reference/ethereum-differences/evm-instructions) page.
 
@@ -306,7 +306,7 @@ let address_or_zero := create(0, _1, sub(_4, _1))   // the header and constructo
 
 zkEVM does not provide any access to the contract bytecode, so the behavior of immutable values is simulated with the system contracts.
 
-1. The deploy code, also known as constructor, assembles the array of immutables in the auxiliary heap. Each array element
+1. The deploy code, also known as the constructor, assembles the array of immutables in the auxiliary heap. Each array element
    consists of an index and a value. Indexes are allocated sequentially by `zksolc` for each string literal identifier allocated by `solc`.
 2. The constructor returns the array as the return data to the contract deployer.
 3. The array is passed to a special system contract called `ImmutableSimulator`, where it is stored in a mapping with
