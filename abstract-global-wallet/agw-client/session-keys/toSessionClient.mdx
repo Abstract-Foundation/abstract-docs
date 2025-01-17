@@ -9,41 +9,36 @@ If a transaction violates any of the session key&rsquo;s policies, it will be re
 
 ## Usage
 
-<CodeGroup>
-
-```tsx example.ts
-import { agwClient } from "./config";
+```tsx
+import { useAbstractClient } from "@abstract-foundation/agw-react";
 import { parseAbi } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
-
-// Use the session signer and configuration from createSession
-const sessionClient = agwClient.toSessionClient(sessionSigner, session);
-
-// The session client will enforce all policies defined in the session
-const hash = await sessionClient.writeContract({
-  address: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA",
-  abi: parseAbi(["function mint(address,uint256) external"]),
-  functionName: "mint",
-  args: [address, BigInt(1)],
-});
-```
-
-```tsx config.ts
-import { createAbstractClient } from "@abstract-foundation/agw-client";
-import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { abstractTestnet } from "viem/chains";
+import { useAccount } from "wagmi";
 
-// As an example, we are creating a new dummy account here for the signer.
-const randomPrivateKey = generatePrivateKey();
-const account = privateKeyToAccount(randomPrivateKey);
+export default function Example() {
+    const { address } = useAccount();
+    const { data: agwClient } = useAbstractClient();
 
-export const agwClient = await createAbstractClient({
-  chain: abstractTestnet,
-  signer: account,
-});
+    async function sendTransactionWithSessionKey() {
+        if (!agwClient || !address) return;
+
+        // Use the existing session signer and session that you created with useCreateSession
+        // Likely you want to store these inside a database or solution like AWS KMS and load them
+        const sessionClient = agwClient.toSessionClient(sessionSigner, session);
+
+        const hash = await sessionClient.writeContract({
+            abi: parseAbi(["function mint(address,uint256) external"]),
+            account: sessionClient.account,
+            chain: abstractTestnet,
+            address: "0xC4822AbB9F05646A9Ce44EFa6dDcda0Bf45595AA",
+            functionName: "mint",
+            args: [address, BigInt(1)],
+        });
+    }
+
+    return <button onClick={sendTransactionWithSessionKey}>Send Transaction with Session Key</button>;
+}
 ```
-
-</CodeGroup>
 
 ## Parameters
 

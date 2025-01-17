@@ -10,28 +10,27 @@ It extends the [deployContract](https://viem.sh/zksync/actions/deployContract) f
 
 ## Usage
 
-```tsx example.ts
+```tsx
 import { useAbstractClient } from "@abstract-foundation/agw-react";
-import { contractAbi, contractBytecode } from "./const";
+import { erc20Abi } from "viem"; // example abi
 import { abstractTestnet } from "viem/chains";
 
-const contractAbi = []; // Your contract ABI
-const contractBytecode = "0x..."; // Your contract bytecode
-
 export default function DeployContract() {
-  const { data: agwClient } = useAbstractClient();
+    const { data: agwClient } = useAbstractClient();
 
-  async function deployContract() {
-    if (!agwClient) return;
+    async function deployContract() {
+        if (!agwClient) return;
 
-    const hash = await agwClient.deployContract({
-      abi: contractAbi,
-      bytecode: contractBytecode,
-      chain: abstractTestnet,
-      account: agwClient.account,
-    });
-  }
+        const hash = await agwClient.deployContract({
+            abi: erc20Abi, // Your smart contract ABI
+            account: agwClient.account,
+            bytecode: "0x...", // Your smart contract bytecode
+            chain: abstractTestnet,
+            args: [], // Constructor arguments
+        });
+    }
 }
+
 ```
 
 ## Parameters

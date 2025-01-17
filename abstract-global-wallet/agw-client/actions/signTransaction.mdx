@@ -18,7 +18,7 @@ export default function SignTransaction() {
   async function signTransaction() {
     if (!agwClient) return;
 
-    const signedTx = await agwClient.signTransaction({
+    const signature = await agwClient.signTransaction({
       to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
       data: "0x69",
     });

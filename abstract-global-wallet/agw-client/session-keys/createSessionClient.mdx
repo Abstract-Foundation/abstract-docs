@@ -13,7 +13,7 @@ If you have an existing [AbstractClient](/abstract-global-wallet/agw-client/crea
 ```tsx example.ts
 import { createSessionClient } from "@abstract-foundation/agw-client/sessions";
 import { abstractTestnet } from "viem/chains";
-import { http } from "viem";
+import { http, parseAbi } from "viem";
 import { privateKeyToAccount, generatePrivateKey } from "viem/accounts";
 
 // The session signer (from createSession)

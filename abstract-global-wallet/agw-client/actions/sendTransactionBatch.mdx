@@ -53,7 +53,7 @@ export default function SendTransactionBatch() {
             functionName: "swapExactTokensForETH",
             args: [
               parseUnits("100", 18),
-              0n,
+              BigInt(0),
               [TOKEN_ADDRESS, WETH_ADDRESS],
               agwClient.account.address,
               BigInt(Math.floor(Date.now() / 1000) + 60 * 20),
