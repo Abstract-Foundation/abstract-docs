@@ -5,31 +5,21 @@ description: "Add Abstract to your wallet or development environment to get star
 
 Use the information below to connect and submit transactions to Abstract.
 
-## Testnet
-
-| Property            | Description                                                         |
-| ------------------- | ------------------------------------------------------------------- |
-| Name                | Abstract Testnet                                                    |
-| Description         | The public testnet for Abstract.                                    |
-| Chain ID            | `11124`                                                             |
-| RPC URL             | `https://api.testnet.abs.xyz`                                       |
-| RPC URL (Websocket) | `wss://api.testnet.abs.xyz/ws`                                       |
-| Explorer            | `https://sepolia.abscan.org/`                                  |
-| Verify URL - Etherscan          | `https://api-sepolia.abscan.org/api`                    |
-| Verify URL - Blockscout          | `https://api-explorer-verify.testnet.abs.xyz/contract_verification` |
-| Currency Symbol     | ETH                                                                 |
+| Property            | Mainnet                        | Testnet                              |
+| ------------------- | ------------------------------ | ------------------------------------ |
+| Name                | Abstract                       | Abstract Testnet                     |
+| Description         | The mainnet for Abstract.      | The public testnet for Abstract.     |
+| Chain ID            | `2741`                         | `11124`                              |
+| RPC URL             | `https://api.mainnet.abs.xyz`  | `https://api.testnet.abs.xyz`        |
+| RPC URL (Websocket) | `wss://api.mainnet.abs.xyz/ws` | `wss://api.testnet.abs.xyz/ws`       |
+| Explorer            | `https://abscan.org/`          | `https://sepolia.abscan.org/`        |
+| Verify URL          | `https://api.abscan.org/api`   | `https://api-sepolia.abscan.org/api` |
+| Currency Symbol     | ETH                            | ETH                                  |
 
 <Tip>
-  Click the button below to connect your wallet to the Abstract Testnet.
+  Click the button below to connect your wallet to the Abstract.
   <ConnectWallet />
 </Tip>
-
-Once connected, use a [bridge](/tooling/bridges) or
-[faucet](/tooling/faucets) to get testnet funds into your wallet.
-
-## Mainnet
-
-Abstract Mainnet is coming soon.
 
 export const ConnectWallet = ({ title }) => {
   if (typeof document === "undefined") {
@@ -90,8 +80,8 @@ export const ConnectWallet = ({ title }) => {
         const switchNetworkBtn = document.getElementById('switchNetworkBtn');
         const walletStatus = document.getElementById('walletStatus');
 
-        const ABSTRACT_CHAIN_ID = '0x2b74'; // 11124 in hexadecimal
-        const ABSTRACT_RPC_URL = 'https://api.testnet.abs.xyz';
+        const ABSTRACT_CHAIN_ID = '0xab5'; // 2741 in hexadecimal
+        const ABSTRACT_RPC_URL = 'https://api.mainnet.abs.xyz';
 
         async function connectWallet() {
           if (typeof window.ethereum !== 'undefined') {
@@ -112,7 +102,7 @@ export const ConnectWallet = ({ title }) => {
             const chainId = await window.ethereum.request({ method: 'eth_chainId' });
             if (chainId === ABSTRACT_CHAIN_ID) {
               switchNetworkBtn.style.display = 'none';
-              walletStatus.textContent = 'Connected to Abstract Testnet.';
+              walletStatus.textContent = 'Connected to Abstract.';
             } else {
               switchNetworkBtn.style.display = 'inline-block';
               walletStatus.textContent = '';
@@ -135,14 +125,14 @@ export const ConnectWallet = ({ title }) => {
                     method: 'wallet_addEthereumChain',
                     params: [{
                       chainId: ABSTRACT_CHAIN_ID,
-                      chainName: 'Abstract Testnet',
+                      chainName: 'Abstract',
                       nativeCurrency: {
                         name: 'Ethereum',
                         symbol: 'ETH',
                         decimals: 18
                       },
                       rpcUrls: [ABSTRACT_RPC_URL],
-                      blockExplorerUrls: ['https://sepolia.abscan.org']
+                      blockExplorerUrls: ['https://abscan.org']
                     }],
                   });
                   await checkNetwork();

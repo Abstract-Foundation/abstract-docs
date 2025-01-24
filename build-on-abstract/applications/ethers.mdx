@@ -34,7 +34,9 @@ npm install zksync-ethers@6 ethers@6
 
 ## 2. Connect to Abstract
 
-```javascript
+<CodeGroup>
+
+```javascript Testnet
 import { Provider, Wallet } from "zksync-ethers";
 import { ethers } from "ethers";
 
@@ -48,6 +50,23 @@ const tx = await wallet.sendTransaction({
   to: wallet.getAddress(),
 });
 ```
+
+```javascript Mainnet
+import { Provider, Wallet } from "zksync-ethers";
+import { ethers } from "ethers";
+
+// Read data from a provider
+const provider = new Provider("https://api.mainnet.abs.xyz");
+const blockNumber = await provider.getBlockNumber();
+
+// Submit transactions from a wallet
+const wallet = new Wallet(ethers.Wallet.createRandom().privateKey, provider);
+const tx = await wallet.sendTransaction({
+  to: wallet.getAddress(),
+});
+```
+
+</CodeGroup>
 
 Learn more about the features of `zksync-ethers` in the official documentation:
 

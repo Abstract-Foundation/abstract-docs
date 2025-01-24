@@ -209,6 +209,7 @@
     {
       "group": "Ecosystem",
       "pages": [
+        "ecosystem/bridges",
         "ecosystem/indexers",
         "ecosystem/interoperability",
         "ecosystem/oracles",
