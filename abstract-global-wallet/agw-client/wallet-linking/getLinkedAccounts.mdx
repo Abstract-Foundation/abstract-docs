@@ -1,0 +1,41 @@
+---
+title: "getLinkedAccounts"
+description: "Function to get all Ethereum Mainnet wallets linked to an Abstract Global Wallet."
+---
+
+The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient) includes a `getLinkedAccounts` method that can be used to retrieve all Ethereum Mainnet wallets that have been linked to an Abstract Global Wallet.
+
+## Usage
+
+```tsx
+import { useAbstractClient } from "@abstract-foundation/agw-react";
+
+export default function CheckLinkedAccounts() {
+  const { data: agwClient } = useAbstractClient();
+
+  async function checkLinkedAccounts() {
+    if (!agwClient) return;
+    
+    // Get all linked Ethereum Mainnet wallets for an AGW
+    const { linkedAccounts } = await agwClient.getLinkedAccounts({
+      agwAddress: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6", // The AGW to check
+    });
+
+    console.log("Linked accounts:", linkedAccounts);
+  }
+
+  return <button onClick={checkLinkedAccounts}>Check Linked Accounts</button>;
+}
+```
+
+## Parameters
+
+<ResponseField name="agwAddress" type="Address" required>
+  The address of the Abstract Global Wallet to check for linked accounts.
+</ResponseField>
+
+## Returns
+
+<ResponseField name="linkedAccounts" type="Address[]">
+  An array of Ethereum wallet addresses that are linked to the AGW.
+</ResponseField>

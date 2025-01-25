@@ -1,0 +1,67 @@
+---
+title: "getLinkedAgw"
+description: "Function to get the linked Abstract Global Wallet for an Ethereum Mainnet address."
+---
+
+The `getLinkedAgw` function is available when extending a [Viem Client](https://viem.sh/docs/clients/custom.html) with `linkableWalletActions`. It can be used to check if an Ethereum Mainnet address has linked an Abstract Global Wallet.
+
+## Usage
+
+```tsx
+import { linkableWalletActions } from "@abstract-foundation/agw-client";
+import { createWalletClient, custom } from "viem";
+import { sepolia } from "viem/chains";
+
+export default function CheckLinkedWallet() {
+  async function checkLinkedWallet() {
+    // Initialize a Viem Wallet client: (https://viem.sh/docs/clients/wallet)
+    // And extend it with linkableWalletActions
+    const client = createWalletClient({
+      chain: sepolia,
+      transport: custom(window.ethereum!),
+    }).extend(linkableWalletActions());
+
+    // Check if an address has a linked AGW
+    const { agw } = await client.getLinkedAgw({
+      address: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6", // The address to check
+    });
+
+    if (agw) {
+      console.log("Linked AGW:", agw);
+    } else {
+      console.log("No linked AGW found");
+    }
+  }
+
+  return <button onClick={checkLinkedAgw}>Check Linked AGW</button>;
+}
+```
+
+## Parameters
+
+<ResponseField name="address" type="Address">
+  The Ethereum Mainnet address to check for a linked AGW. If not provided, defaults to the connected account's address.
+</ResponseField>
+
+## Returns
+
+<ResponseField name="agw" type="Address | undefined">
+  The address of the linked Abstract Global Wallet, or `undefined` if no AGW is linked.
+</ResponseField>
+
+## How it works
+
+The function checks the [ExclusiveDelegateResolver](/abstract-global-wallet/agw-client/wallet-linking/overview#check-linked-wallets) contract to determine if the provided address has a linked AGW. 
+
+- If the address has a linked AGW, returns the AGW address
+- If the address has no linked AGW, returns `undefined`
+
+You can also use the `isLinkedAccount` helper function to check if a specific AGW is linked to an address:
+
+```tsx
+const isLinked = await client.isLinkedAccount({
+  address: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
+});
+```
+
+This returns `true` if the address is linked to the currently connected AGW, `false` otherwise.
