@@ -200,6 +200,15 @@
       ]
     },
     {
+      "group": "Wallet Linking",
+      "pages": [
+        "abstract-global-wallet/agw-client/wallet-linking/overview",
+        "abstract-global-wallet/agw-client/wallet-linking/linkToAgw",
+        "abstract-global-wallet/agw-client/wallet-linking/getLinkedAccounts",
+        "abstract-global-wallet/agw-client/wallet-linking/getLinkedAgw"
+      ]
+    },
+    {
       "group": "Utils",
       "pages": [
         "abstract-global-wallet/agw-client/getSmartAccountAddressFromInitialSigner",
