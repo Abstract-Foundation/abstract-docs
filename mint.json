@@ -37,6 +37,10 @@
     {
       "name": "Ecosystem",
       "url": "ecosystem"
+    },
+    {
+      "name": "Portal",
+      "url": "portal"
     }
   ],
   "navigation": [
@@ -214,6 +218,12 @@
         "ecosystem/oracles",
         "ecosystem/rpc-providers",
         "ecosystem/paymasters"
+      ]
+    },
+    {
+      "group": "Portal",
+      "pages": [
+        "portal/overview"
       ]
     }
   ],
