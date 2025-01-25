@@ -48,20 +48,3 @@ export default function CheckLinkedWallet() {
 <ResponseField name="agw" type="Address | undefined">
   The address of the linked Abstract Global Wallet, or `undefined` if no AGW is linked.
 </ResponseField>
-
-## How it works
-
-The function checks the [ExclusiveDelegateResolver](/abstract-global-wallet/agw-client/wallet-linking/overview#check-linked-wallets) contract to determine if the provided address has a linked AGW. 
-
-- If the address has a linked AGW, returns the AGW address
-- If the address has no linked AGW, returns `undefined`
-
-You can also use the `isLinkedAccount` helper function to check if a specific AGW is linked to an address:
-
-```tsx
-const isLinked = await client.isLinkedAccount({
-  address: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
-});
-```
-
-This returns `true` if the address is linked to the currently connected AGW, `false` otherwise.
