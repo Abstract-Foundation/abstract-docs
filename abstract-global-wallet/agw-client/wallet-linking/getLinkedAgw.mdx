@@ -22,9 +22,7 @@ export default function CheckLinkedWallet() {
     }).extend(linkableWalletActions());
 
     // Check if an address has a linked AGW
-    const { agw } = await client.getLinkedAgw({
-      address: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6", // The address to check
-    });
+    const { agw } = await client.getLinkedAgw();
 
     if (agw) {
       console.log("Linked AGW:", agw);
@@ -33,7 +31,7 @@ export default function CheckLinkedWallet() {
     }
   }
 
-  return <button onClick={checkLinkedAgw}>Check Linked AGW</button>;
+  return <button onClick={checkLinkedWallet}>Check Linked AGW</button>;
 }
 ```
 
