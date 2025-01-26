@@ -1,0 +1,68 @@
+---
+title: "linkToAgw"
+description: "Function to link an Ethereum Mainnet wallet to an Abstract Global Wallet."
+---
+
+The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient) includes a `linkToAgw` method that can be used to create a link between an Ethereum Mainnet wallet and an Abstract Global Wallet.
+
+## Usage
+
+```tsx
+import { linkableWalletActions } from "@abstract-foundation/agw-client";
+import { createWalletClient, custom } from "viem";
+import { sepolia, abstractTestnet } from "viem/chains";
+
+export default function LinkWallet() {
+  async function linkAgwWallet() {
+    // Initialize a Viem Wallet client: (https://viem.sh/docs/clients/wallet)
+    // And extend it with linkableWalletActions
+    const client = createWalletClient({
+      chain: sepolia,
+      transport: custom(window.ethereum!),
+    }).extend(linkableWalletActions());
+
+    // Call linkToAgw with the AGW address 
+    const { l1TransactionHash, getL2TransactionHash } =
+      await client.linkToAgw({
+        agwAddress: "0x...", // The AGW address to link to
+        enabled: true, // Enable or disable the link
+        l2Chain: abstractTestnet, 
+      });
+
+    // Get the L2 transaction hash once the L1 transaction is confirmed
+    const l2Hash = await getL2TransactionHash();
+  }
+
+  return <button onClick={linkAgwWallet}>Link Wallet</button>;
+
+}
+```
+
+## Parameters
+
+<ResponseField name="agwAddress" type="Address" required>
+  The address of the Abstract Global Wallet to link to.
+</ResponseField>
+
+<ResponseField name="enabled" type="boolean" required>
+  Whether to enable or disable the link between the wallets.
+</ResponseField>
+
+<ResponseField name="l2Chain" type="Chain" required>
+  The Abstract chain to create the link on (e.g. `abstractTestnet`).
+</ResponseField>
+
+<ResponseField name="account" type="Account">
+  The account to use for the transaction.
+</ResponseField>
+
+## Returns
+
+<ResponseField name="l1TransactionHash" type="Hash">
+  The transaction hash of the L1 transaction that initiated the link.
+</ResponseField>
+
+<ResponseField name="getL2TransactionHash" type="() => Promise<Hash>">
+  A function that returns a Promise resolving to the L2 transaction hash once
+  the L1 transaction is confirmed.
+</ResponseField>

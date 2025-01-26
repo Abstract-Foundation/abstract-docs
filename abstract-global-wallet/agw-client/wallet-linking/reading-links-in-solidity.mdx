@@ -1,0 +1,50 @@
+---
+title: "Reading Wallet Links in Solidity"
+description: "How to read links between Ethereum wallets and Abstract Global Wallets in Solidity."
+---
+
+The [ExclusiveDelegateResolver](https://sepolia.abscan.org/address/0x0000000078CC4Cc1C14E27c0fa35ED6E5E58825D#code#F1#L19) contract 
+provides functions to read wallet links in your Solidity smart contracts. This allows you to build features like:
+
+- Checking if a user has linked their AGW before allowing them to mint an NFT
+- Allowing users to claim tokens based on NFTs they own in their Ethereum Mainnet wallet
+
+
+## Reading Links
+
+First, define the rights identifier used for AGW links:
+
+```solidity
+bytes24 constant _AGW_LINK_RIGHTS = bytes24(keccak256("AGW_LINK"));
+
+IExclusiveDelegateResolver public constant DELEGATE_RESOLVER =
+    IExclusiveDelegateResolver(0x0000000078CC4Cc1C14E27c0fa35ED6E5E58825D);
+```
+
+Then use one of the following functions to read link information:
+
+### Check if an EOA has linked an AGW
+
+Use `exclusiveWalletByRights` to check if an EOA has an AGW linked:
+
+```solidity
+function checkLinkedAGW(address eoa) public view returns (address) {
+    // Returns either:
+    // - If EOA has linked an AGW: the AGW address
+    // - If EOA has not linked an AGW: the EOA address
+    return DELEGATE_RESOLVER.exclusiveWalletByRights(eoa, _AGW_LINK_RIGHTS);
+}
+```
+
+### Check NFT owner's linked AGW
+
+Use `exclusiveOwnerByRights` to check if an NFT owner has linked an AGW:
+
+```solidity
+function checkNFTOwnerAGW(address nftContract, uint256 tokenId) public view returns (address) {
+    // Returns either:
+    // - If NFT owner has linked an AGW: the AGW address
+    // - If NFT owner has not linked an AGW: the NFT owner address
+    return DELEGATE_RESOLVER.exclusiveOwnerByRights(nftContract, tokenId, _AGW_LINK_RIGHTS);
+}
+```
