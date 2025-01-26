@@ -23,27 +23,16 @@ IExclusiveDelegateResolver public constant DELEGATE_RESOLVER =
 
 Then use one of the following functions to read link information:
 
-### Check if an AGW is linked to an EOA
+### Check if an EOA has linked an AGW
 
-Use `exclusiveWalletByRights` to check if an AGW has an EOA linked:
+Use `exclusiveWalletByRights` to check if an EOA has an AGW linked:
 
 ```solidity
-function checkLinkedEOA(address agw) public view returns (address) {
+function checkLinkedAGW(address eoa) public view returns (address) {
     // Returns either:
-    // - If AGW has an EOA linked: the EOA address
-    // - If AGW does not have an EOA linked: the AGW address
-    return DELEGATE_RESOLVER.exclusiveWalletByRights(agw, _AGW_LINK_RIGHTS);
-}
-```
-
-### Check what AGWs are linked to an EOA 
-
-Use `delegatedWalletsByRights` to get all AGWs linked to an EOA:
-
-```solidity
-function getLinkedAGWs(address eoa) public view returns (address[] memory) {
-    // Returns an array of AGW addresses that the EOA has linked to
-    return DELEGATE_RESOLVER.delegatedWalletsByRights(eoa, _AGW_LINK_RIGHTS);
+    // - If EOA has linked an AGW: the AGW address
+    // - If EOA has not linked an AGW: the EOA address
+    return DELEGATE_RESOLVER.exclusiveWalletByRights(eoa, _AGW_LINK_RIGHTS);
 }
 ```
 
@@ -59,6 +48,3 @@ function checkNFTOwnerAGW(address nftContract, uint256 tokenId) public view retu
     return DELEGATE_RESOLVER.exclusiveOwnerByRights(nftContract, tokenId, _AGW_LINK_RIGHTS);
 }
 ```
-
-
-
