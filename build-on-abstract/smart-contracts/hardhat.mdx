@@ -59,14 +59,12 @@ Install the required dependencies to compile, deploy and interact with smart con
 
 - [@matterlabs/hardhat-zksync](https://github.com/matter-labs/hardhat-zksync):
   A suite of Hardhat plugins for working with Abstract.
-- [@matterlabs/zksync-contracts](https://www.npmjs.com/package/@matterlabs/zksync-contracts):
-  Access [system contracts](/how-abstract-works/system-contracts/overview) and other utilities.
 - [zksync-ethers](/build-on-abstract/applications/ethers):
   Recommended package for writing [Hardhat scripts](https://hardhat.org/hardhat-runner/docs/advanced/scripts)
   to interact with your smart contracts.
 
 ```bash
-npm install -D @matterlabs/hardhat-zksync @matterlabs/zksync-contracts zksync-ethers@6 ethers@6
+npm install -D @matterlabs/hardhat-zksync zksync-ethers@6 ethers@6
 ```
 
 ## 3. Modify the Hardhat configuration
@@ -93,10 +91,17 @@ const config: HardhatUserConfig = {
       zksync: true,
       chainId: 11124,
     },
+    abstractMainnet: {
+      url: "https://api.mainnet.abs.xyz",
+      ethNetwork: "mainnet",
+      zksync: true,
+      chainId: 2741,
+    },
   },
   etherscan: {
     apiKey: {
       abstractTestnet: "TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD",
+      abstractMainnet: "IEYKU3EEM5XCD76N7Y7HF9HG7M9ARZ2H4A",
     },
     customChains: [
       {
@@ -105,6 +110,14 @@ const config: HardhatUserConfig = {
         urls: {
           apiURL: "https://api-sepolia.abscan.org/api",
           browserURL: "https://sepolia.abscan.org/",
+        },
+      },
+      {
+        network: "abstractMainnet",
+        chainId: 2741,
+        urls: {
+          apiURL: "https://api.abscan.org/api",
+          browserURL: "https://abscan.org/",
         },
       },
     ],
@@ -119,8 +132,13 @@ export default config;
 
 ### Using system contracts
 
-To use [system contracts](/how-abstract-works/system-contracts/overview),
-set the `enableEraVMExtensions` flag to **true**:
+To use [system contracts](/how-abstract-works/system-contracts/overview), install the `@matterlabs/zksync-contracts` package:
+
+```bash
+npm install -D @matterlabs/zksync-contracts
+```
+
+Then set the `enableEraVMExtensions` flag to **true**:
 
 ```typescript {4}
 zksolc: {
@@ -163,9 +181,17 @@ npx hardhat clean
 Use the [zksolc compiler](https://docs.zksync.io/zk-stack/components/compiler/toolchain/solidity)
 (installed in the above steps) to compile smart contracts for Abstract:
 
-```bash
+<CodeGroup>
+
+```bash Testnet
 npx hardhat compile --network abstractTestnet
 ```
+
+```bash Mainnet
+npx hardhat compile --network abstractMainnet
+```
+
+</CodeGroup>
 
 You should now see the compiled smart contracts in the generated `artifacts-zk` directory.
 
@@ -242,13 +268,21 @@ You should now see the compiled smart contracts in the generated `artifacts-zk` 
 
 Run the following command to deploy your smart contracts:
 
-```bash
-npx hardhat deploy-zksync --script deploy.ts
+<CodeGroup>
+
+```bash Testnet
+npx hardhat deploy-zksync --script deploy.ts --network abstractTestnet
 ```
+
+```bash Mainnet
+npx hardhat deploy-zksync --script deploy.ts --network abstractMainnet
+```
+
+</CodeGroup>
 
 If successful, your output should look similar to the following:
 
-```bash
+```bash {2}
 Running deploy script
 HelloAbstract was deployed to YOUR_CONTRACT_ADDRESS
 ```
@@ -259,17 +293,19 @@ HelloAbstract was deployed to YOUR_CONTRACT_ADDRESS
   interact with it from a [block explorer](/tooling/block-explorers).
 To verify your smart contract, run the following command:
 
-```bash
+<CodeGroup>
+
+```bash Testnet
 npx hardhat verify --network abstractTestnet YOUR_CONTRACT_ADDRESS
 ```
 
-**Note**: Replace `YOUR_CONTRACT_ADDRESS` with the address of your deployed smart contract.
-If successful, your output should look similar to the following:
-
-```bash
-Your verification ID is: 123
-Contract successfully verified on ZKsync block explorer!
+```bash Mainnet
+npx hardhat verify --network abstractMainnet YOUR_CONTRACT_ADDRESS
 ```
+
+</CodeGroup>
+
+**Note**: Replace `YOUR_CONTRACT_ADDRESS` with the address of your deployed smart contract.
 
   </Step>
 </Steps>

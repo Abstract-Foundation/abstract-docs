@@ -32,7 +32,9 @@ Configure your Viem [client](https://viem.sh/zksync/client) using `abstractTestn
 as the [chain](https://viem.sh/zksync/chains) and extend it with
 [eip712WalletActions](https://viem.sh/zksync/client#eip712walletactions).
 
-```javascript
+<CodeGroup>
+
+```javascript Testnet
 import { createPublicClient, createWalletClient, custom, http } from 'viem'
 import { abstractTestnet } from 'viem/chains'
 import { eip712WalletActions } from 'viem/zksync'
@@ -49,6 +51,26 @@ const publicClient = createPublicClient({
   transport: http()
 }).extend(eip712WalletActions());
 ```
+
+```javascript Mainnet
+import { createPublicClient, createWalletClient, custom, http } from 'viem'
+import { abstract } from 'viem/chains'
+import { eip712WalletActions } from 'viem/zksync
+
+// Create a client from a wallet
+const walletClient = createWalletClient({
+  chain: abstract,
+  transport: custom(window.ethereum!),
+}).extend(eip712WalletActions()) ;
+
+// Create a client without a wallet
+const publicClient = createPublicClient({
+  chain: abstract,
+  transport: http()
+}).extend(eip712WalletActions());
+```
+
+</CodeGroup>
 
 Learn more on the official [viem documentation](https://viem.sh/zksync).
 
@@ -99,7 +121,9 @@ a smart wallet account as the `account` field to the [client](#client-configurat
 
 [View Viem documentation](https://viem.sh/zksync/accounts/toSmartAccount).
 
-```javascript
+<CodeGroup>
+
+```javascript Testnet
 import { toSmartAccount, eip712WalletActions } from "viem/zksync";
 import { createWalletClient, http } from "viem";
 import { abstractTestnet } from "viem/chains";
@@ -120,3 +144,27 @@ const walletClient = createWalletClient({
 
 // ... Continue using the wallet client as usual (will send transactions from the smart contract wallet)
 ```
+
+```javascript Mainnet
+import { toSmartAccount, eip712WalletActions } from "viem/zksync";
+import { createWalletClient, http } from "viem";
+import { abstract } from "viem/chains";
+
+const account = toSmartAccount({
+  address: CONTRACT_ADDRESS,
+  async sign({ hash }) {
+    // ... signing logic here for your smart contract account
+  },
+});
+
+// Create a client from a smart contract wallet
+const walletClient = createWalletClient({
+  chain: abstract,
+  transport: http(),
+  account: account, // <-- Provide the smart contract wallet account
+}).extend(eip712WalletActions());
+
+// ... Continue using the wallet client as usual (will send transactions from the smart contract wallet)
+```
+
+</CodeGroup>

@@ -36,7 +36,11 @@ import { ConnectKitProvider } from "connectkit";
 
 const queryClient = new QueryClient();
 
-export default function AbstractWalletWrapper({ children }: { children: React.ReactNode }) {
+export default function AbstractWalletWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
@@ -52,7 +56,7 @@ export default function AbstractWalletWrapper({ children }: { children: React.Re
 
 ```tsx Wagmi Config
 import { createConfig, http } from "wagmi";
-import { abstractTestnet } from "viem/chains";
+import { abstractTestnet, abstract } from "viem/chains"; // Use abstract for mainnet
 import { abstractWalletConnector } from "@abstract-foundation/agw-react/connectors";
 
 export const config = createConfig({

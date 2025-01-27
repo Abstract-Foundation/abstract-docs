@@ -20,39 +20,31 @@ Deposits from L1 to L2 take around ~15 minutes, whereas
 withdrawals from L2 to L1 currently take up to 24 hours due to the
 built-in [withdrawal delay](https://docs.zksync.io/build/resources/withdrawal-delay#withdrawal-delay).
 
-<Card
-  title="Abstract Native Bridge"
-  icon="bridge"
-  href="https://portal.testnet.abs.xyz/bridge/"
->
-  Visit the native bridge to move assets between Ethereum and Abstract for free.
-</Card>
+<CardGroup>
+  <Card
+    title="Mainnet Bridge"
+    icon="bridge"
+    href="https://portal.mainnet.abs.xyz/bridge/"
+  >
+    Visit the native bridge to move assets between Ethereum and Abstract.
+  </Card>
+
+  <Card
+    title="Testnet Bridge"
+    icon="bridge"
+    href="https://portal.testnet.abs.xyz/bridge/"
+  >
+    Visit the native bridge to move assets between Ethereum and Abstract.
+  </Card>
+</CardGroup>
 
 ## Third Party Bridges
 
 In addition to the native bridge, users can also utilize third-party bridges
-to move assets between Ethereum and Abstract.
-These bridges offer alternative routes and may come with different features but also have different **risks**.
+to move assets from other chains to Abstract and vice versa.
+These bridges offer alternative routes that are typically faster and cheaper than the native bridge,
+however come with different **security risks**.
 
-### Relay
-
-Relay provides near-instant transfers between Ethereum and Abstract for a small fee.
-It works by connecting users with relayers that act on users&rsquo; behalf across chains in exchange for a small fee.
-
-<CardGroup cols={2}>
-  <Card
-    title="Relay Bridge"
-    icon="bridge"
-    href="https://testnets.relay.link/abstract"
-  >
-    Visit the Relay bridge to move assets between Ethereum and Abstract
-    instantly for a fee.
-  </Card>
-  <Card
-    title="Relay documentation"
-    icon="file-contract"
-    href="https://docs.relay.link/what-is-relay"
-  >
-    Learn more about how Relay works under the hood
-  </Card>
-</CardGroup>
+<Card title="View Third Party Bridges" icon="bridge" href="/ecosystem/bridges">
+  Use third party bridges to move assets between other chains and Abstract.
+</Card>

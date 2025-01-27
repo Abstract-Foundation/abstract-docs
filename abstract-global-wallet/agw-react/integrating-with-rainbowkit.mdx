@@ -87,7 +87,7 @@ export const connectors = connectorsForWallets(
 
 ```tsx Wagmi Config
 import { createConfig } from "wagmi";
-import { abstractTestnet } from "wagmi/chains";
+import { abstractTestnet, abstract } from "wagmi/chains"; // Use abstract for mainnet
 import { createClient, http } from "viem";
 import { eip712WalletActions } from "viem/zksync";
 // + import connectors from your RainbowKit config

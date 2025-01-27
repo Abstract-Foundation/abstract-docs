@@ -59,13 +59,20 @@ npm run dev
 
 ## 3. Connect the app to Abstract
 
-Import `abstractTestnet` from the `thirdweb/chains` package:
+Import the Abstract chain from the `thirdweb/chains` package:
 
-```javascript
+<CodeGroup>
+```javascript Testnet
 import { abstractTestnet } from "thirdweb/chains";
 ```
 
-Use the `abstractTestnet` import as the value for the `chain` property wherever required.
+```javascript Mainnet
+import { abstract } from "thirdweb/chains";
+```
+
+</CodeGroup>
+
+Use the Abstract chain import as the value for the `chain` property wherever required.
 
 ```javascript
 <ConnectButton client={client} chain={abstractTestnet} />

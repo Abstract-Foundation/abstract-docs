@@ -9,9 +9,10 @@ throughout your application.
 
 ```tsx
 import { AbstractWalletProvider } from "@abstract-foundation/agw-react";
+import { abstractTestnet, abstract } from "viem/chains"; // Use abstract for mainnet
 
 const config = {
-  testnet: true, // Required
+  chain: abstractTestnet, // Use abstract for mainnet
   // Optionally, provide your own RPC URL
   // Learn more: https://viem.sh/docs/clients/transports/http.html
   // transport: http("https://.../rpc") // Optional
@@ -33,10 +34,8 @@ const App = () => {
 The configuration object for the AbstractWalletProvider.
 
     <Expandable title="properties">
-        <ResponseField name="testnet" type="boolean" required>
-            Whether to use the Abstract testnet (`true`) or mainnet (`false`).
-
-            Currently, both flags use the testnet since mainnet is not yet live.
+        <ResponseField name="chain" type="Chain" required>
+            Either `abstractTestnet` or `abstract` (for mainnet).
 
         </ResponseField>
 

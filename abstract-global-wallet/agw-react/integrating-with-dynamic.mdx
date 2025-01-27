@@ -33,7 +33,7 @@ Wrap your application in the [DynamicContextProvider](https://docs.dynamic.xyz/r
 import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { AbstractEvmWalletConnectors } from "@dynamic-labs-connectors/abstract-global-wallet-evm";
 import { Chain } from "viem";
-import { abstractTestnet } from "viem/chains";
+import { abstractTestnet, abstract } from "viem/chains"; // Use abstract for mainnet
 
 export default function AbstractWalletWrapper({
   children,
@@ -65,7 +65,7 @@ export default function AbstractWalletWrapper({
 ```tsx Config
 import { EvmNetwork } from "@dynamic-labs/sdk-react-core";
 import { Chain } from "viem";
-import { abstractTestnet } from "viem/chains";
+import { abstractTestnet, abstract } from "viem/chains";
 
 export function toDynamicChain(chain: Chain, iconUrl: string): EvmNetwork {
   return {

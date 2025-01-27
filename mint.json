@@ -219,6 +219,7 @@
     {
       "group": "Ecosystem",
       "pages": [
+        "ecosystem/bridges",
         "ecosystem/indexers",
         "ecosystem/interoperability",
         "ecosystem/oracles",
@@ -244,10 +245,6 @@
     {
       "source": "/ecosystem/block-explorers",
       "destination": "/tooling/block-explorers"
-    },
-    {
-      "source": "/ecosystem/bridges",
-      "destination": "/tooling/bridges"
     },
     {
       "source": "/ecosystem/faucets",
