@@ -1,0 +1,112 @@
+---
+title: "Wallet Linking"
+sidebarTitle: "Overview"
+description: "Link wallets from Ethereum Mainnet to the Abstract Global Wallet."
+---
+
+You may want to allow users to perform actions with their Abstract Global Wallet (AGW) based on information from their Ethereum Mainnet wallet, for example to:
+
+- Check if a user is whitelisted for an NFT mint based on their Ethereum Mainnet wallet.
+- Read what NFTs or tokens the user holds in their Ethereum Mainnet wallet.
+
+For these use cases, Abstract provides the [DelegateRegistry](https://sepolia.abscan.org/address/0x0000000059A24EB229eED07Ac44229DB56C5d797#code#F1#L16) contract to that allows users to make a *link* between their Ethereum Mainnet wallet and their AGW.
+
+This link is created by having users sign a transaction on Ethereum Mainnet that includes their Abstract Global Wallet address; creating a way for applications to read what wallets are linked to an AGW.
+
+The linking process is available in the SDK to enable you to perform the link in your application, however users can also
+perform the link directly on [Abstract&rsquo;s Global Linking page](https://link-testnet.abs.xyz/).
+
+<Card
+  icon="link"
+  title="Abstract Global Linking Site"
+  href="https://link-testnet.abs.xyz/"
+>
+  Link an Ethereum Mainnet wallet to your Abstract Global Wallet.
+</Card>
+
+## How It Works
+
+<Steps>
+  <Step title="Link wallets">
+    On Ethereum Mainnet, users submit a transaction that calls the [delegateAll](https://sepolia.abscan.org/address/0x0000000059A24EB229eED07Ac44229DB56C5d797#code#F1#L44) function on the
+    [DelegateRegistry](https://sepolia.abscan.org/address/0x0000000059A24EB229eED07Ac44229DB56C5d797#code#F1#L16) contract to initialize a link between their Ethereum Mainnet wallet and their Abstract Global Wallet:
+
+Once submitted, the delegation information is bridged from Ethereum to Abstract via the [BridgeHub](https://sepolia.abscan.org/address/0x35A54c8C757806eB6820629bc82d90E056394C92) 
+contract to become available on Abstract.
+
+You can trigger this flow in your application by using the [linkToAgw](/abstract-global-wallet/agw-client/wallet-linking/linkToAgw) function.
+
+
+  </Step>
+  <Step title="Check linked wallets">
+  
+    To view the linked EOAs for an AGW and vice versa, the [ExclusiveDelegateResolver](https://sepolia.abscan.org/address/0x0000000078CC4Cc1C14E27c0fa35ED6E5E58825D#code#F1#L19)
+    contract can be used, which contains the following functions to read delegation information:
+
+<AccordionGroup>
+  <Accordion title="exclusiveWalletByRights">
+    Given an EOA address as input, returns either:
+    - ✅ If the EOA has an AGW linked: the AGW address.
+    - ❌ If the EOA does not have an AGW linked: the EOA address.
+
+    Use this to check if an EOA has an AGW linked, or to validate that an AGW is performing a transaction on behalf of a linked EOA 
+    
+    ```solidity
+    function exclusiveWalletByRights(
+      address vault,    // The AGW address
+      bytes24 rights   // The rights identifier to check
+    ) returns (address)
+    ```
+
+    Use the following `rights` value to check the AGW link:
+
+    ```solidity
+    bytes24 constant _AGW_LINK_RIGHTS = bytes24(keccak256("AGW_LINK"));
+    ```
+
+  </Accordion>
+
+  <Accordion title="delegatedWalletsByRights">
+    Given an AGW address as input, returns a list of L1 wallets that have linked to the AGW.
+    Use this to check what EOAs have been linked to a specific AGW (can be multiple).
+
+    ```solidity
+    function delegatedWalletsByRights(
+      address wallet,   // The AGW to check delegations for
+      bytes24 rights   // The rights identifier to check
+    ) returns (address[])
+    ```
+
+    Use the following `rights` value to check the AGW link:
+
+    ```solidity
+    bytes24 constant _AGW_LINK_RIGHTS = bytes24(keccak256("AGW_LINK"));
+    ```
+  </Accordion>
+
+  <Accordion title="exclusiveOwnerByRights">
+    Given an NFT contract address and token ID as input, returns:
+
+    - ✅ If the NFT owner has linked an AGW: the AGW address.
+    - ❌ If the NFT owner has not linked an AGW: the NFT owner address.
+
+    ```solidity
+    function exclusiveOwnerByRights(
+      address contractAddress,  // The ERC721 contract address
+      uint256 tokenId,         // The token ID to check
+      bytes24 rights           // The rights identifier to check
+    ) returns (address)
+    ```
+    
+    Use the following `rights` value to check the AGW link:
+
+    ```solidity
+    bytes24 constant _AGW_LINK_RIGHTS = bytes24(keccak256("AGW_LINK"));
+    ```
+  </Accordion>
+</AccordionGroup>
+
+This information can be read using the SDK methods; [getLinkedAgw](/abstract-global-wallet/agw-client/wallet-linking/getLinkedAgw) and [getLinkedAccounts](/abstract-global-wallet/agw-client/wallet-linking/getLinkedAccounts).
+
+</Step>
+</Steps>
