@@ -247,10 +247,6 @@
       "destination": "/tooling/block-explorers"
     },
     {
-      "source": "/ecosystem/bridges",
-      "destination": "/tooling/bridges"
-    },
-    {
       "source": "/ecosystem/faucets",
       "destination": "/tooling/faucets"
     }
