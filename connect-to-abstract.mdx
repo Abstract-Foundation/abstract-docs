@@ -1,26 +1,3 @@
----
-title: "Connect to Abstract"
-description: "Add Abstract to your wallet or development environment to get started."
----
-
-Use the information below to connect and submit transactions to Abstract.
-
-| Property            | Mainnet                        | Testnet                              |
-| ------------------- | ------------------------------ | ------------------------------------ |
-| Name                | Abstract                       | Abstract Testnet                     |
-| Description         | The mainnet for Abstract.      | The public testnet for Abstract.     |
-| Chain ID            | `2741`                         | `11124`                              |
-| RPC URL             | `https://api.mainnet.abs.xyz`  | `https://api.testnet.abs.xyz`        |
-| RPC URL (Websocket) | `wss://api.mainnet.abs.xyz/ws` | `wss://api.testnet.abs.xyz/ws`       |
-| Explorer            | `https://abscan.org/`          | `https://sepolia.abscan.org/`        |
-| Verify URL          | `https://api.abscan.org/api`   | `https://api-sepolia.abscan.org/api` |
-| Currency Symbol     | ETH                            | ETH                                  |
-
-<Tip>
-  Click the button below to connect your wallet to the Abstract.
-  <ConnectWallet />
-</Tip>
-
 export const ConnectWallet = ({ title }) => {
   if (typeof document === "undefined") {
     return null;
@@ -28,7 +5,13 @@ export const ConnectWallet = ({ title }) => {
     setTimeout(() => {
       const connectWalletContainer = document.getElementById("connect-wallet-container");
       if (connectWalletContainer) {
-        connectWalletContainer.innerHTML = '<div id="wallet-content"><button id="connectWalletBtn" class="connect-wallet-btn">Connect Wallet</button><button id="switchNetworkBtn" class="connect-wallet-btn" style="display:none;">Switch Network</button><strong id="walletStatus"></strong></div>';
+        connectWalletContainer.innerHTML = `
+          <div id="wallet-content">
+            <button id="connectWalletBtn" class="connect-wallet-btn">Connect Wallet</button>
+            <button id="switchNetworkBtn" class="connect-wallet-btn" style="display:none;">Switch Network</button>
+            <button id="addNetworkBtn" class="connect-wallet-btn">Add Abstract Network</button>
+            <strong id="walletStatus"></strong>
+          </div>`;
 
         const style = document.createElement('style');
         style.textContent = `
@@ -78,6 +61,7 @@ export const ConnectWallet = ({ title }) => {
 
         const connectWalletBtn = document.getElementById('connectWalletBtn');
         const switchNetworkBtn = document.getElementById('switchNetworkBtn');
+        const addNetworkBtn = document.getElementById('addNetworkBtn');
         const walletStatus = document.getElementById('walletStatus');
 
         const ABSTRACT_CHAIN_ID = '0xab5'; // 2741 in hexadecimal
@@ -120,25 +104,7 @@ export const ConnectWallet = ({ title }) => {
               await checkNetwork();
             } catch (switchError) {
               if (switchError.code === 4902) {
-                try {
-                  await window.ethereum.request({
-                    method: 'wallet_addEthereumChain',
-                    params: [{
-                      chainId: ABSTRACT_CHAIN_ID,
-                      chainName: 'Abstract',
-                      nativeCurrency: {
-                        name: 'Ethereum',
-                        symbol: 'ETH',
-                        decimals: 18
-                      },
-                      rpcUrls: [ABSTRACT_RPC_URL],
-                      blockExplorerUrls: ['https://abscan.org']
-                    }],
-                  });
-                  await checkNetwork();
-                } catch (addError) {
-                  console.error('Failed to add Abstract chain:', addError);
-                }
+                await addAbstractNetwork();
               } else {
                 console.error('Failed to switch to Abstract chain:', switchError);
               }
@@ -146,8 +112,33 @@ export const ConnectWallet = ({ title }) => {
           }
         }
 
+        async function addAbstractNetwork() {
+          if (typeof window.ethereum !== 'undefined') {
+            try {
+              await window.ethereum.request({
+                method: 'wallet_addEthereumChain',
+                params: [{
+                  chainId: ABSTRACT_CHAIN_ID,
+                  chainName: 'Abstract',
+                  nativeCurrency: {
+                    name: 'Ethereum',
+                    symbol: 'ETH',
+                    decimals: 18,
+                  },
+                  rpcUrls: [ABSTRACT_RPC_URL],
+                  blockExplorerUrls: ['https://abscan.org'],
+                }],
+              });
+              await checkNetwork();
+            } catch (addError) {
+              console.error('Failed to add Abstract network:', addError);
+            }
+          }
+        }
+
         connectWalletBtn.addEventListener('click', connectWallet);
         switchNetworkBtn.addEventListener('click', switchToAbstractChain);
+        addNetworkBtn.addEventListener('click', addAbstractNetwork);
 
         // Listen for network changes
         if (typeof window.ethereum !== 'undefined') {
@@ -177,5 +168,5 @@ export const ConnectWallet = ({ title }) => {
 
     return <div id="connect-wallet-container"></div>;
 
-}
+  }
 };
