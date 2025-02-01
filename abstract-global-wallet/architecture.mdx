@@ -28,7 +28,7 @@ For this reason, each AGW account is generated in a two-step process:
 
 1. **EOA Creation**: An EOA wallet is created under the hood as the user signs up with their email, social account,
    or other login methods.
-2. **Smart Contract Wallet Creation**: the smart contract wallet is deployed and provided the EOA address
+2. **Smart Contract Wallet Creation**: the smart contract wallet is deployed and provided with the EOA address
    (from the previous step) as an approved signer.
 
 Once the smart contract is initialized, the user can freely add and remove signers to the wallets
@@ -91,8 +91,7 @@ The three shards are:
 
 #### How Shards are Combined
 
-To reconstruct the private key, the user must have access to **2 out of 3** shards. This can be a combination
-of any two shards, the most common being the **Device Share** and **Auth Share**.
+To reconstruct the private key, the user must have access to **two out of three** shards. This can be a combination of any two shards, with the most common being the **Device Share** and **Auth Share**.
 
 - **Device Share** + **Auth Share**: This is the typical flow; the user authenticates with the Privy server
   using their original login method (e.g. social account) on their device and the auth share is decrypted.
