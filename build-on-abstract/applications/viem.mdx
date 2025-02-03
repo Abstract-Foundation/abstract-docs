@@ -4,8 +4,8 @@ description: "Learn how to use the Viem library to build applications on Abstrac
 ---
 
 The Viem library has first-class support for Abstract by providing a set of
-extensions to interact with [paymasters](/how-abstract-works/native-account-abstraction/paymasters),
-[smart contract wallets](/how-abstract-works/native-account-abstraction/smart-contract-wallets), and more.
+extensions to interact with [paymasters](/how-abstract-works/native-account-abstraction/paymasters.mdx),
+[smart contract wallets](/how-abstract-works/native-account-abstraction/smart-contract-wallets.mdx), and more.
 This page will walk through how to configure Viem to utilize Abstract&rsquo;s features.
 
 <Accordion title="Prerequisites">
@@ -99,7 +99,7 @@ const transactionHash = await walletClient.sendTransaction({
 
 #### Paymasters
 
-Viem has native support for Abstract [paymasters](/how-abstract-works/native-account-abstraction/paymasters).
+Viem has native support for Abstract [paymasters](/how-abstract-works/native-account-abstraction/paymasters.mdx).
 
 Provide the `paymaster` and `paymasterInput` fields when sending a transaction.
 
@@ -115,7 +115,7 @@ const hash = await walletClient.sendTransaction({
 
 #### Smart Contract Wallets
 
-Viem also has native support for using [smart contract wallets](/how-abstract-works/native-account-abstraction/smart-contract-wallets).
+Viem also has native support for using [smart contract wallets](/how-abstract-works/native-account-abstraction/smart-contract-wallets.mdx).
 This means you can submit transactions `from` a smart contract wallet by providing
 a smart wallet account as the `account` field to the [client](#client-configuration).
 
