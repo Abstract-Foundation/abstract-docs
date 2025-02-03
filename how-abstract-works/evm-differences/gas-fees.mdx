@@ -5,7 +5,7 @@ description: "Learn how Abstract differs from Ethereum's EVM opcodes."
 
 Abstract&rsquo;s gas fees depend on the fluctuating
 [gas prices](https://ethereum.org/en/developers/docs/gas/) on Ethereum. As mentioned in
-the [transaction lifecycle](/how-abstract-works/architecture/transaction-lifecycle)
+the [transaction lifecycle](/how-abstract-works/architecture/transaction-lifecycle.mdx)
 section, Abstract posts state diffs _(as well as compressed contract bytecode)_ to Ethereum
 in the form of [blobs](https://www.eip4844.com/).
 
@@ -22,11 +22,11 @@ Fees on Abstract therefore consist of both **off-chain** and **onchain** compone
 
 1. **Offchain Fee**:
    - Fixed cost (approximately $0.001 per transaction).
-   - Covers L2 state storage and zero-knowledge [proof generation](/how-abstract-works/architecture/components/prover-and-verifier#proof-generation).
+   - Covers L2 state storage and zero-knowledge [proof generation](/how-abstract-works/architecture/components/prover-and-verifier.mdx#proof-generation).
    - Independent of transaction complexity.
 2. **Onchain Fee**:
    - Variable cost (influenced by Ethereum gas prices).
-   - Covers [proof verification](/how-abstract-works/architecture/components/prover-and-verifier#proof-verification) and [publishing state](/how-abstract-works/architecture/transaction-lifecycle) on Ethereum.
+   - Covers [proof verification](/how-abstract-works/architecture/components/prover-and-verifier.mdx#proof-verification) and [publishing state](/how-abstract-works/architecture/transaction-lifecycle.mdx) on Ethereum.
 
 ## Differences from Ethereum
 
