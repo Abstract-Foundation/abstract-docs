@@ -142,10 +142,10 @@ meaning you can use the hooks and features of these libraries within your applic
 
 ### 3. Use React Hooks
 
-With the provider setup, you can now use any of the available [hooks](/abstract-global-wallet/agw-react/hooks/useAbstractClient)
+With the provider setup, you can now use any of the available [hooks](/abstract-global-wallet/agw-react/hooks/useAbstractClient.mdx)
 from the `agw-react` package inside
 any component within your application. To prompt the user to sign in with AGW, use the
-[useLoginWithAbstract](/abstract-global-wallet/agw-react/hooks/useLoginWithAbstract) hook.
+[useLoginWithAbstract](/abstract-global-wallet/agw-react/hooks/useLoginWithAbstract.mdx) hook.
 
 ```tsx
 import { useLoginWithAbstract } from "@abstract-foundation/agw-react";
@@ -161,7 +161,7 @@ export default function SignIn() {
 ### 4. Use wagmi hooks
 
 Once the user has signed in, you can begin to use any of the `agw-react` hooks,
-such as [useWriteContractSponsored](/abstract-global-wallet/agw-react/hooks/useWriteContractSponsored)
+such as [useWriteContractSponsored](/abstract-global-wallet/agw-react/hooks/useWriteContractSponsored.mdx)
 as well as all of the existing [wagmi hooks](https://wagmi.sh/react/api/hooks); such as [useAccount](https://wagmi.sh/react/api/hooks/useAccount),
 [useBalance](https://wagmi.sh/react/api/hooks/useBalance), etc.
 
@@ -192,12 +192,12 @@ export default function SendTransactionWithWagmi() {
 
 ### 5. Use the client directly
 
-The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient)
-also exposes a set of [actions](/abstract-global-wallet/agw-client/actions/deployContract)
+The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient.mdx)
+also exposes a set of [actions](/abstract-global-wallet/agw-client/actions/deployContract.mdx)
 you can use to interact with the wallet, including
-[deploying a contract](/abstract-global-wallet/agw-client/actions/deployContract),
-[sending a transaction](/abstract-global-wallet/agw-client/actions/sendTransaction),
-or [calling a contract function](/abstract-global-wallet/agw-client/actions/writeContract).
+[deploying a contract](/abstract-global-wallet/agw-client/actions/deployContract.mdx),
+[sending a transaction](/abstract-global-wallet/agw-client/actions/sendTransaction.mdx),
+or [calling a contract function](/abstract-global-wallet/agw-client/actions/writeContract.mdx).
 
 ```tsx
 import { useGlobalWalletSignerClient } from "@abstract-foundation/agw-react";
