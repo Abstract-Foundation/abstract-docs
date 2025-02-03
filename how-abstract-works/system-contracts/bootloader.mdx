@@ -12,7 +12,7 @@ The bootloader system contract plays several vital roles on Abstract, responsibl
 The bootloader processes transactions in batches that it
 receives from the [VM](https://docs.zksync.io/build/developer-reference/era-vm) and puts
 them all through the flow outlined in the
-[transaction flow](/how-abstract-works/native-account-abstraction/transaction-flow) section.
+[transaction flow](/how-abstract-works/native-account-abstraction/transaction-flow.mdx) section.
 
 <CardGroup cols={2}>
   <Card
@@ -34,13 +34,13 @@ them all through the flow outlined in the
 ## Bootloader Execution Flow
 
 1. As the bootloader receives batches of transactions from the VM, it sends the information
-   about the current batch to the [SystemContext system contract](/how-abstract-works/system-contracts/list-of-system-contracts#systemcontext)
+   about the current batch to the [SystemContext system contract](/how-abstract-works/system-contracts/list-of-system-contracts.mdx#systemcontext)
    before processing each transaction.
 
 2. As each transaction is processed, it goes through the flow outlined
-   in the [gas fees](/how-abstract-works/evm-differences/gas-fees) section.
+   in the [gas fees](/how-abstract-works/evm-differences/gas-fees.mdx) section.
 
-3. At the end of each batch, the bootloader informs the [L1Messenger system contract](/how-abstract-works/system-contracts/list-of-system-contracts#l1messenger)
+3. At the end of each batch, the bootloader informs the [L1Messenger system contract](/how-abstract-works/system-contracts/list-of-system-contracts.mdx#l1messenger)
    for it to begin sending data to Ethereum about the transactions that were processed.
 
 ## BootloaderUtilities System Contract
