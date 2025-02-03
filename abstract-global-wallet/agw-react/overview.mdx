@@ -8,8 +8,8 @@ icon: "react"
 The `agw-react` package provides a set of hooks and components that allow users to sign in and send
 transactions using Abstract Global Wallet. **It is built on top of the [wagmi](https://wagmi.sh/) library.**
 
-Once the user connects their wallet by calling [useLoginWithAbstract](/abstract-global-wallet/agw-react/hooks/useLoginWithAbstract) _(within the context
-of an [AbstractWalletProvider](/abstract-global-wallet/agw-react/AbstractWalletProvider)_),
+Once the user connects their wallet by calling [useLoginWithAbstract](/abstract-global-wallet/agw-react/hooks/useLoginWithAbstract.mdx) _(within the context
+of an [AbstractWalletProvider](/abstract-global-wallet/agw-react/AbstractWalletProvider.mdx)_),
 you can continue to use any of the [wagmi](https://wagmi.sh/) and [TanStack Query](https://tanstack.com/query/latest/docs/framework/react/overview)
 hooks as you would with any other wallet, as well as all of the [viem](https://viem.sh/) functionality.
 
@@ -18,13 +18,13 @@ hooks as you would with any other wallet, as well as all of the [viem](https://v
 Both wagmi and TanStack Query wrap your application in a **provider** component that allows you
 to use the hooks and components they provide anywhere in your application.
 
-The `agw-react` package similarly provides the [AbstractWalletProvider](/abstract-global-wallet/agw-react/AbstractWalletProvider) component,
+The `agw-react` package similarly provides the [AbstractWalletProvider](/abstract-global-wallet/agw-react/AbstractWalletProvider.mdx) component,
 which under the hood wraps your application in the following providers:
 
 1. The TanStack [QueryClientProvider](https://tanstack.com/query/latest/docs/framework/react/reference/QueryClientProvider):
    to manage your application's state using [queries](https://wagmi.sh/react/guides/tanstack-query) and [mutations](https://wagmi.sh/react/guides/tanstack-query),
    e.g. to check if a wallet is connected, read data from the blockchain, and send transactions.
-2. The wagmi [WagmiProvider](https://wagmi.sh/react/api/WagmiProvider): configured to use the Abstract [network](/connect-to-abstract)
+2. The wagmi [WagmiProvider](https://wagmi.sh/react/api/WagmiProvider): configured to use the Abstract [network](/connect-to-abstract.mdx)
    with Abstract Global Wallet as a [wallet connection option](https://wagmi.sh/react/guides/connect-wallet).
 
 Learn more about the [wagmi](https://wagmi.sh/) and [TanStack Query](https://tanstack.com/query/latest/docs/framework/react/overview)
