@@ -11,16 +11,15 @@ throughout your application.
 import { AbstractWalletProvider } from "@abstract-foundation/agw-react";
 import { abstractTestnet, abstract } from "viem/chains"; // Use abstract for mainnet
 
-const config = {
-  chain: abstractTestnet, // Use abstract for mainnet
-  // Optionally, provide your own RPC URL
-  // Learn more: https://viem.sh/docs/clients/transports/http.html
-  // transport: http("https://.../rpc") // Optional
-};
-
 const App = () => {
   return (
-    <AbstractWalletProvider config={config}>
+    <AbstractWalletProvider
+      chain={abstractTestnet} // Use abstract for mainnet
+      // Optionally, provide your own RPC URL
+      // transport={http("https://.../rpc")}
+      // Optionally, provide your own QueryClient
+      // queryClient={queryClient}
+    >
       {/* Your application components */}
     </AbstractWalletProvider>
   );
@@ -29,22 +28,24 @@ const App = () => {
 
 ## Props
 
-<ResponseField name="config" type="object" required>
+<ResponseField name="chain" type="Chain" required>
+  The chain to connect to. Must be either `abstractTestnet` or `abstract` (for
+  mainnet). The provider will throw an error if an unsupported chain is
+  provided.
+</ResponseField>
 
-The configuration object for the AbstractWalletProvider.
+<ResponseField name="transport" type="Transport">
+  Optional. A [Viem Transport](https://viem.sh/docs/clients/transports/http.html) instance to use if you
+  want to connect to a custom RPC URL.
 
-    <Expandable title="properties">
-        <ResponseField name="chain" type="Chain" required>
-            Either `abstractTestnet` or `abstract` (for mainnet).
+If not provided, the default HTTP transport will be used.
 
-        </ResponseField>
+</ResponseField>
 
-        <ResponseField name="transport" type="Transport">
-            Optional. A [Viem Transport](https://viem.sh/docs/clients/transports/http.html) instance to use if you
-            want to connect to a custom RPC URL.
+<ResponseField name="queryClient" type="QueryClient">
+  Optional. A [@tanstack/react-query QueryClient](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclient) instance
+  to use for data fetching.
 
-            If not provided, the default Abstract RPC URL will be used.
-        </ResponseField>
-    </Expandable>
+If not provided, a new QueryClient instance will be created with default settings.
 
 </ResponseField>
