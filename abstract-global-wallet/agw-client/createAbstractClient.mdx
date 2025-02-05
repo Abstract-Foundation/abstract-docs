@@ -43,7 +43,7 @@ console.log("Transaction sent:", `https://sepolia.abscan.org/tx/${hash}`);
 ## Parameters
 
 <ResponseField name="signer" type="Account" required>
-  The EOA account that is the owner of the AGW smart contract wallet.
+  The EOA account that owns the AGW smart contract wallet.
 
 - If this account has not yet created an Abstract Global Wallet, the first transaction they send will first deploy one,
   set the account as the owner and then continue with the transaction.
