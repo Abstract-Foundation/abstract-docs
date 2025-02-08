@@ -138,8 +138,8 @@ export default async function () {
 
   // Submit tx, as an example, send a message to another wallet.
   const tx = await wallet.sendTransaction({
-    to: "0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d" // Example, send message to some other wallet
-    data: "0x1337" // Example, some arbitrary data
+    to: "0x8e729E23CDc8bC21c37a73DA4bA9ebdddA3C8B6d", // Example, send message to some other wallet
+    data: "0x1337", // Example, some arbitrary data
     customData: {
       paymasterParams, // Provide the paymaster params object here!
     }
