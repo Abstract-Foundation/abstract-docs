@@ -12,7 +12,7 @@ This allows you to invalidate existing session keys, preventing them from being 
 Revoke session(s) by providing either:
 
 - The session configuration object(s) (see [parameters](#parameters)).
-- The transaction hash(es) returned by [createSession](/abstract-global-wallet/agw-client/session-keys/createSession).
+- The session hash(es) returned by [getSessionHash()](https://github.com/Abstract-Foundation/agw-sdk/blob/ea8db618788c6e93100efae7f475da6f4f281aeb/packages/agw-client/src/sessions.ts#L213).
 
 ```tsx
 import { useAbstractClient } from "@abstract-foundation/agw-react";
