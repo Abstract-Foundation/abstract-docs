@@ -119,7 +119,7 @@ zksolc: {
 version: "latest",
 settings: {
 // This is the current name of the "isSystem" flag
-enableEraVMExtensions: false, // Note: NonceHolder and the ContractDeployer system contracts can only be called with a special isSystem flag as true
+enableEraVMExtensions: true, // Note: NonceHolder and the ContractDeployer system contracts can only be called with a special isSystem flag as true
 },
 },
 defaultNetwork: "abstractTestnet",
@@ -151,7 +151,7 @@ Add the `is_system = true` flag to the `foundry.toml` configuration file.
 src = 'src'
 libs = ['lib']
 fallback_oz = true
-is_system = false # Note: NonceHolder and the ContractDeployer system contracts can only be called with a special isSystem flag as true
+is_system = true # Note: NonceHolder and the ContractDeployer system contracts can only be called with a special isSystem flag as true
 mode = "3"
 ```
 
