@@ -228,7 +228,10 @@
         "ecosystem/interoperability",
         "ecosystem/oracles",
         "ecosystem/rpc-providers",
-        "ecosystem/paymasters"
+        "ecosystem/paymasters",
+        "ecosystem/automation",
+        "ecosystem/relayers",
+        "ecosystem/verifiable-randomness"
       ]
     },
     {
