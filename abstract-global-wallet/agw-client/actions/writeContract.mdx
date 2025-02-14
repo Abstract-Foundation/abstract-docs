@@ -1,10 +1,10 @@
 ---
 title: "writeContract"
-description: Function to call functions on a smart contract using the connected Abstract Global Wallet.
+description: Function to interact with a smart contract using the connected Abstract Global Wallet.
 ---
 
 The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient)
-includes a `writeContract` method that can be used to call functions on a smart contract using the connected Abstract Global Wallet.
+includes a `writeContract` method that can be used to interact with a smart contract using the connected Abstract Global Wallet.
 
 ## Usage
 
@@ -31,11 +31,11 @@ export default function WriteContract() {
 ## Parameters
 
 <ResponseField name="address" type="Address" required>
-  The address of the contract to write to.
+  The address of the contract to interact with.
 </ResponseField>
 
 <ResponseField name="abi" type="Abi" required>
-  The ABI of the contract to write to.
+  The ABI of the contract to interact with.
 </ResponseField>
 
 <ResponseField name="functionName" type="string" required>
@@ -77,6 +77,7 @@ export default function WriteContract() {
 
 <ResponseField name="paymasterInput" type="Hex">
   Input data to the paymaster. Required if `paymaster` is provided.
+</ResponseField>
 
 <Expandable title="Example with Paymaster">
 
@@ -93,8 +94,6 @@ const transactionHash = await agwClient.writeContract({
 ```
 
 </Expandable>
-
-</ResponseField>
 
 ## Returns
 
