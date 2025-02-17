@@ -103,15 +103,17 @@ set the `is_system` flag to **true**.
 
 </Note>
 
-## 4. Write a smart contract
+## 4. Remove the example contract files: rm src/Counter.sol script/Counter.s.sol test/Counter.t.sol
 
-Modify the `src/Counter.sol` file to include the following smart contract:
+## 5. Write a smart contract
+
+Create and modify the `src/ContractName.sol` file to include the following smart contract:
 
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-contract Counter {
+contract ContractName {
     uint256 public number;
 
     function setNumber(uint256 newNumber) public {
@@ -124,7 +126,9 @@ contract Counter {
 }
 ```
 
-## 5. Compile the smart contract
+By analogy, add files for tests and scripts in the correct directories.
+
+## 6. Compile the smart contract
 
 Use the [zksolc compiler](https://docs.zksync.io/zk-stack/components/compiler/toolchain/solidity)
 (installed in the above steps) to compile smart contracts for Abstract:
@@ -135,7 +139,7 @@ forge build --zksync
 
 You should now see the compiled smart contracts in the generated `zkout` directory.
 
-## 6. Deploy the smart contract
+## 7. Deploy the smart contract
 
 <Steps>
   <Step title="Get testnet funds" icon="wallet">
@@ -166,7 +170,7 @@ Run the following command to deploy your smart contracts:
 <CodeGroup>
 
 ```bash Testnet
-forge create src/Counter.sol:Counter \
+forge create src/ContractName.sol:ContractName \
     --account myKeystore \
     --rpc-url https://api.testnet.abs.xyz \
     --chain 11124 \
@@ -174,7 +178,7 @@ forge create src/Counter.sol:Counter \
 ```
 
 ```bash Mainnet
-forge create src/Counter.sol:Counter \
+forge create src/ContractName.sol:Contra \
     --account myKeystore \
     --rpc-url https://api.mainnet.abs.xyz \
     --chain 2741 \
@@ -204,7 +208,7 @@ To verify your smart contract, run the following command:
 
 ```bash Testnet
 forge verify-contract 0x85717893A18F255285AB48d7bE245ddcD047dEAE \
-    src/Counter.sol:Counter \
+    src/ContractName.sol:ContractName \
     --verifier etherscan \
     --verifier-url https://api-sepolia.abscan.org/api \
     --etherscan-api-key TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD \
@@ -213,7 +217,7 @@ forge verify-contract 0x85717893A18F255285AB48d7bE245ddcD047dEAE \
 
 ```bash Mainnet
 forge verify-contract 0x85717893A18F255285AB48d7bE245ddcD047dEAE \
-    src/Counter.sol:Counter \
+    src/ContractName.sol:ContractName \
     --verifier etherscan \
     --verifier-url https://api.abscan.org/api \
     --etherscan-api-key IEYKU3EEM5XCD76N7Y7HF9HG7M9ARZ2H4A \
