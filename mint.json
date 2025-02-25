@@ -46,11 +46,7 @@
   "navigation": [
     {
       "group": "Overview",
-      "pages": [
-        "overview",
-        "what-is-abstract",
-        "connect-to-abstract"
-      ]
+      "pages": ["overview", "what-is-abstract", "connect-to-abstract"]
     },
     {
       "group": "Build on Abstract",
@@ -230,15 +226,12 @@
         "ecosystem/rpc-providers",
         "ecosystem/paymasters",
         "ecosystem/automation",
-        "ecosystem/relayers",
-        "ecosystem/verifiable-randomness"
+        "ecosystem/relayers"
       ]
     },
     {
       "group": "Portal",
-      "pages": [
-        "portal/overview"
-      ]
+      "pages": ["portal/overview"]
     }
   ],
   "footerSocials": {
