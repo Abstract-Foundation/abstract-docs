@@ -46,11 +46,7 @@
   "navigation": [
     {
       "group": "Overview",
-      "pages": [
-        "overview",
-        "what-is-abstract",
-        "connect-to-abstract"
-      ]
+      "pages": ["overview", "what-is-abstract", "connect-to-abstract"]
     },
     {
       "group": "Build on Abstract",
@@ -228,14 +224,14 @@
         "ecosystem/interoperability",
         "ecosystem/oracles",
         "ecosystem/rpc-providers",
-        "ecosystem/paymasters"
+        "ecosystem/paymasters",
+        "ecosystem/automation",
+        "ecosystem/relayers"
       ]
     },
     {
       "group": "Portal",
-      "pages": [
-        "portal/overview"
-      ]
+      "pages": ["portal/overview"]
     }
   ],
   "footerSocials": {
