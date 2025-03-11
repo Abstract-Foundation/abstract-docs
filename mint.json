@@ -219,14 +219,15 @@
     {
       "group": "Ecosystem",
       "pages": [
+        "ecosystem/automation",
         "ecosystem/bridges",
         "ecosystem/indexers",
         "ecosystem/interoperability",
+        "ecosystem/multi-sig-wallets",
         "ecosystem/oracles",
-        "ecosystem/rpc-providers",
         "ecosystem/paymasters",
-        "ecosystem/automation",
-        "ecosystem/relayers"
+        "ecosystem/relayers",
+        "ecosystem/rpc-providers"
       ]
     },
     {
