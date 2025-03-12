@@ -227,7 +227,8 @@
         "ecosystem/oracles",
         "ecosystem/paymasters",
         "ecosystem/relayers",
-        "ecosystem/rpc-providers"
+        "ecosystem/rpc-providers",
+        "ecosystem/token-distribution"
       ]
     },
     {
