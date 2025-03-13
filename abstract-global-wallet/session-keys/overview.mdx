@@ -4,9 +4,48 @@ sidebarTitle: "Overview"
 description: "Explore session keys, how to create them, and how to use them with the Abstract Global Wallet."
 ---
 
-Session keys are temporary keys that are approved to execute a pre-defined set of actions on behalf of an Abstract Global Wallet without the need for the owner to sign each transaction.
+Session keys are temporary keys that are approved to execute a pre-defined set of actions on behalf of an Abstract Global Wallet without requiring the owner to sign each transaction.
 
 They unlock seamless user experiences by executing transactions behind the scenes without interrupting the user with popups; powerful for games, mobile apps, and more.
+
+## How session keys work
+
+Applications can prompt users to approve the creation of a session key for their Abstract Global Wallet.
+This session key specifies:
+
+- A scoped set of actions that the session key is approved to execute.
+- A specific EOA account, the **signer**, that is permitted to execute the scoped actions.
+
+If the user approves the session key creation, the **signer** account can submit any of the actions within the defined scope without requiring user confirmation; until the session key expires or is revoked.
+
+<Frame>
+  <div
+    style={{
+      position: "relative",
+      paddingBottom: "56.25%",
+      height: 0,
+      overflow: "hidden",
+      width: "100%",
+      maxWidth: "100%",
+    }}
+  >
+    <iframe
+      src="https://www.youtube.com/embed/lJAV91BvL88?si=BfdCf954_vw5fpBP"
+      title="YouTube video player"
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+      }}
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerPolicy="strict-origin-when-cross-origin"
+      allowFullScreen
+    />
+  </div>
+</Frame>
 
 ## How to use session keys
 

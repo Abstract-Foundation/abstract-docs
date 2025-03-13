@@ -190,7 +190,8 @@
     {
       "group": "Session Keys",
       "pages": [
-        "abstract-global-wallet/agw-client/session-keys/overview",
+        "abstract-global-wallet/session-keys/overview",
+        "abstract-global-wallet/session-keys/going-to-production",
         "abstract-global-wallet/agw-client/session-keys/createSession",
         "abstract-global-wallet/agw-react/hooks/useCreateSession",
         "abstract-global-wallet/agw-client/session-keys/createSessionClient",
@@ -256,6 +257,10 @@
     {
       "source": "/ecosystem/faucets",
       "destination": "/tooling/faucets"
+    },
+    {
+      "source": "/abstract-global-wallet/agw-client/session-keys/overview",
+      "destination": "/abstract-global-wallet/session-keys/overview"
     }
   ]
 }

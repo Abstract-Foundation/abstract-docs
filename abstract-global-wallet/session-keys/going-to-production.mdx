@@ -1,0 +1,84 @@
+---
+title: "Going to Production"
+sidebarTitle: "Going to Production"
+description: "Learn how to use session keys in production on Abstract Mainnet."
+---
+
+While session keys unlock new ways to create engaging consumer experiences, improper or malicious implementations of session keys
+create new ways for bad actors to steal assets from users.
+
+Session keys are permissionless on **testnet**, however, **mainnet** enforces several security measures to protect users.
+This document outlines the security restrictions and best practices for using session keys.
+
+## Session Key Policy Registry
+
+Session keys are restricted to a whitelist of allowed policies on Abstract Mainnet through the [Session Key Policy Registry contract](https://abscan.org/address/0xA146c7118A46b32aBD0e1ACA41DF4e61061b6b93#code), which manages a whitelist of approved session keys.
+
+Applications must pass a security review before being added to the
+registry to enable the use of session keys for their policies.
+
+### Restricted Session Key Policies
+
+Session key policies that request `approve` and/or `setApprovalForAll` functions _must_ be passed with additional `constraints` that restrict the approval to a specific contract address.
+
+For example, the following policy must include a `constraints` array that restricts the approval to a specific contract address,
+or will be rejected with "Unconstrained token approval/transfer destination in call policy."
+
+```typescript
+{
+  target: "0x...",
+  selector: toFunctionSelector("approve(address, uint256)"),
+  // ... must include a constraints array that restricts the approval to a specific contract address
+}
+```
+
+## Session Key Signer Accounts
+
+Session keys specify a **signer** account; an <Tooltip tip="Externally Owned Account, i.e. a public/private key pair.">EOA</Tooltip> that is permitted to perform the actions specified in the session configuration. Therefore, the private key of the signer(s) you create are **SENSITIVE VALUES**!
+
+Exposing the signer private key enables attackers to execute any of the actions specified in a session configuration for any AGW that has approved a session key with that signer&rsquo;s address.
+
+```typescript
+await agwClient.createSession({
+  session: {
+    signer: sessionSigner.address, // <--- The session key signer account
+    // ...
+  },
+});
+```
+
+Below, we provide recommended approaches to implement secure session key signer storage.
+
+### Privy Server Wallets
+
+[Privy Server Wallets](https://docs.privy.io/guide/server-wallets/) provide a secure way to create and store signer account(s) for session keys using trusted execution environments (TEEs); ensuring private keys can only ever be reassembled within a secure enclave and never exposed to perform any malicious actions.
+
+By using a Privy Server Wallet as the session key signer, attackers cannot compromise the TEE to access the signer account private key to perform any malicious actions.
+
+<Card
+  title="Example Repo: Session Key Signer with Privy Server Wallets"
+  icon="github"
+  href="https://github.com/Abstract-Foundation/examples/tree/main/server-wallets-session-keys"
+>
+  View the example repository for a session key signer implementation using
+  Privy Server Wallets.
+</Card>
+
+### Unique Signer Accounts per Config
+
+If you want to store session signer accounts on the client, such as in the browser&rsquo;s [local storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) or [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API), you must create a new unique signer account for each session key to limit the impact of a compromised signer account.
+
+If an attacker gains access to a signer account by compromising the user&rsquo;s client, generating unique signer accounts isolates the attack to a single Abstract Global Wallet.
+
+Browser storage methods are vulnerable to Cross-site scripting (XSS) attacks, which can expose the signer account private key to attackers. It is recommended to first **encrypt** the signer account private key before storing it on the client.
+
+It is **not acceptable** to use a single signer account stored on the client for all session keys.
+
+<Card
+  title="Example Repo: Encrypted Unique Signer Keys in Local Storage"
+  icon="github"
+  href="https://github.com/Abstract-Foundation/examples/tree/main/session-keys-local-storage"
+>
+  View the example repository for generating unique signer accounts and storing
+  them encrypted in the browser's local storage.
+</Card>
