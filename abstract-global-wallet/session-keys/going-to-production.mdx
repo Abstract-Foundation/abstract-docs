@@ -94,3 +94,11 @@ It is **not acceptable** to use a single signer account stored on the client for
   View the example repository for generating unique signer accounts and storing
   them encrypted in the browser's local storage.
 </Card>
+
+## Risks of Using Session Keys
+
+Temporary keys enable transactions without owner signatures; this functionality introduces several legal risks that developers should be aware of, particularly around security and data management. These include:
+
+- If session keys are compromised, they can be used for unauthorized transactions, potentially leading to financial losses.
+- Failing to follow recommended practices, such as creating new keys per user or managing expiration, could result in security vulnerabilities.
+- Storing session keys, even when encrypted, risks data breaches. You should comply with applicable data protection laws.
