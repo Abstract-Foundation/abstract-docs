@@ -51,25 +51,26 @@ If the user approves the session key creation, the **signer** account can submit
 
 <Steps>
   <Step title="Create a session key">
-    Create a new session key that defines specific actions allowed to be executed on behalf of the Abstract Global Wallet using [createSession](/abstract-global-wallet/agw-client/session-keys/createSession).
+    Create a new session key that defines specific actions allowed to be executed on behalf of the Abstract Global Wallet using [createSession](/abstract-global-wallet/agw-client/session-keys/createSession) or [useCreateSession](/abstract-global-wallet/agw-react/hooks/useCreateSession).
 
-    This session key is an account that is approved to execute the actions defined in the session configuration on behalf of the Abstract Global Wallet.
+    This session key configuration defines a **signer account** that is approved to execute the actions defined in the session on behalf of the Abstract Global Wallet.
 
     <Warning>
-      It is highly recommended to create a new session **signer key** for each user.
-
-      Using the same signer key for multiple
-      sessions compromises security isolation - if the key is exposed, all associated sessions become vulnerable rather than containing the risk to a single session.
+      Session keys must be whitelisted on the [session key policy registry](/abstract-global-wallet/session-keys/going-to-production#session-key-policy-registry)
+      to be used on Abstract mainnet following a security review.
     </Warning>
 
   </Step>
   <Step title="Store the session key">
-    Store the session key in the location of your choice, such as local storage or a backend database.
+    Store the session key securely using the guidelines outlined in [Going to Production](/abstract-global-wallet/session-keys/going-to-production#session-key-signer-accounts).
+    The session config is required for the session key to be used to execute actions on behalf of the Abstract Global Wallet.
 
-    Keys are approved to execute the actions defined in the session configuration on behalf of the Abstract Global Wallet until they expire.
+    The signer account(s) defined in the session configuration objects are **sensitive values** that must be stored securely.
 
-    <Warning>
-      It is recommended to encrypt the signer keys before storing them.
+     <Warning>
+      Use the recommendations for [session key signer accounts](/abstract-global-wallet/session-keys/going-to-production#session-key-signer-accounts)
+      outlined in [Going to Production](/abstract-global-wallet/session-keys/going-to-production)
+      to ensure the signer account(s) are stored securely.
     </Warning>
 
   </Step>
@@ -84,7 +85,6 @@ If the user approves the session key creation, the **signer** account can submit
   </Step>
   <Step title="Optional - Revoke the session key">
     Session keys naturally expire after the duration specified in the session configuration.
-
     However, if you need to revoke a session key before it expires, you can do so using [revokeSessions](/abstract-global-wallet/agw-client/session-keys/revokeSessions).
 
   </Step>
