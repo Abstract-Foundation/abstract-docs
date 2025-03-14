@@ -28,7 +28,19 @@ or will be rejected with "Unconstrained token approval/transfer destination in c
 {
   target: "0x...",
   selector: toFunctionSelector("approve(address, uint256)"),
-  // ... must include a constraints array that restricts the approval to a specific contract address
+
+  // Must include a constraints array that restricts the approval to a specific contract address
+  constraints: [
+    {
+      condition: ConstraintCondition.Equal,
+      index: 0n,
+      limit: LimitType.Unlimited,
+      refValue: encodeAbiParameters(
+        [{ type: "address" }],
+        ["0x-your-contract-address"]
+      ),
+    },
+  ],
 }
 ```
 
