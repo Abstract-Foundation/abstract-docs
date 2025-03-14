@@ -1,0 +1,91 @@
+---
+title: "Session keys"
+sidebarTitle: "Overview"
+description: "Explore session keys, how to create them, and how to use them with the Abstract Global Wallet."
+---
+
+Session keys are temporary keys that are approved to execute a pre-defined set of actions on behalf of an Abstract Global Wallet without requiring the owner to sign each transaction.
+
+They unlock seamless user experiences by executing transactions behind the scenes without interrupting the user with popups; powerful for games, mobile apps, and more.
+
+## How session keys work
+
+Applications can prompt users to approve the creation of a session key for their Abstract Global Wallet.
+This session key specifies:
+
+- A scoped set of actions that the session key is approved to execute.
+- A specific EOA account, the **signer**, that is permitted to execute the scoped actions.
+
+If the user approves the session key creation, the **signer** account can submit any of the actions within the defined scope without requiring user confirmation; until the session key expires or is revoked.
+
+<Frame>
+  <div
+    style={{
+      position: "relative",
+      paddingBottom: "56.25%",
+      height: 0,
+      overflow: "hidden",
+      width: "100%",
+      maxWidth: "100%",
+    }}
+  >
+    <iframe
+      src="https://www.youtube.com/embed/lJAV91BvL88?si=BfdCf954_vw5fpBP"
+      title="YouTube video player"
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+      }}
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerPolicy="strict-origin-when-cross-origin"
+      allowFullScreen
+    />
+  </div>
+</Frame>
+
+## How to use session keys
+
+<Steps>
+  <Step title="Create a session key">
+    Create a new session key that defines specific actions allowed to be executed on behalf of the Abstract Global Wallet using [createSession](/abstract-global-wallet/agw-client/session-keys/createSession) or [useCreateSession](/abstract-global-wallet/agw-react/hooks/useCreateSession).
+
+    This session key configuration defines a **signer account** that is approved to execute the actions defined in the session on behalf of the Abstract Global Wallet.
+
+    <Warning>
+      Session keys must be whitelisted on the [session key policy registry](/abstract-global-wallet/session-keys/going-to-production#session-key-policy-registry)
+      to be used on Abstract mainnet following a security review.
+    </Warning>
+
+  </Step>
+  <Step title="Store the session key">
+    Store the session key securely using the guidelines outlined in [Going to Production](/abstract-global-wallet/session-keys/going-to-production#session-key-signer-accounts).
+    The session config is required for the session key to be used to execute actions on behalf of the Abstract Global Wallet.
+
+    The signer account(s) defined in the session configuration objects are **sensitive values** that must be stored securely.
+
+     <Warning>
+      Use the recommendations for [session key signer accounts](/abstract-global-wallet/session-keys/going-to-production#session-key-signer-accounts)
+      outlined in [Going to Production](/abstract-global-wallet/session-keys/going-to-production)
+      to ensure the signer account(s) are stored securely.
+    </Warning>
+
+  </Step>
+  <Step title="Use the session key">
+    Create a `SessionClient` instance using either:
+
+    - [toSessionClient](/abstract-global-wallet/agw-client/session-keys/toSessionClient) if you have an existing [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient) available.
+    - [createSessionClient](/abstract-global-wallet/agw-client/session-keys/createSessionClient) if you don&rsquo;t already have an [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient), such as from a backend environment.
+
+    Use the client to submit transactions and perform actions (e.g. [writeContract](/abstract-global-wallet/agw-client/actions/writeContract)) without requiring the user to approve each transaction. Transactions are signed by the session key account and are submitted `from` the Abstract Global Wallet.
+
+  </Step>
+  <Step title="Optional - Revoke the session key">
+    Session keys naturally expire after the duration specified in the session configuration.
+    However, if you need to revoke a session key before it expires, you can do so using [revokeSessions](/abstract-global-wallet/agw-client/session-keys/revokeSessions).
+
+  </Step>
+</Steps>
