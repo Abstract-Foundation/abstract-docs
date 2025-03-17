@@ -1,7 +1,10 @@
 ---
-title: "Hardhat"
-description: "Learn how to use Hardhat to build and deploy smart contracts on Abstract."
+title: "Hardhat - Get Started"
+sidebarTitle: "Get Started"
+description: "Get started with Abstract by deploying your first smart contract using Hardhat."
 ---
+
+This document outlines the end-to-end process of deploying a smart contract on Abstract using Hardhat.
 
 <Card
   title="YouTube Tutorial: Get Started with Hardhat"
@@ -79,8 +82,8 @@ const config: HardhatUserConfig = {
   zksolc: {
     version: "latest",
     settings: {
-      // Note: This must be true to call NonceHolder & ContractDeployer system contracts
-      enableEraVMExtensions: false,
+      // find all available options in the official documentation
+      // https://docs.zksync.io/build/tooling/hardhat/hardhat-zksync-solc#configuration
     },
   },
   defaultNetwork: "abstractTestnet",
@@ -128,25 +131,6 @@ const config: HardhatUserConfig = {
 };
 
 export default config;
-```
-
-### Using system contracts
-
-To use [system contracts](/how-abstract-works/system-contracts/overview), install the `@matterlabs/zksync-contracts` package:
-
-```bash
-npm install -D @matterlabs/zksync-contracts
-```
-
-Then set the `enableEraVMExtensions` flag to **true**:
-
-```typescript {4}
-zksolc: {
-  settings: {
-    // If you plan to interact directly with the NonceHolder or ContractDeployer system contracts
-    enableEraVMExtensions: true,
-  },
-},
 ```
 
 ## 4. Write a smart contract

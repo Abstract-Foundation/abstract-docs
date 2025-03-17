@@ -1,0 +1,72 @@
+---
+title: "Hardhat - Compiling Contracts"
+sidebarTitle: "Compiling Contracts"
+description: "Learn how to compile your smart contracts using Hardhat on Abstract."
+---
+
+Smart contracts must be compiled to [Zksync VM](https://docs.zksync.io/zksync-protocol/vm)-compatible bytecode using the [`zksolc`](https://matter-labs.github.io/era-compiler-solidity/latest/) compiler to prepare them for deployment on Abstract.
+
+<Steps>
+
+  <Step title="Update Hardhat configuration">
+
+    Ensure your Hardhat configuration file is configured to use `zksolc`, as outlined in the [installation guide](/build-on-abstract/smart-contracts/hardhat/installation#update-hardhat-configuration):
+
+```typescript hardhat.config.ts [expandable]
+import { HardhatUserConfig } from "hardhat/config";
+import "@matterlabs/hardhat-zksync";
+
+const config: HardhatUserConfig = {
+  zksolc: {
+    version: "latest",
+    settings: {
+      // find all available options in the official documentation
+      // https://docs.zksync.io/build/tooling/hardhat/hardhat-zksync-solc#configuration
+    },
+  },
+  defaultNetwork: "abstractTestnet",
+  networks: {
+    abstractTestnet: {
+      url: "https://api.testnet.abs.xyz",
+      ethNetwork: "sepolia",
+      zksync: true,
+      chainId: 11124,
+    },
+    abstractMainnet: {
+      url: "https://api.mainnet.abs.xyz",
+      ethNetwork: "mainnet",
+      zksync: true,
+      chainId: 2741,
+    },
+  },
+  solidity: {
+    version: "0.8.24",
+  },
+};
+
+export default config;
+```
+
+  </Step>
+
+  <Step title="Compile contracts">
+
+    Compile your contracts with **zksolc**:
+
+    <CodeGroup>
+
+```bash Testnet
+npx hardhat clean && npx hardhat compile --network abstractTestnet
+```
+
+```bash Mainnet
+npx hardhat clean && npx hardhat compile --network abstractMainnet
+```
+
+</CodeGroup>
+
+This will generate the `artifacts-zk` and `cache-zk` directories containing the compilation artifacts (including contract ABIs) and compiler cache files respectively.
+
+  </Step>
+
+</Steps>

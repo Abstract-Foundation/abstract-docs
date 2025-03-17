@@ -1,0 +1,121 @@
+---
+title: "Hardhat - Installation"
+sidebarTitle: "Installing Hardhat"
+description: "Learn how to setup a new Hardhat project on Abstract."
+---
+
+<Steps>
+
+  <Step title="Create a new Hardhat project">
+
+    Inside an empty directory, initialize a new Hardhat project using
+    the [Hardhat CLI](https://hardhat.org/getting-started/):
+
+  <Accordion title="System Requirements">
+    Ensure you have the following installed on your machine:
+
+    - [Node.js](https://nodejs.org/en/download/) v18.0.0 or later.
+    - If you are on Windows, we strongly recommend using [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/about) to follow this guide.
+
+    </Accordion>
+
+    Create a new directory and navigate into it:
+
+    ```bash
+    mkdir my-abstract-project && cd my-abstract-project
+    ```
+
+    Initialize a new Hardhat project within the directory:
+
+    ```bash
+    npx hardhat init
+    ```
+
+    Select your preferences when prompted by the CLI, or use the recommended setup below.
+
+    <Accordion title="Recommended Hardhat setup">
+    We recommend selecting the following options when prompted by the Hardhat CLI:
+
+    ```bash
+    ✔ What do you want to do? · Create a TypeScript project
+    ✔ Hardhat project root: · /path/to/my-abstract-project
+    ✔ Do you want to add a .gitignore? (Y/n) · y
+    ✔ Do you ... install ... dependencies with npm ... · y
+    ```
+
+    </Accordion>
+
+  </Step>
+
+  <Step title="Install hardhat-zksync">
+
+    Abstract uses the [ZKsync VM](https://docs.zksync.io/zksync-protocol/vm), which expects [different bytecode](/how-abstract-works/evm-differences/overview)
+    than the Ethereum Virtual Machine (EVM).
+    The [`hardhat-zksync`](https://docs.zksync.io/zksync-era/tooling/hardhat/plugins/hardhat-zksync) library includes several plugins to help you compile, deploy and verify smart contracts for the Zksync VM on Abstract.
+
+    Install the `@matter-labs/hardhat-zksync` package:
+
+    <CodeGroup>
+
+    ```bash npm
+    npm install -D @matterlabs/hardhat-zksync
+    ```
+
+    ```bash yarn
+    yarn add -D @matterlabs/hardhat-zksync
+    ```
+
+    ```bash pnpm
+    pnpm add -D @matterlabs/hardhat-zksync
+    ```
+
+    ```bash bun
+    bun add -D @matterlabs/hardhat-zksync
+    ```
+
+    </CodeGroup>
+
+  </Step>
+
+  <Step title="Update Hardhat configuration">
+
+    Modify your `hardhat.config.ts` file to include the following options:
+
+```ts
+import { HardhatUserConfig } from "hardhat/config";
+import "@matterlabs/hardhat-zksync";
+
+const config: HardhatUserConfig = {
+  zksolc: {
+    version: "latest",
+    settings: {
+      // find all available options in the official documentation
+      // https://docs.zksync.io/build/tooling/hardhat/hardhat-zksync-solc#configuration
+    },
+  },
+  defaultNetwork: "abstractTestnet",
+  networks: {
+    abstractTestnet: {
+      url: "https://api.testnet.abs.xyz",
+      ethNetwork: "sepolia",
+      zksync: true,
+      chainId: 11124,
+    },
+    abstractMainnet: {
+      url: "https://api.mainnet.abs.xyz",
+      ethNetwork: "mainnet",
+      zksync: true,
+      chainId: 2741,
+    },
+  },
+  solidity: {
+    version: "0.8.24",
+  },
+};
+
+export default config;
+```
+
+  </Step>
+
+</Steps>
