@@ -55,9 +55,28 @@
         {
           "group": "Smart Contracts",
           "pages": [
-            "build-on-abstract/smart-contracts/hardhat",
-            "build-on-abstract/smart-contracts/foundry",
-            "build-on-abstract/smart-contracts/debugging-contracts"
+            {
+              "group": "Hardhat",
+              "pages": [
+                "build-on-abstract/smart-contracts/hardhat/get-started",
+                "build-on-abstract/smart-contracts/hardhat/installation",
+                "build-on-abstract/smart-contracts/hardhat/compiling-contracts",
+                "build-on-abstract/smart-contracts/hardhat/testing-contracts",
+                "build-on-abstract/smart-contracts/hardhat/deploying-contracts",
+                "build-on-abstract/smart-contracts/hardhat/verifying-contracts"
+              ]
+            },
+            {
+              "group": "Foundry",
+              "pages": [
+                "build-on-abstract/smart-contracts/foundry/get-started",
+                "build-on-abstract/smart-contracts/foundry/installation",
+                "build-on-abstract/smart-contracts/foundry/compiling-contracts",
+                "build-on-abstract/smart-contracts/foundry/testing-contracts",
+                "build-on-abstract/smart-contracts/foundry/deploying-contracts",
+                "build-on-abstract/smart-contracts/foundry/verifying-contracts"
+              ]
+            }
           ]
         },
         {
@@ -262,6 +281,14 @@
     {
       "source": "/abstract-global-wallet/agw-client/session-keys/overview",
       "destination": "/abstract-global-wallet/session-keys/overview"
+    },
+    {
+      "source": "/build-on-abstract/smart-contracts/hardhat",
+      "destination": "/build-on-abstract/smart-contracts/hardhat/get-started"
+    },
+    {
+      "source": "build-on-abstract/smart-contracts/foundry",
+      "destination": "/build-on-abstract/smart-contracts/foundry/get-started"
     }
   ]
 }

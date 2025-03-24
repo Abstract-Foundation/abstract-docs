@@ -1,0 +1,92 @@
+---
+title: "Hardhat - Installation"
+sidebarTitle: "Installing hardhat-zksync"
+description: "Learn how to setup a new Hardhat project on Abstract using hardhat-zksync."
+---
+
+This page assumes you already have a Hardhat project setup. If you don&rsquo;t, follow the steps in the [Getting Started](/build-on-abstract/smart-contracts/hardhat/get-started) guide to create a new project.
+
+<Steps>
+  <Step title="Install hardhat-zksync">
+
+    Abstract uses the [ZKsync VM](https://docs.zksync.io/zksync-protocol/vm), which expects [different bytecode](/how-abstract-works/evm-differences/overview)
+    than the Ethereum Virtual Machine (EVM).
+    The [`hardhat-zksync`](https://docs.zksync.io/zksync-era/tooling/hardhat/plugins/hardhat-zksync) library includes several plugins to help you compile, deploy and verify smart contracts for the Zksync VM on Abstract.
+
+    Install the `@matter-labs/hardhat-zksync` package:
+
+    <CodeGroup>
+
+    ```bash npm
+    npm install -D @matterlabs/hardhat-zksync
+    ```
+
+    ```bash yarn
+    yarn add -D @matterlabs/hardhat-zksync
+    ```
+
+    ```bash pnpm
+    pnpm add -D @matterlabs/hardhat-zksync
+    ```
+
+    ```bash bun
+    bun add -D @matterlabs/hardhat-zksync
+    ```
+
+    </CodeGroup>
+
+  </Step>
+
+  <Step title="Update Hardhat configuration">
+
+    Modify your `hardhat.config.ts` file to include the following options:
+
+```ts
+import { HardhatUserConfig } from "hardhat/config";
+import "@matterlabs/hardhat-zksync";
+
+const config: HardhatUserConfig = {
+  zksolc: {
+    version: "latest",
+    settings: {
+      // find all available options in the official documentation
+      // https://docs.zksync.io/build/tooling/hardhat/hardhat-zksync-solc#configuration
+    },
+  },
+  defaultNetwork: "abstractTestnet",
+  networks: {
+    abstractTestnet: {
+      url: "https://api.testnet.abs.xyz",
+      ethNetwork: "sepolia",
+      zksync: true,
+      chainId: 11124,
+    },
+    abstractMainnet: {
+      url: "https://api.mainnet.abs.xyz",
+      ethNetwork: "mainnet",
+      zksync: true,
+      chainId: 2741,
+    },
+  },
+  solidity: {
+    version: "0.8.24",
+  },
+};
+
+export default config;
+```
+
+  </Step>
+
+  <Step title="Run Hardhat commands">
+
+    Provide the `--network` flag to specify the Abstract network you want to use.
+
+    ```bash
+    # e.g. Compile the network using the zksolc compiler
+    npx hardhat compile --network abstractTestnet
+    ```
+
+  </Step>
+
+</Steps>

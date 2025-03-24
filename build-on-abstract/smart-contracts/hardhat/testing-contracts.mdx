@@ -1,0 +1,361 @@
+---
+title: "Hardhat - Testing Contracts"
+sidebarTitle: "Testing Contracts"
+description: "Learn how to test your smart contracts using Hardhat."
+---
+
+Verify your smart contracts work as intended before you deploy them by writing [tests](https://hardhat.org/hardhat-runner/docs/guides/test-contracts).
+
+## Testing Smart Contracts
+
+<Steps>
+
+  <Step title="Update Hardhat configuration">
+
+    Ensure your Hardhat configuration file is configured to use `zksolc`, as outlined in the [installation guide](/build-on-abstract/smart-contracts/hardhat/installation#update-hardhat-configuration):
+
+```typescript hardhat.config.ts [expandable]
+import { HardhatUserConfig } from "hardhat/config";
+import "@matterlabs/hardhat-zksync";
+
+const config: HardhatUserConfig = {
+  zksolc: {
+    version: "latest",
+    settings: {
+      // find all available options in the official documentation
+      // https://docs.zksync.io/build/tooling/hardhat/hardhat-zksync-solc#configuration
+    },
+  },
+  defaultNetwork: "abstractTestnet",
+  networks: {
+    abstractTestnet: {
+      url: "https://api.testnet.abs.xyz",
+      ethNetwork: "sepolia",
+      zksync: true,
+      chainId: 11124,
+    },
+    abstractMainnet: {
+      url: "https://api.mainnet.abs.xyz",
+      ethNetwork: "mainnet",
+      zksync: true,
+      chainId: 2741,
+    },
+  },
+  solidity: {
+    version: "0.8.24",
+  },
+};
+
+export default config;
+```
+
+  </Step>
+
+  <Step title="Install zksync-ethers">
+
+    The [zksync-ethers](https://sdk.zksync.io/js/ethers/why-zksync-ethers) package provides a modified version of the ethers library that is compatible with Abstract and the ZKsync VM. Install the package by running the following command:
+
+<CodeGroup>
+  
+```bash npm
+npm install -D zksync-ethers
+```
+
+```bash yarn
+yarn add -D zksync-ethers
+```
+
+```bash pnpm
+pnpm add -D zksync-ethers
+```
+
+```bash bun
+bun add -D zksync-ethers
+```
+
+</CodeGroup>
+
+  </Step>
+
+  <Step title="Write test definitions">
+    Write test definitions inside the `/test` directory, for example, `test/HelloWorld.test.ts`.
+
+```typescript test/HelloWorld.test.ts [expandable]
+import * as hre from "hardhat";
+import { expect } from "chai";
+import { Deployer } from "@matterlabs/hardhat-zksync";
+import { Wallet, Provider, Contract } from "zksync-ethers";
+import { vars } from "hardhat/config";
+
+describe("HelloWorld", function () {
+  let helloWorld: Contract;
+
+  beforeEach(async function () {
+    const provider = new Provider(hre.network.config.url);
+    const wallet = new Wallet(vars.get("DEPLOYER_PRIVATE_KEY"), provider);
+    const deployer = new Deployer(hre, wallet);
+    const artifact = await hre.deployer.loadArtifact("HelloWorld");
+    helloWorld = await deployer.deploy(artifact);
+  });
+
+  it("Should return the correct initial message", async function () {
+    expect(await helloWorld.getMessage()).to.equal("Hello World");
+  });
+
+  it("Should set a new message correctly", async function () {
+    await helloWorld.setMessage("Hello Abstract!");
+    expect(await helloWorld.getMessage()).to.equal("Hello Abstract!");
+  });
+});
+```
+
+  </Step>
+
+  <Step title="Add a deployer private key">
+    Create a new [configuration variable](https://hardhat.org/hardhat-runner/docs/guides/configuration-variables) called `DEPLOYER_PRIVATE_KEY` that contains the private key of a wallet you want to deploy the contract from.
+
+    ```bash
+    npx hardhat vars set DEPLOYER_PRIVATE_KEY
+    ```
+
+    Enter the private key of a new wallet you created for this step.
+
+    ```bash
+    ✔ Enter value: · ****************************************************************
+    ```
+
+    <Tip>
+      Use one of the **rich wallets** as the `DEPLOYER_PRIVATE_KEY` when using a [local node](#running-a-local-node).
+    </Tip>
+
+  </Step>
+
+  <Step title="Get ETH in the deployer account">
+    The deployer account requires ETH to deploy a smart contract.
+
+    - **Testnet**: Claim ETH via a [faucet](/tooling/faucets), or
+    [bridge](/tooling/bridges) ETH from Sepolia.
+    - **Mainnet**: Use a [bridge](/tooling/bridges) to transfer ETH to Abstract mainnet.
+
+  </Step>
+
+  <Step title="Run the tests">
+    Run the tests by running the following command:
+
+    ```bash
+    npx hardhat test --network abstractTestnet
+    ```
+
+  </Step>
+</Steps>
+
+## Running a local node
+
+The [zksync-cli](https://github.com/matter-labs/zksync-cli) package provides a command-line interface for instantiating local nodes.
+
+Run a local node as your test environment is beneficial for many reasons:
+
+- **Speed**: Local nodes are faster than testnet/mainnet, increasing iteration speed.
+- **Rich wallets**: Local nodes come with "rich wallets" pre-funded with ETH.
+- **Isolation**: Local nodes are separate environments with no existing state.
+
+<Steps>
+
+  <Step title="Run a local node">
+
+    <Note>
+      [Docker](https://www.docker.com/) is required to run a local node. [Installation guide ↗](https://docs.docker.com/get-docker/)
+    </Note>
+
+    Run a local node by running the following command:
+
+    ```bash
+    npx zksync-cli dev start
+    ```
+
+    Select the `anvil-zksync` option when prompted:
+
+    ```bash {1}
+    ❯ anvil-zksync - Quick startup, no persisted state, only L2 node - zkcli-in-memory-node
+    Dockerized node - Persistent state, includes L1 and L2 nodes - zkcli-dockerized-node
+    ```
+
+    This will start a local node and a development wallet for you to use:
+
+    ```bash
+    anvil-zksync started v0.3.2:
+      - ZKsync Node (L2):
+        - Chain ID: 260
+        - RPC URL: http://127.0.0.1:8011
+        - Rich accounts: https://docs.zksync.io/zksync-era/tooling/local-setup/anvil-zksync-node#pre-configured-rich-wallets
+    ```
+
+  </Step>
+
+  <Step title="Add the local node as a Hardhat network">
+    Add the local node as a network in your Hardhat configuration file:
+
+    ```typescript hardhat.config.ts
+    networks: {
+      // ... Existing Abstract networks
+      inMemoryNode: {
+        url: "http://127.0.0.1:8011",
+        ethNetwork: "localhost", // in-memory node doesn't support eth node; removing this line will cause an error
+        zksync: true,
+      },
+    },
+    ```
+
+  </Step>
+
+  <Step title="Update the deployer private key configuration variable">
+    Update the `DEPLOYER_PRIVATE_KEY` configuration variable to use one of the [pre-funded rich wallet](#rich-wallets) private keys.
+
+    ```bash
+    npx hardhat vars set DEPLOYER_PRIVATE_KEY
+    ```
+
+    Enter the private key of one of the [rich wallets](#rich-wallets).
+
+    ```bash
+    ✔ Enter value: · ****************************************************************
+    ```
+
+    <Tip>
+      Use one of the **rich wallets** as the `DEPLOYER_PRIVATE_KEY` when using a [local node](#running-a-local-node).
+    </Tip>
+
+  </Step>
+
+  <Step title="Run the tests">
+    Run the tests on the local node using the following command:
+
+    ```bash
+    npx hardhat test --network inMemoryNode
+    ```
+
+  </Step>
+
+</Steps>
+
+### Rich Wallets
+
+The local node includes pre-configured "rich" accounts for testing:
+
+```text [expandable]
+Address #0: 0xBC989fDe9e54cAd2aB4392Af6dF60f04873A033A
+Private Key: 0x3d3cbc973389cb26f657686445bcc75662b415b656078503592ac8c1abb8810e
+Mnemonic: mass wild lava ripple clog cabbage witness shell unable tribe rubber enter
+
+---
+
+Address #1: 0x55bE1B079b53962746B2e86d12f158a41DF294A6
+Private Key: 0x509ca2e9e6acf0ba086477910950125e698d4ea70fa6f63e000c5a22bda9361c
+Mnemonic: crumble clutch mammal lecture lazy broken nominee visit gentle gather gym erupt
+
+---
+
+Address #2: 0xCE9e6063674DC585F6F3c7eaBe82B9936143Ba6C
+Private Key: 0x71781d3a358e7a65150e894264ccc594993fbc0ea12d69508a340bc1d4f5bfbc
+Mnemonic: illegal okay stereo tattoo between alien road nuclear blind wolf champion regular
+
+---
+
+Address #3: 0xd986b0cB0D1Ad4CCCF0C4947554003fC0Be548E9
+Private Key: 0x379d31d4a7031ead87397f332aab69ef5cd843ba3898249ca1046633c0c7eefe
+Mnemonic: point donor practice wear alien abandon frozen glow they practice raven shiver
+
+---
+
+Address #4: 0x87d6ab9fE5Adef46228fB490810f0F5CB16D6d04
+Private Key: 0x105de4e75fe465d075e1daae5647a02e3aad54b8d23cf1f70ba382b9f9bee839
+Mnemonic: giraffe organ club limb install nest journey client chunk settle slush copy
+
+---
+
+Address #5: 0x78cAD996530109838eb016619f5931a03250489A
+Private Key: 0x7becc4a46e0c3b512d380ca73a4c868f790d1055a7698f38fb3ca2b2ac97efbb
+Mnemonic: awful organ version habit giraffe amused wire table begin gym pistol clean
+
+---
+
+Address #6: 0xc981b213603171963F81C687B9fC880d33CaeD16
+Private Key: 0xe0415469c10f3b1142ce0262497fe5c7a0795f0cbfd466a6bfa31968d0f70841
+Mnemonic: exotic someone fall kitten salute nerve chimney enlist pair display over inside
+
+---
+
+Address #7: 0x42F3dc38Da81e984B92A95CBdAAA5fA2bd5cb1Ba
+Private Key: 0x4d91647d0a8429ac4433c83254fb9625332693c848e578062fe96362f32bfe91
+Mnemonic: catch tragic rib twelve buffalo also gorilla toward cost enforce artefact slab
+
+---
+
+Address #8: 0x64F47EeD3dC749d13e49291d46Ea8378755fB6DF
+Private Key: 0x41c9f9518aa07b50cb1c0cc160d45547f57638dd824a8d85b5eb3bf99ed2bdeb
+Mnemonic: arrange price fragile dinner device general vital excite penalty monkey major faculty
+
+---
+
+Address #9: 0xe2b8Cb53a43a56d4d2AB6131C81Bd76B86D3AFe5
+Private Key: 0xb0680d66303a0163a19294f1ef8c95cd69a9d7902a4aca99c05f3e134e68a11a
+Mnemonic: increase pulp sing wood guilt cement satoshi tiny forum nuclear sudden thank
+
+---
+```
+
+**Same mnemonic rich wallets**
+
+Mnemonic: `stuff slice staff easily soup parent arm payment cotton trade scatter struggle`
+
+```text [expandable]
+Address #10: 0x36615Cf349d7F6344891B1e7CA7C72883F5dc049
+Private Key: 0x7726827caac94a7f9e1b160f7ea819f172f7b6f9d2a97f992c38edeab82d4110
+
+---
+
+Address #11: 0xa61464658AfeAf65CccaaFD3a512b69A83B77618
+Private Key: 0xac1e735be8536c6534bb4f17f06f6afc73b2b5ba84ac2cfb12f7461b20c0bbe3
+
+---
+
+Address #12: 0x0D43eB5B8a47bA8900d84AA36656c92024e9772e
+Private Key: 0xd293c684d884d56f8d6abd64fc76757d3664904e309a0645baf8522ab6366d9e
+
+---
+
+Address #13: 0xA13c10C0D5bd6f79041B9835c63f91de35A15883
+Private Key: 0x850683b40d4a740aa6e745f889a6fdc8327be76e122f5aba645a5b02d0248db8
+
+---
+
+Address #14: 0x8002cD98Cfb563492A6fB3E7C8243b7B9Ad4cc92
+Private Key: 0xf12e28c0eb1ef4ff90478f6805b68d63737b7f33abfa091601140805da450d93
+
+---
+
+Address #15: 0x4F9133D1d3F50011A6859807C837bdCB31Aaab13
+Private Key: 0xe667e57a9b8aaa6709e51ff7d093f1c5b73b63f9987e4ab4aa9a5c699e024ee8
+
+---
+
+Address #16: 0xbd29A1B981925B94eEc5c4F1125AF02a2Ec4d1cA
+Private Key: 0x28a574ab2de8a00364d5dd4b07c4f2f574ef7fcc2a86a197f65abaec836d1959
+
+---
+
+Address #17: 0xedB6F5B4aab3dD95C7806Af42881FF12BE7e9daa
+Private Key: 0x74d8b3a188f7260f67698eb44da07397a298df5427df681ef68c45b34b61f998
+
+---
+
+Address #18: 0xe706e60ab5Dc512C36A4646D719b889F398cbBcB
+Private Key: 0xbe79721778b48bcc679b78edac0ce48306a8578186ffcb9f2ee455ae6efeace1
+
+---
+
+Address #19: 0xE90E12261CCb0F3F7976Ae611A29e84a6A85f424
+Private Key: 0x3eb15da85647edd9a1159a4a13b9e7c56877c4eb33f614546d4db06a51868b1c
+
+---
+```

@@ -1,7 +1,11 @@
 ---
-title: "Hardhat"
-description: "Learn how to use Hardhat to build and deploy smart contracts on Abstract."
+title: "Hardhat - Get Started"
+sidebarTitle: "Get Started"
+description: "Get started with Abstract by deploying your first smart contract using Hardhat."
 ---
+
+This document outlines the end-to-end process of deploying a smart contract on Abstract using Hardhat.
+It&rsquo;s the ideal guide if you&rsquo;re building a new project from scratch.
 
 <Card
   title="YouTube Tutorial: Get Started with Hardhat"
@@ -79,8 +83,8 @@ const config: HardhatUserConfig = {
   zksolc: {
     version: "latest",
     settings: {
-      // Note: This must be true to call NonceHolder & ContractDeployer system contracts
-      enableEraVMExtensions: false,
+      // find all available options in the official documentation
+      // https://docs.zksync.io/build/tooling/hardhat/hardhat-zksync-solc#configuration
     },
   },
   defaultNetwork: "abstractTestnet",
@@ -128,25 +132,6 @@ const config: HardhatUserConfig = {
 };
 
 export default config;
-```
-
-### Using system contracts
-
-To use [system contracts](/how-abstract-works/system-contracts/overview), install the `@matterlabs/zksync-contracts` package:
-
-```bash
-npm install -D @matterlabs/zksync-contracts
-```
-
-Then set the `enableEraVMExtensions` flag to **true**:
-
-```typescript {4}
-zksolc: {
-  settings: {
-    // If you plan to interact directly with the NonceHolder or ContractDeployer system contracts
-    enableEraVMExtensions: true,
-  },
-},
 ```
 
 ## 4. Write a smart contract
@@ -198,15 +183,7 @@ You should now see the compiled smart contracts in the generated `artifacts-zk` 
 ## 6. Deploy the smart contract
 
 <Steps>
-  <Step title="Get testnet funds" icon="wallet">
-    Deploying smart contracts requires testnet ETH.
-
-    Claim testnet funds via a [faucet](/tooling/faucets), or
-    [bridge](/tooling/bridges) ETH from Sepolia to the Abstract testnet.
-
-  </Step>
-
-  <Step title="Add your private key" icon="key">
+  <Step title="Add the deployer account private key" icon="key">
     Create a new [configuration variable](https://hardhat.org/hardhat-runner/docs/guides/configuration-variables)
     called `DEPLOYER_PRIVATE_KEY`.
 
@@ -221,6 +198,15 @@ You should now see the compiled smart contracts in the generated `artifacts-zk` 
     ```
 
     <Warning>Do NOT use a private key associated with real funds. Create a new wallet for this step.</Warning>
+
+  </Step>
+
+  <Step title="Get ETH in the deployer account">
+    The deployer account requires ETH to deploy a smart contract.
+
+    - **Testnet**: Claim ETH via a [faucet](/tooling/faucets), or
+    [bridge](/tooling/bridges) ETH from Sepolia.
+    - **Mainnet**: Use a [bridge](/tooling/bridges) to transfer ETH to Abstract mainnet.
 
   </Step>
 

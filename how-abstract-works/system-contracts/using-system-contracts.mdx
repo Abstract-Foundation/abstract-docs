@@ -110,34 +110,37 @@ You can also enable the `isSystem` flag for your smart contract development envi
 Add `enableEraVMExtensions: true` within the `settings` object of the `zksolc` object in the `hardhat.config.js` file.
 
 <Accordion title="View Hardhat configuration">
+
 ```typescript
 import { HardhatUserConfig } from "hardhat/config";
 import "@matterlabs/hardhat-zksync";
 
 const config: HardhatUserConfig = {
-zksolc: {
-version: "latest",
-settings: {
-// This is the current name of the "isSystem" flag
-enableEraVMExtensions: true, // Note: NonceHolder and the ContractDeployer system contracts can only be called with a special isSystem flag as true
-},
-},
-defaultNetwork: "abstractTestnet",
-networks: {
-abstractTestnet: {
-url: "https://api.testnet.abs.xyz",
-ethNetwork: "sepolia",
-zksync: true,
-verifyURL: 'https://api-explorer-verify.testnet.abs.xyz/contract_verification',
-},
-},
-solidity: {
-version: "0.8.24",
-},
+  zksolc: {
+    version: "latest",
+    settings: {
+      // This is the current name of the "isSystem" flag
+      enableEraVMExtensions: true, // Note: NonceHolder and the ContractDeployer system contracts can only be called with a special isSystem flag as true
+    },
+  },
+  defaultNetwork: "abstractTestnet",
+  networks: {
+    abstractTestnet: {
+      url: "https://api.testnet.abs.xyz",
+      ethNetwork: "sepolia",
+      zksync: true,
+      verifyURL:
+        "https://api-explorer-verify.testnet.abs.xyz/contract_verification",
+    },
+  },
+  solidity: {
+    version: "0.8.24",
+  },
 };
 
 export default config;
 ```
+
 </Accordion>
 
 #### Foundry
