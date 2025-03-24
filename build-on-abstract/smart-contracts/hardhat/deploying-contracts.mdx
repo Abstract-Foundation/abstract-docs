@@ -1,0 +1,216 @@
+---
+title: "Hardhat - Deploying Contracts"
+sidebarTitle: "Deploying Contracts"
+description: "Learn how to deploy smart contracts on Abstract using Hardhat."
+---
+
+## Deploying Contract
+
+<Steps>
+
+  <Step title="Install zksync-ethers">
+
+    The [zksync-ethers](https://sdk.zksync.io/js/ethers/why-zksync-ethers) package provides a modified version of the ethers library that is compatible with Abstract and the ZKsync VM. Install the package by running the following command:
+
+  <CodeGroup>
+  
+    ```bash npm
+    npm install -D zksync-ethers
+    ```
+
+    ```bash yarn
+    yarn add -D zksync-ethers
+    ```
+
+    ```bash pnpm
+    pnpm add -D zksync-ethers
+    ```
+
+    ```bash bun
+    bun add -D zksync-ethers
+    ```
+
+  </CodeGroup>
+
+  </Step>
+
+  <Step title="Set the deployer account private key">
+    Create a new [configuration variable](https://hardhat.org/hardhat-runner/docs/guides/configuration-variables)
+    called `DEPLOYER_PRIVATE_KEY`.
+
+    ```bash
+    npx hardhat vars set DEPLOYER_PRIVATE_KEY
+    ```
+
+    Enter the private key of a new wallet you created for this step.
+
+    ```bash
+    ✔ Enter value: · ****************************************************************
+    ```
+
+    <Warning>Do NOT use a private key associated with real funds. Create a new wallet for this step.</Warning>
+
+  </Step>
+
+  <Step title="Get ETH in the deployer account">
+    The deployer account requires ETH to deploy a smart contract.
+
+    - **Testnet**: Claim ETH via a [faucet](/tooling/faucets), or
+    [bridge](/tooling/bridges) ETH from Sepolia.
+    - **Mainnet**: Use a [bridge](/tooling/bridges) to transfer ETH to Abstract mainnet.
+
+  </Step>
+
+  <Step title="Write the deployment script">
+    Create a new [Hardhat script](https://hardhat.org/hardhat-runner/docs/advanced/scripts) located at `/deploy/deploy.ts`:
+
+    ```bash
+    mkdir deploy && touch deploy/deploy.ts
+    ```
+
+    Add the following code to the `deploy.ts` file:
+
+    ```typescript
+    import { Wallet } from "zksync-ethers";
+    import { HardhatRuntimeEnvironment } from "hardhat/types";
+    import { Deployer } from "@matterlabs/hardhat-zksync";
+    import { vars } from "hardhat/config";
+
+    // An example of a deploy script that will deploy and call a simple contract.
+    export default async function (hre: HardhatRuntimeEnvironment) {
+      console.log(`Running deploy script`);
+
+      // Initialize the wallet using your private key.
+      const wallet = new Wallet(vars.get("DEPLOYER_PRIVATE_KEY"));
+
+      // Create deployer object and load the artifact of the contract we want to deploy.
+      const deployer = new Deployer(hre, wallet);
+      // Load contract
+      const artifact = await deployer.loadArtifact("HelloAbstract");
+
+      // Deploy this contract. The returned object will be of a `Contract` type,
+      // similar to the ones in `ethers`.
+      const tokenContract = await deployer.deploy(artifact);
+
+      console.log(
+        `${
+          artifact.contractName
+        } was deployed to ${await tokenContract.getAddress()}`
+      );
+    }
+    ```
+
+  </Step>
+  <Step title="Deploy your smart contract">
+
+Run the following command to deploy your smart contracts:
+
+<CodeGroup>
+
+```bash Testnet
+npx hardhat deploy-zksync --script deploy.ts --network abstractTestnet
+```
+
+```bash Mainnet
+npx hardhat deploy-zksync --script deploy.ts --network abstractMainnet
+```
+
+</CodeGroup>
+
+If successful, your output should look similar to the following:
+
+```bash {2}
+Running deploy script
+HelloAbstract was deployed to YOUR_CONTRACT_ADDRESS
+```
+
+  </Step>
+</Steps>
+
+## Providing constructor arguments
+
+The second argument to the `deploy` function is an array of constructor arguments.
+
+To deploy your smart contract with constructor arguments, provide an array containing your constructor arguments as the second argument to the `deploy` function.
+
+```typescript [expandable] {12-15}
+import { Wallet } from "zksync-ethers";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { Deployer } from "@matterlabs/hardhat-zksync";
+import { vars } from "hardhat/config";
+
+// An example of a deploy script that will deploy and call a simple contract.
+export default async function (hre: HardhatRuntimeEnvironment) {
+  const wallet = new Wallet(vars.get("DEPLOYER_PRIVATE_KEY"));
+  const deployer = new Deployer(hre, wallet);
+  const artifact = await deployer.loadArtifact("HelloAbstract");
+
+  // Provide the constructor arguments
+  const constructorArgs = ["Hello, Abstract!"];
+  const tokenContract = await deployer.deploy(artifact, constructorArgs);
+
+  console.log(
+    `${
+      artifact.contractName
+    } was deployed to ${await tokenContract.getAddress()}`
+  );
+}
+```
+
+## Create2 & Smart Wallet Deployments
+
+Specify different deployment types through using the third `deploymentType` parameter:
+
+- **create**: Standard contract deployment (default)
+- **create2**: Deterministic deployment using CREATE2
+- **createAccount**: Deploy a [smart contract wallet](/how-abstract-works/native-account-abstraction/smart-contract-wallets).
+- **create2Account**: Deterministic deployment of a [smart contract wallet](/how-abstract-works/native-account-abstraction/smart-contract-wallets).
+
+```typescript [expandable] {11}
+import { Wallet } from "zksync-ethers";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { Deployer } from "@matterlabs/hardhat-zksync";
+import { vars } from "hardhat/config";
+
+export default async function (hre: HardhatRuntimeEnvironment) {
+  const wallet = new Wallet(vars.get("DEPLOYER_PRIVATE_KEY"));
+  const deployer = new Deployer(hre, wallet);
+  const artifact = await deployer.loadArtifact("HelloAbstract");
+
+  const deploymentType = "create2";
+  const tokenContract = await deployer.deploy(artifact, [], deploymentType);
+
+  console.log(
+    `${
+      artifact.contractName
+    } was deployed to ${await tokenContract.getAddress()}`
+  );
+}
+```
+
+## Additional Factory Dependencies
+
+Factory smart contracts (contracts that can deploy other contracts) require the bytecode of the contracts they can deploy
+to be provided within the factory dependencies array.
+
+[Learn more about factory dependencies](/how-abstract-works/evm-differences/contract-deployment).
+
+```typescript [expandable] {5-6,16}
+import { Wallet } from "zksync-ethers";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { Deployer } from "@matterlabs/hardhat-zksync";
+
+// Additional bytecode dependencies (typically imported from artifacts)
+const contractBytecode = "0x..."; // Your contract bytecode
+
+const wallet = new Wallet(vars.get("DEPLOYER_PRIVATE_KEY"));
+const deployer = new Deployer(hre, wallet);
+const artifact = await deployer.loadArtifact("FactoryContract");
+const contract = await deployer.deploy(
+  artifact,
+  ["Hello world!"],
+  "create",
+  {},
+  [contractBytecode]
+);
+```

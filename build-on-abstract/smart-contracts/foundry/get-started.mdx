@@ -1,6 +1,7 @@
 ---
-title: "Foundry"
-description: "Learn how to use Foundry to build and deploy smart contracts on Abstract."
+title: "Foundry - Get Started"
+sidebarTitle: "Get Started"
+description: "Get started with Abstract by deploying your first smart contract using Foundry."
 ---
 
 To use Foundry to build smart contracts on Abstract, use the [foundry-zksync](https://github.com/matter-labs/foundry-zksync) fork.
@@ -138,14 +139,6 @@ You should now see the compiled smart contracts in the generated `zkout` directo
 ## 6. Deploy the smart contract
 
 <Steps>
-  <Step title="Get testnet funds" icon="wallet">
-    Deploying smart contracts requires testnet ETH.
-
-    Claim testnet funds via a [faucet](/tooling/faucets), or
-    [bridge](/tooling/bridges) ETH from Sepolia to the Abstract testnet.
-
-  </Step>
-
   <Step title="Add your private key" icon="key">
     Create a new [wallet keystore](https://book.getfoundry.sh/reference/cast/cast-wallet-import).
 
@@ -156,6 +149,15 @@ You should now see the compiled smart contracts in the generated `zkout` directo
     Enter your wallet's private key when prompted and provide a password to encrypt it.
 
     <Warning>We recommend not to use a private key associated with real funds. Create a new wallet for this step.</Warning>
+
+  </Step>
+
+  <Step title="Get ETH in the deployer account">
+    The deployer account requires ETH to deploy a smart contract.
+
+    - **Testnet**: Claim ETH via a [faucet](/tooling/faucets), or
+    [bridge](/tooling/bridges) ETH from Sepolia.
+    - **Mainnet**: Use a [bridge](/tooling/bridges) to transfer ETH to Abstract mainnet.
 
   </Step>
 

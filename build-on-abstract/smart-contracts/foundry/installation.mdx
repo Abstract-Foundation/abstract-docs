@@ -1,0 +1,79 @@
+---
+title: "Foundry - Installation"
+sidebarTitle: "Installing foundry-zksync"
+description: "Learn how to setup a new Foundry project on Abstract using foundry-zksync."
+---
+
+[Foundry-zksync](https://foundry-book.zksync.io/) is a fork of the Foundry toolchain built for the ZKskync VM that Abstract uses.
+
+<Card
+  title="Foundry-zksync Book"
+  icon="hammer"
+  href="https://foundry-book.zksync.io/"
+>
+  View the full documentation for foundry-zksync.
+</Card>
+
+Get started with Foundry-zksync by following the steps below.
+
+<Steps>
+  <Step title="Install foundry-zksync">
+
+Install the `foundryup-zksync` fork:
+
+```bash
+curl -L https://raw.githubusercontent.com/matter-labs/foundry-zksync/main/install-foundry-zksync | bash
+```
+
+Run `foundryup-zksync` to install `forge`, `cast`, and `anvil`:
+
+```bash
+foundryup-zksync
+```
+
+You may need to restart your terminal session after installation to continue.
+
+  <Accordion title="Common installation issues" icon="circle-exclamation">
+    <AccordionGroup>
+        <Accordion title="foundryup-zksync: command not found">
+          Restart your terminal session.
+        </Accordion>
+        <Accordion title="Could not detect shell">
+        To add the `foundry` binary to your PATH, run the following command:
+        ```
+        export PATH="$PATH:/Users/<your-username-here>/.foundry/bin"
+        ```
+        Replace `<your-username-here>` with the correct path to your home directory.
+        </Accordion>
+        <Accordion title="Library not loaded: libusb" >
+        The [libusb](https://libusb.info/) library may need to be installed manually on macOS.
+        Run the following command to install the library:
+        ```bash
+        brew install libusb
+        ```
+        </Accordion>
+    </AccordionGroup>
+  </Accordion>
+  </Step>
+
+  <Step title="Verify installation">
+
+    A helpful command to check if the installation was successful is:
+
+    ```bash
+    forge build --help | grep -A 20 "ZKSync configuration:"
+    ```
+
+    If installed successfully, 20 lines of `--zksync` options will be displayed.
+
+  </Step>
+  <Step title="Create a new project">
+
+    Create a new project with `forge` and change directory into the project.
+
+    ```bash
+    forge init my-abstract-project && cd my-abstract-project
+    ```
+
+  </Step>
+</Steps>

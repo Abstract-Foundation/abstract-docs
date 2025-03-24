@@ -1,0 +1,112 @@
+---
+title: "Foundry - Deploying Contracts"
+sidebarTitle: "Deploying Contracts"
+description: "Learn how to deploy smart contracts on Abstract using Foundry."
+---
+
+## Deploying Contracts
+
+<Steps>
+  <Step title="Add your deployer wallet's private key">
+    Create a new [wallet keystore](https://book.getfoundry.sh/reference/cast/cast-wallet-import) to securely store your deployer account's private key.
+
+    ```bash
+    cast wallet import myKeystore --interactive
+    ```
+
+    Enter your wallet's private key when prompted and provide a password to encrypt it.
+
+  </Step>
+
+  <Step title="Get ETH in the deployer account">
+    The deployer account requires ETH to deploy a smart contract.
+
+    - **Testnet**: Claim ETH via a [faucet](/tooling/faucets), or
+    [bridge](/tooling/bridges) ETH from Sepolia.
+    - **Mainnet**: Use a [bridge](/tooling/bridges) to transfer ETH to Abstract mainnet.
+
+  </Step>
+
+  <Step title="Get an Abscan API key">
+
+    Follow the [Abscan documentation](https://docs.abscan.org/getting-started/viewing-api-usage-statistics) to get an API key.
+
+  </Step>
+
+  <Step title="Deploy your smart contract">
+
+Run the following command to deploy your smart contracts:
+
+<CodeGroup>
+
+```bash Testnet
+forge create src/Counter.sol:Counter \
+    --account myKeystore \
+    --rpc-url https://api.testnet.abs.xyz \
+    --chain 11124 \
+    --zksync \
+    --verifier etherscan \
+    --verifier-url https://api-sepolia.abscan.org/api \
+    --etherscan-api-key TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD \
+```
+
+```bash Mainnet
+forge create src/Counter.sol:Counter \
+    --account myKeystore \
+    --rpc-url https://api.mainnet.abs.xyz \
+    --chain 2741 \
+    --zksync \
+    --verifier etherscan \
+    --verifier-url https://api.abscan.org/api \
+    --etherscan-api-key <your-abscan-api-key-here>
+```
+
+Replace `<your-abscan-api-key-here>` with your Abscan API key from the previous step.
+
+</CodeGroup>
+
+Ensure `myKeystore` is the name of the keystore file you created in the previous step.
+
+If successful, the output should look similar to the following:
+
+```bash {2}
+Deployer: 0x9C073184e74Af6D10DF575e724DC4712D98976aC
+Deployed to: 0x85717893A18F255285AB48d7bE245ddcD047dEAE
+Transaction hash: 0x2a4c7c32f26b078d080836b247db3e6c7d0216458a834cfb8362a2ac84e68d9f
+```
+
+  </Step>
+
+</Steps>
+
+## Providing Constructor Arguments
+
+If your smart contract has a constructor with arguments, provide the arguments in the order they are defined in the constructor following the `--constructor-args` flag.
+
+<CodeGroup>
+
+```bash Testnet
+forge create src/Counter.sol:Counter \
+    --account myKeystore \
+    --rpc-url https://api.testnet.abs.xyz \
+    --chain 11124 \
+    --zksync \
+    --constructor-args 1000000000000000000 0x9C073184e74Af6D10DF575e724DC4712D98976aC \
+    --verifier etherscan \
+    --verifier-url https://api-sepolia.abscan.org/api \
+    --etherscan-api-key TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD \
+```
+
+```bash Mainnet
+forge create src/Counter.sol:Counter \
+    --account myKeystore \
+    --rpc-url https://api.mainnet.abs.xyz \
+    --chain 2741 \
+    --zksync \
+    --constructor-args 1000000000000000000 0x9C073184e74Af6D10DF575e724DC4712D98976aC
+    --verifier etherscan \
+    --verifier-url https://api.abscan.org/api \
+    --etherscan-api-key <your-abscan-api-key-here>
+```
+
+</CodeGroup>

@@ -5,6 +5,7 @@ description: "Get started with Abstract by deploying your first smart contract u
 ---
 
 This document outlines the end-to-end process of deploying a smart contract on Abstract using Hardhat.
+It&rsquo;s the ideal guide if you&rsquo;re building a new project from scratch.
 
 <Card
   title="YouTube Tutorial: Get Started with Hardhat"
@@ -182,15 +183,7 @@ You should now see the compiled smart contracts in the generated `artifacts-zk` 
 ## 6. Deploy the smart contract
 
 <Steps>
-  <Step title="Get testnet funds" icon="wallet">
-    Deploying smart contracts requires testnet ETH.
-
-    Claim testnet funds via a [faucet](/tooling/faucets), or
-    [bridge](/tooling/bridges) ETH from Sepolia to the Abstract testnet.
-
-  </Step>
-
-  <Step title="Add your private key" icon="key">
+  <Step title="Add the deployer account private key" icon="key">
     Create a new [configuration variable](https://hardhat.org/hardhat-runner/docs/guides/configuration-variables)
     called `DEPLOYER_PRIVATE_KEY`.
 
@@ -205,6 +198,15 @@ You should now see the compiled smart contracts in the generated `artifacts-zk` 
     ```
 
     <Warning>Do NOT use a private key associated with real funds. Create a new wallet for this step.</Warning>
+
+  </Step>
+
+  <Step title="Get ETH in the deployer account">
+    The deployer account requires ETH to deploy a smart contract.
+
+    - **Testnet**: Claim ETH via a [faucet](/tooling/faucets), or
+    [bridge](/tooling/bridges) ETH from Sepolia.
+    - **Mainnet**: Use a [bridge](/tooling/bridges) to transfer ETH to Abstract mainnet.
 
   </Step>
 

@@ -1,0 +1,79 @@
+---
+title: "Hardhat - Verifying Contracts"
+sidebarTitle: "Verifying Contracts"
+description: "Learn how to verify smart contracts on Abstract using Hardhat."
+---
+
+## Verifying Contracts
+
+<Steps>
+
+<Step title="Get an Abscan API key">
+
+Follow the [Abscan documentation](https://docs.abscan.org/getting-started/viewing-api-usage-statistics) to get an API key.
+
+</Step>
+
+<Step title="Update Hardhat configuration">
+
+Add the below `etherscan` configuration object to your Hardhat configuration file.
+
+Replace `<your-abscan-api-key-here>` with your Abscan API key from the previous step.
+
+```typescript hardhat.config.ts {8}
+import { HardhatUserConfig } from "hardhat/config";
+import "@matterlabs/hardhat-zksync";
+
+const config: HardhatUserConfig = {
+  etherscan: {
+    apiKey: {
+      abstractTestnet: "TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD",
+      abstractMainnet: "your-abscan-api-key-here",
+    },
+    customChains: [
+      {
+        network: "abstractTestnet",
+        chainId: 11124,
+        urls: {
+          apiURL: "https://api-sepolia.abscan.org/api",
+          browserURL: "https://sepolia.abscan.org/",
+        },
+      },
+      {
+        network: "abstractMainnet",
+        chainId: 2741,
+        urls: {
+          apiURL: "https://api.abscan.org/api",
+          browserURL: "https://abscan.org/",
+        },
+      },
+    ],
+  },
+};
+
+export default config;
+```
+
+</Step>
+
+<Step title="Verify a contract">
+
+    Run the following command to verify a contract:
+
+    ```bash
+    npx hardhat verify --network abstractTestnet <contract-address>
+    ```
+
+    Replace `<contract-address>` with the address of the contract you want to verify.
+
+</Step>
+
+</Steps>
+
+## Constructor Arguments
+
+To verify a contract with constructor arguments, pass the constructor arguments to the `verify` command after the contract address.
+
+```bash
+npx hardhat verify --network abstractTestnet <contract-address> <constructor-arguments>
+```

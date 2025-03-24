@@ -1,0 +1,49 @@
+---
+title: "Foundry - Verifying Contracts"
+sidebarTitle: "Verifying Contracts"
+description: "Learn how to verify smart contracts on Abstract using Foundry."
+---
+
+## Verifying Contracts
+
+Contracts can be verified as they are deployed as described in [Deploying Contracts](/build-on-abstract/smart-contracts/foundry/deploying-contracts). This page outlines how to verify contracts that have already been deployed on Abstract.
+
+<Steps>
+
+<Step title="Get an Abscan API key">
+
+Follow the [Abscan documentation](https://docs.abscan.org/getting-started/viewing-api-usage-statistics) to get an API key.
+
+</Step>
+
+<Step title="Verify an existing contract">
+
+Verify an existing contract by running the following command:
+
+<CodeGroup>
+
+```bash Testnet
+forge verify-contract 0x85717893A18F255285AB48d7bE245ddcD047dEAE \
+    src/Counter.sol:Counter \
+    --verifier etherscan \
+    --verifier-url https://api-sepolia.abscan.org/api \
+    --etherscan-api-key TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD \
+    --zksync
+```
+
+```bash Mainnet
+forge verify-contract 0x85717893A18F255285AB48d7bE245ddcD047dEAE \
+    src/Counter.sol:Counter \
+    --verifier etherscan \
+    --verifier-url https://api.abscan.org/api \
+    --etherscan-api-key <your-abscan-api-key-here> \
+    --zksync
+```
+
+</CodeGroup>
+
+_**Note**: Replace the contract path, address, and API key with your own._
+
+</Step>
+
+</Steps>

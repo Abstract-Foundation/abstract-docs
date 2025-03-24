@@ -1,0 +1,163 @@
+---
+title: "Foundry - Testing Contracts"
+sidebarTitle: "Testing Contracts"
+description: "Learn how to test your smart contracts using Foundry."
+---
+
+Verify your smart contracts work as intended before you deploy them by writing [tests](https://foundry-book.zksync.io/forge/testing/).
+
+## Testing Smart Contracts
+
+<Steps>
+
+  <Step title="Write test definitions">
+
+Write test definitions inside the `/test` directory, for example, `test/HelloWorld.t.sol`.
+
+<CodeGroup>
+
+```solidity test/HelloWorld.t.sol
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import { Test } from "forge-std/Test.sol";
+
+contract HelloWorldTest is Test {
+  function setUp() public {
+      owner = makeAddr("owner");
+      vm.prank(owner);
+      helloWorld = new HelloWorld();
+  }
+
+  function test_HelloWorld() public {
+    helloWorld.setMessage("Hello, World!");
+    assertEq(helloWorld.getMessage(), "Hello, World!");
+  }
+}
+```
+
+```solidity src/HelloWorld.sol
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract HelloWorld {
+  string public message = "Hello, World!";
+
+  function setMessage(string memory newMessage) public {
+    message = newMessage;
+  }
+
+  function getMessage() public view returns (string memory) {
+    return message;
+  }
+}
+```
+
+</CodeGroup>
+</Step>
+
+  <Step title="Run tests">
+
+    Run the tests by running the following command:
+
+    ```bash
+    forge test --zksync
+    ```
+
+  </Step>
+
+</Steps>
+
+## Cheatcodes
+
+[Cheatcodes](https://foundry-book.zksync.io/forge/cheatcodes) allow you to manipulate the state of the blockchain during testing, allowing you to change the block number, your identity, and more.
+
+<Card 
+    title="Foundry Cheatcode Reference"
+    icon="gear"
+    url="https://book.getfoundry.sh/cheatcodes/"
+>
+
+Reference for all cheatcodes available in Foundry.
+
+</Card>
+
+### Cheatcode Limitations
+
+When testing on Abstract, cheatcodes have important [limitations](https://foundry-book.zksync.io/zksync-specifics/limitations/cheatcodes) due to how the underlying ZKsync VM executes transactions. Cheatcodes can only be used at the root level of your test contract - they cannot be accessed from within any contract being tested.
+
+```solidity
+// This works ✅
+function testCheatcodeAtRootLevel() public {
+  vm.roll(10);                     // Valid: called directly from test
+  vm.prank(someAddress);           // Valid: called directly from test
+  MyContract testContract = new MyContract();
+  testContract.someFunction();     // Cheatcodes not available inside this call
+}
+
+// This won't work as expected ❌
+contract MyContract {
+  function someFunction() public {
+    vm.warp(1000);                 // Invalid: called from within a contract
+  }
+}
+```
+
+### ZKsync VM Cheatcodes
+
+Abstract's underlying ZKsync VM provides additional cheatcodes for testing Abstract-specific functionality:
+
+| Cheatcode                                                                                               | Description                                                                                                                           |
+| ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| [`zkVm`](https://foundry-book.zksync.io/zksync-specifics/cheatcodes/zk-vm)                              | Enables/disables ZKsync context for transactions. Switches between EVM and zkEVM execution environments.                              |
+| [`zkVmSkip`](https://foundry-book.zksync.io/zksync-specifics/cheatcodes/zk-vm-skip)                     | When running in zkEVM context, skips the next `CREATE` or `CALL`, executing it on the EVM instead.                                    |
+| [`zkRegisterContract`](https://foundry-book.zksync.io/zksync-specifics/cheatcodes/zk-register-contract) | Registers bytecodes for ZK-VM for transact/call and create instructions. Useful for testing with contracts already deployed on-chain. |
+| [`zkUsePaymaster`](https://foundry-book.zksync.io/zksync-specifics/cheatcodes/zk-use-paymaster)         | Configures a paymaster for the next transaction. Enables testing paymasters for gasless transactions.                                 |
+| [`zkUseFactoryDep`](https://foundry-book.zksync.io/zksync-specifics/cheatcodes/zk-use-factory-dep)      | Registers a factory dependency for the next transaction. Useful for testing complex contract deployments.                             |
+
+## Fork Testing
+
+Running your tests against a fork of Abstract testnet or mainnet allows you to test your contracts in a real environment before deploying to Abstract.
+
+This is especially useful for testing contracts that interact with other contracts on Abstract such as those listed on the [Deployed Contracts](https://docs.abstract.xyz/tooling/deployed-contracts) page.
+
+To run your tests against a fork of Abstract testnet or mainnet, you can use the following command:
+
+<CodeGroup>
+
+```bash Testnet
+forge test --zksync --fork-url https://api.testnet.abs.xyz
+```
+
+```bash Mainnet
+forge test --zksync --fork-url https://api.mainnet.abs.xyz
+```
+
+</CodeGroup>
+
+## Local Node Testing
+
+[Anvil-zksync](https://foundry-book.zksync.io/anvil-zksync/) comes installed with Foundry, and is a tool that allows you
+to instantiate a local node for testing purposes.
+
+Run the following command to start the local node:
+
+```bash
+anvil-zksync
+```
+
+Then run your tests on the local node by running the following command:
+
+```bash
+forge test --zksync --fork-url http://localhost:8011
+```
+
+[View all available options ↗](https://docs.zksync.io/zksync-era/tooling/local-setup/anvil-zksync-node).
+
+## Advanced Testing
+
+View further documentation on advanced testing with Foundry-zksync:
+
+- [Fuzz testing](https://foundry-book.zksync.io/forge/fuzz-testing)
+- [Invariant testing](https://foundry-book.zksync.io/forge/invariant-testing)
+- [Differential testing](https://foundry-book.zksync.io/forge/differential-ffi-testing)

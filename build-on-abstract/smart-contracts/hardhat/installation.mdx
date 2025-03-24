@@ -1,52 +1,12 @@
 ---
 title: "Hardhat - Installation"
-sidebarTitle: "Installing Hardhat"
-description: "Learn how to setup a new Hardhat project on Abstract."
+sidebarTitle: "Installing hardhat-zksync"
+description: "Learn how to setup a new Hardhat project on Abstract using hardhat-zksync."
 ---
 
+This page assumes you already have a Hardhat project setup. If you don&rsquo;t, follow the steps in the [Getting Started](/build-on-abstract/smart-contracts/hardhat/get-started) guide to create a new project.
+
 <Steps>
-
-  <Step title="Create a new Hardhat project">
-
-    Inside an empty directory, initialize a new Hardhat project using
-    the [Hardhat CLI](https://hardhat.org/getting-started/):
-
-  <Accordion title="System Requirements">
-    Ensure you have the following installed on your machine:
-
-    - [Node.js](https://nodejs.org/en/download/) v18.0.0 or later.
-    - If you are on Windows, we strongly recommend using [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/about) to follow this guide.
-
-    </Accordion>
-
-    Create a new directory and navigate into it:
-
-    ```bash
-    mkdir my-abstract-project && cd my-abstract-project
-    ```
-
-    Initialize a new Hardhat project within the directory:
-
-    ```bash
-    npx hardhat init
-    ```
-
-    Select your preferences when prompted by the CLI, or use the recommended setup below.
-
-    <Accordion title="Recommended Hardhat setup">
-    We recommend selecting the following options when prompted by the Hardhat CLI:
-
-    ```bash
-    ✔ What do you want to do? · Create a TypeScript project
-    ✔ Hardhat project root: · /path/to/my-abstract-project
-    ✔ Do you want to add a .gitignore? (Y/n) · y
-    ✔ Do you ... install ... dependencies with npm ... · y
-    ```
-
-    </Accordion>
-
-  </Step>
-
   <Step title="Install hardhat-zksync">
 
     Abstract uses the [ZKsync VM](https://docs.zksync.io/zksync-protocol/vm), which expects [different bytecode](/how-abstract-works/evm-differences/overview)
@@ -115,6 +75,17 @@ const config: HardhatUserConfig = {
 
 export default config;
 ```
+
+  </Step>
+
+  <Step title="Run Hardhat commands">
+
+    Provide the `--network` flag to specify the Abstract network you want to use.
+
+    ```bash
+    # e.g. Compile the network using the zksolc compiler
+    npx hardhat compile --network abstractTestnet
+    ```
 
   </Step>
 

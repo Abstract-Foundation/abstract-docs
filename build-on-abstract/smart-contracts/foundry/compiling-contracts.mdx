@@ -1,0 +1,38 @@
+---
+title: "Foundry - Compiling Contracts"
+sidebarTitle: "Compiling Contracts"
+description: "Learn how to compile your smart contracts using Foundry on Abstract."
+---
+
+Smart contracts must be compiled to [Zksync VM](https://docs.zksync.io/zksync-protocol/vm)-compatible bytecode using the [`zksolc`](https://matter-labs.github.io/era-compiler-solidity/latest/) compiler to prepare them for deployment on Abstract.
+
+<Steps>
+
+  <Step title="Configure foundry.toml">
+
+    Update your `foundry.toml` file to include the following options:
+
+    ```toml
+    [profile.default]
+    src = 'src'
+    libs = ['lib']
+    fallback_oz = true
+    is_system = false # Note: NonceHolder and the ContractDeployer system contracts can only be called with a special is_system flag as true
+    mode = "3"
+    ```
+
+  </Step>
+
+  <Step title="Compile contracts">
+
+    Compile your contracts using the following command:
+
+    ```bash
+    forge build --zksync
+    ```
+
+This will generate the `zkout` directory containing the compiled smart contracts.
+
+  </Step>
+
+</Steps>
