@@ -96,6 +96,10 @@ libs = ['lib']
 fallback_oz = true
 is_system = false # Note: NonceHolder and the ContractDeployer system contracts can only be called with a special is_system flag as true
 mode = "3"
+
+[etherscan]
+abstractTestnet = { chain = "11124", url = "", key = ""} # You can replace these values or leave them blank to override via CLI
+abstractMainnet = { chain = "2741", url = "", key = ""} # You can replace these values or leave them blank to override via CLI
 ```
 
 <Note>
@@ -161,6 +165,13 @@ You should now see the compiled smart contracts in the generated `zkout` directo
 
   </Step>
 
+  
+<Step title="Get an Abscan API key">
+
+Follow the [Abscan documentation](https://docs.abscan.org/getting-started/viewing-api-usage-statistics) to get an API key to verify your smart contracts on the block explorer.
+
+</Step>
+
   <Step title="Deploy your smart contract" icon="rocket">
 
 Run the following command to deploy your smart contracts:
@@ -172,7 +183,11 @@ forge create src/Counter.sol:Counter \
     --account myKeystore \
     --rpc-url https://api.testnet.abs.xyz \
     --chain 11124 \
-    --zksync
+    --zksync \
+    --verify \
+    --verifier etherscan \
+    --verifier-url https://api-sepolia.abscan.org/api \
+    --etherscan-api-key TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD
 ```
 
 ```bash Mainnet
@@ -180,12 +195,16 @@ forge create src/Counter.sol:Counter \
     --account myKeystore \
     --rpc-url https://api.mainnet.abs.xyz \
     --chain 2741 \
-    --zksync
+    --zksync \
+    --verify \
+    --verifier etherscan \
+    --verifier-url https://api.abscan.org/api \
+    --etherscan-api-key <your-abscan-api-key>
 ```
 
 </CodeGroup>
 
-Ensure `myKeystore` is the name of the keystore file you created in the previous step.
+_**Note**: Replace the contract path, address, and Abscan API key with your own._
 
 If successful, the output should look similar to the following:
 
@@ -193,38 +212,9 @@ If successful, the output should look similar to the following:
 Deployer: 0x9C073184e74Af6D10DF575e724DC4712D98976aC
 Deployed to: 0x85717893A18F255285AB48d7bE245ddcD047dEAE
 Transaction hash: 0x2a4c7c32f26b078d080836b247db3e6c7d0216458a834cfb8362a2ac84e68d9f
+
+Contract successfully verified
 ```
-
-  </Step>
-  <Step title="Verify your smart contract on the block explorer" icon="check">
-
-Verifying your smart contract is helpful for others to view the code and
-interact with it from a [block explorer](/tooling/block-explorers).
-To verify your smart contract, run the following command:
-
-<CodeGroup>
-
-```bash Testnet
-forge verify-contract 0x85717893A18F255285AB48d7bE245ddcD047dEAE \
-    src/Counter.sol:Counter \
-    --verifier etherscan \
-    --verifier-url https://api-sepolia.abscan.org/api \
-    --etherscan-api-key TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD \
-    --zksync
-```
-
-```bash Mainnet
-forge verify-contract 0x85717893A18F255285AB48d7bE245ddcD047dEAE \
-    src/Counter.sol:Counter \
-    --verifier etherscan \
-    --verifier-url https://api.abscan.org/api \
-    --etherscan-api-key IEYKU3EEM5XCD76N7Y7HF9HG7M9ARZ2H4A \
-    --zksync
-```
-
-</CodeGroup>
-
-_**Note**: Replace the contract path and address with your own._
 
   </Step>
 </Steps>

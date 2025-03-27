@@ -19,6 +19,10 @@ Smart contracts must be compiled to [Zksync VM](https://docs.zksync.io/zksync-pr
     fallback_oz = true
     is_system = false # Note: NonceHolder and the ContractDeployer system contracts can only be called with a special is_system flag as true
     mode = "3"
+
+    [etherscan]
+    abstractTestnet = { chain = "11124", url = "", key = ""} # You can replace these values or leave them blank to override via CLI
+    abstractMainnet = { chain = "2741", url = "", key = ""} # You can replace these values or leave them blank to override via CLI
     ```
 
   </Step>

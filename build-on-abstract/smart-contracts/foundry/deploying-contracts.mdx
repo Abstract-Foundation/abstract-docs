@@ -39,7 +39,11 @@ forge create src/Counter.sol:Counter \
     --account myKeystore \
     --rpc-url https://api.testnet.abs.xyz \
     --chain 11124 \
-    --zksync
+    --zksync \
+    --verify \
+    --verifier etherscan \
+    --verifier-url https://api-sepolia.abscan.org/api \
+    --etherscan-api-key TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD
 ```
 
 ```bash Mainnet
@@ -47,12 +51,16 @@ forge create src/Counter.sol:Counter \
     --account myKeystore \
     --rpc-url https://api.mainnet.abs.xyz \
     --chain 2741 \
-    --zksync
+    --zksync \
+    --verify \
+    --verifier etherscan \
+    --verifier-url https://api.abscan.org/api \
+    --etherscan-api-key <your-abscan-api-key>
 ```
 
 </CodeGroup>
 
-Ensure `myKeystore` is the name of the keystore file you created in the previous step.
+_**Note**: Replace the contract path and Etherscan API key with your own._
 
 If successful, the output should look similar to the following:
 
@@ -78,7 +86,11 @@ forge create src/Counter.sol:Counter \
     --rpc-url https://api.testnet.abs.xyz \
     --chain 11124 \
     --zksync \
-    --constructor-args 1000000000000000000 0x9C073184e74Af6D10DF575e724DC4712D98976aC
+    --constructor-args 1000000000000000000 0x9C073184e74Af6D10DF575e724DC4712D98976aC \
+    --verify \
+    --verifier etherscan \
+    --verifier-url https://api-sepolia.abscan.org/api \
+    --etherscan-api-key TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD
 ```
 
 ```bash Mainnet
@@ -87,7 +99,13 @@ forge create src/Counter.sol:Counter \
     --rpc-url https://api.mainnet.abs.xyz \
     --chain 2741 \
     --zksync \
-    --constructor-args 1000000000000000000 0x9C073184e74Af6D10DF575e724DC4712D98976aC
+    --constructor-args 1000000000000000000 0x9C073184e74Af6D10DF575e724DC4712D98976aC \
+    --verify \
+    --verifier etherscan \
+    --verifier-url https://api.abscan.org/api \
+    --etherscan-api-key <your-abscan-api-key>
 ```
 
 </CodeGroup>
+
+_**Note**: Replace the contract path, constructor arguments, and Abscan API key with your own._
