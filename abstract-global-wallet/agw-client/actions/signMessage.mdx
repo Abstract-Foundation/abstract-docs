@@ -1,0 +1,82 @@
+---
+title: "signMessage"
+description: Function to sign messages using the connected Abstract Global Wallet.
+---
+
+The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient)
+includes a `signMessage` method that can be used to sign a message using the connected Abstract Global Wallet.
+The method follows the [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271) standard for contract signature verification.
+
+<Card
+  title="View Example Repository"
+  icon="github"
+  href="https://github.com/Abstract-Foundation/examples/tree/main/agw-signing-messages"
+>
+  View an example implementation of signing and verifying messages with AGW in a
+  Next.js app.
+</Card>
+
+## Usage
+
+<CodeGroup>
+
+```tsx Signing (client-side)
+import { useAbstractClient } from "@abstract-foundation/agw-react";
+
+export default function SignMessage() {
+  const { data: agwClient } = useAbstractClient();
+
+  async function signMessage() {
+    if (!agwClient) return;
+
+    // Alternatively, you can use Wagmi useSignMessage: https://wagmi.sh/react/api/hooks/useSignMessage
+    const signature = await agwClient.signMessage({
+      message: "Hello, Abstract!",
+    });
+  }
+}
+```
+
+```tsx Verifying (server-side)
+import { createPublicClient, http } from "viem";
+import { abstractTestnet } from "viem/chains";
+
+// Create a public client to verify the message
+const publicClient = createPublicClient({
+  chain: abstractTestnet,
+  transport: http(),
+});
+
+// Verify the message
+const isValid = await publicClient.verifyMessage({
+  address: walletAddress, // The AGW address you expect to have signed the message
+  message: "Hello, Abstract!",
+  signature,
+});
+```
+
+</CodeGroup>
+
+## Parameters
+
+<ResponseField name="message" type="string | Hex" required>
+  The message to sign. Can be a string or a hex value.
+</ResponseField>
+
+<ResponseField name="account" type="Account" required>
+  The account to sign the message with. Use the `account` from the
+  [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient) to
+  use the Abstract Global Wallet.
+</ResponseField>
+
+## Returns
+
+Returns a `Promise<Hex>` containing the signature of the message.
+
+## Verification
+
+To verify a signature created by an Abstract Global Wallet, use the `verifyMessage` function from a public client:
+
+```tsx
+
+```

@@ -202,6 +202,7 @@
         "abstract-global-wallet/agw-client/actions/signTransaction",
         "abstract-global-wallet/agw-client/actions/sendTransaction",
         "abstract-global-wallet/agw-client/actions/sendTransactionBatch",
+        "abstract-global-wallet/agw-client/actions/signMessage",
         "abstract-global-wallet/agw-client/actions/writeContract",
         "abstract-global-wallet/agw-react/hooks/useWriteContractSponsored"
       ]
