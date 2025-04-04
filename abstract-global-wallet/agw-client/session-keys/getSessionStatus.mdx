@@ -1,0 +1,57 @@
+---
+title: "getSessionStatus"
+description: "Function to check the current status of a session key from the validator contract."
+---
+
+The `getSessionStatus` function checks the current status of a session key from the validator contract, allowing you to determine if a session is active, expired, closed, or not initialized.
+
+## Usage
+
+```tsx
+import { useAbstractClient } from "@abstract-foundation/agw-react";
+import { SessionStatus } from "@abstract-foundation/agw-client/sessions";
+import { useAccount } from "wagmi";
+
+export default function CheckSessionStatus() {
+  const { address } = useAccount();
+  const { data: agwClient } = useAbstractClient();
+  
+  async function checkStatus() {
+    if (!address || !agwClient) return;
+
+    // Provide either a session hash or session config object
+    const sessionHashOrConfig = "..."; // or { ... }
+    const status = await agwClient.getSessionStatus(sessionHashOrConfig);
+
+    // Handle the different status cases
+    switch (status) {
+      case 0: // Not initialized
+        console.log("Session does not exist");
+      case 1: // Active
+        console.log("Session is active and can be used");
+      case 2: // Closed
+        console.log("Session has been revoked");
+      case 3: // Expired
+        console.log("Session has expired");
+    }
+  }
+}
+```
+
+## Parameters
+
+<ResponseField name="sessionHashOrConfig" type="Hash | SessionConfig" required>
+  Either the hash of the session configuration or the session configuration
+  object itself.
+</ResponseField>
+
+## Returns
+
+<ResponseField name="status" type="SessionStatus">
+  The current status of the session: 
+  
+- `SessionStatus.NotInitialized` (0): The session has not been created 
+- `SessionStatus.Active` (1): The session is active and can be used 
+- `SessionStatus.Closed` (2): The session has been revoked 
+- `SessionStatus.Expired` (3): The session has expired
+</ResponseField>
