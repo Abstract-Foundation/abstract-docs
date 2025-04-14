@@ -182,6 +182,7 @@
         "abstract-global-wallet/agw-react/integrating-with-dynamic",
         "abstract-global-wallet/agw-react/integrating-with-privy",
         "abstract-global-wallet/agw-react/integrating-with-rainbowkit",
+        "abstract-global-wallet/agw-react/integrating-with-walletconnect",
         "abstract-global-wallet/agw-react/integrating-with-thirdweb"
       ]
     },
