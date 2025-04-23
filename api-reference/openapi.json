@@ -13,6 +13,10 @@
   ],
   "tags": [
     {
+      "name": "Overview",
+      "description": "Overview of the Abstract JSON-RPC API"
+    },
+    {
       "name": "Ethereum API",
       "description": "Standard Ethereum JSON-RPC methods"
     },
@@ -24,8 +28,8 @@
   "paths": {
     "/": {
       "post": {
-        "tags": ["Ethereum API"],
-        "summary": "JSON-RPC API",
+        "tags": ["Overview"],
+        "summary": "Abstract JSON-RPC API",
         "description": "Single endpoint that accepts all JSON-RPC method calls",
         "operationId": "jsonrpc",
         "requestBody": {

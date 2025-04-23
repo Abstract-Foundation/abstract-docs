@@ -1,0 +1,46 @@
+---
+title: "Abstract JSON-RPC API"
+sidebarTitle: "Abstract JSON-RPC API"
+description: "View the full reference for the Abstract JSON-RPC API."
+---
+
+Information about the state of Abstract such as the chain ID, block number, status of transactions and state changing operations
+such as submitting transactions are executed via Abstract&rsquo;s JSON RPC API.
+The JSON RPC API has 4 namespaces:
+
+| Namespace | Description                                                    | Example           |
+| --------- | -------------------------------------------------------------- | ----------------- |
+| `eth_`    | Standard Ethereum JSON-RPC methods.                            | `eth_chainId`     |
+| `zks_`    | JSON-RPC methods specific to the ZKsync VM that Abstract uses. | `zks_estimateFee` |
+| `debug_`  | JSON-RPC methods useful for debugging purposes.                | `debug_traceCall` |
+| `pubsub_` | JSON-RPC methods for subscribing to events via WebSockets      | `eth_subscribe`   |
+
+## RPC Namespaces
+
+<CardGroup cols={2}>
+  <Card
+    title="Ethereum JSON-RPC API"
+    icon="ethereum"
+    href="/api-reference/ethereum-json-rpc-api"
+  />
+  <Card
+    title="ZKsync JSON-RPC API"
+    href="/api-reference/zksync-json-rpc-api"
+    icon={
+      <img
+        src="https://raw.githubusercontent.com/Abstract-Foundation/abstract-docs/main/images/abs-green.png"
+        alt="Native"
+      />
+    }
+  />
+  <Card
+    title="Debugging JSON-RPC API"
+    icon="ban-bug"
+    href="/api-reference/debugging-json-rpc-api"
+  />
+  <Card
+    title="PubSub JSON-RPC API"
+    icon="webhook"
+    href="/api-reference/pubsub-json-rpc-api"
+  />
+</CardGroup>
