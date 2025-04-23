@@ -1,0 +1,110 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Abstract JSON-RPC API",
+    "description": "JSON-RPC API documentation for Abstract blockchain",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.mainnet.abs.xyz",
+      "description": "Abstract Mainnet"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Ethereum API",
+      "description": "Standard Ethereum JSON-RPC methods"
+    }
+  ],
+  "paths": {
+    "/": {
+      "post": {
+        "tags": ["Ethereum API"],
+        "summary": "eth_chainId",
+        "description": "Gets the current chain ID",
+        "operationId": "eth_chainId",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["jsonrpc", "method", "id"],
+                "properties": {
+                  "jsonrpc": {
+                    "type": "string",
+                    "default": "2.0",
+                    "description": "JSON-RPC version"
+                  },
+                  "method": {
+                    "type": "string",
+                    "default": "eth_chainId",
+                    "description": "The method to call"
+                  },
+                  "params": {
+                    "type": "array",
+                    "items": {},
+                    "description": "Parameters (empty for this method)",
+                    "default": []
+                  },
+                  "id": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Request identifier"
+                  }
+                }
+              },
+              "examples": {
+                "eth_chainId": {
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "eth_chainId",
+                    "params": []
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the chain ID in hexadecimal format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "jsonrpc": {
+                      "type": "string",
+                      "example": "2.0"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "result": {
+                      "type": "string",
+                      "description": "Hexadecimal representation of the current blockchain network's chain ID",
+                      "example": "0x144"
+                    }
+                  }
+                },
+                "examples": {
+                  "chainIdResponse": {
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "result": "0x144",
+                      "id": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

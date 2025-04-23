@@ -14,6 +14,13 @@
         "tab": "Documentation",
         "groups": [
           {
+            "group": "Endpoints",
+            "openapi": {
+              "source": "/api-reference/openapi.json",
+              "directory": "api-reference"
+            }
+          },
+          {
             "group": "Overview",
             "pages": ["overview", "what-is-abstract", "connect-to-abstract"]
           },
