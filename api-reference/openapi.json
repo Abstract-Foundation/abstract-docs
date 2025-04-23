@@ -5673,6 +5673,158 @@
           }
         }
       }
+    },
+    "/eth_subscribe": {
+      "post": {
+        "tags": ["PubSub API"],
+        "summary": "eth_subscribe",
+        "description": "Creates a new subscription for events.",
+        "operationId": "eth_subscribe",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["jsonrpc", "method", "id"],
+                "properties": {
+                  "jsonrpc": {
+                    "type": "string",
+                    "default": "2.0",
+                    "description": "JSON-RPC version"
+                  },
+                  "method": {
+                    "type": "string",
+                    "default": "eth_subscribe",
+                    "description": "The method to call"
+                  },
+                  "params": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "string",
+                          "description": "Name of the subscription (e.g., 'newHeads', 'logs')"
+                        },
+                        {
+                          "type": "object",
+                          "description": "Optional filter conditions for the subscription"
+                        }
+                      ]
+                    },
+                    "description": "Parameters for the subscription",
+                    "example": ["newHeads"]
+                  },
+                  "id": {
+                    "type": "integer",
+                    "description": "Request identifier",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A subscription ID used to identify and manage the subscription",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "jsonrpc": {
+                      "type": "string",
+                      "example": "2.0"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "result": {
+                      "type": "string",
+                      "description": "Subscription ID",
+                      "example": "0x9cef478923ff08bf67fde6c64013158d"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/eth_unsubscribe": {
+      "post": {
+        "tags": ["PubSub API"],
+        "summary": "eth_unsubscribe",
+        "description": "Cancels an existing subscription.",
+        "operationId": "eth_unsubscribe",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["jsonrpc", "method", "id"],
+                "properties": {
+                  "jsonrpc": {
+                    "type": "string",
+                    "default": "2.0",
+                    "description": "JSON-RPC version"
+                  },
+                  "method": {
+                    "type": "string",
+                    "default": "eth_unsubscribe",
+                    "description": "The method to call"
+                  },
+                  "params": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "The ID of the subscription to cancel"
+                    },
+                    "description": "Parameters for unsubscribing",
+                    "example": ["0x9cef478923ff08bf67fde6c64013158d"]
+                  },
+                  "id": {
+                    "type": "integer",
+                    "description": "Request identifier",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Boolean indicating if the subscription was successfully cancelled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "jsonrpc": {
+                      "type": "string",
+                      "example": "2.0"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "result": {
+                      "type": "boolean",
+                      "description": "Success status",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
