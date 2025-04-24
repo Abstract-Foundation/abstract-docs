@@ -646,7 +646,7 @@
                         "items": {},
                         "description": "Transaction hash",
                         "default": [
-                          "0x5e98cafbdbb08e77c77a942314c7dd45a6f0ba4ffcc4428303bf814e1a1645a9"
+                          "0xef395f7a595f28e833583c50c2e1949a15516a2e0f346b8891024ecf8ca825ec"
                         ]
                       },
                       "id": {
@@ -3689,7 +3689,7 @@
       "post": {
         "tags": ["ZKSync API"],
         "summary": "zks_getTestnetPaymaster",
-        "description": "Retrieves the testnet paymaster address, specifically for interactions within the ZKsync Sepolia Testnet environment. Note: This method is only applicable for ZKsync Sepolia Testnet.",
+        "description": "Retrieves the testnet paymaster address, specifically for interactions within the Abstract Sepolia Testnet environment. Note: This method is only applicable for Abstract Sepolia Testnet (i.e. not mainnet).",
         "operationId": "zks_getTestnetPaymaster",
         "requestBody": {
           "required": true,
@@ -3769,7 +3769,7 @@
       "post": {
         "tags": ["ZKSync API"],
         "summary": "zks_getL1BatchBlockRange",
-        "description": "Returns the range of blocks contained within a specified L1 batch",
+        "description": "Returns the range of blocks contained within a specified L1 batch. The range is provided by the beginning and end block numbers in hexadecimal.",
         "operationId": "zks_getL1BatchBlockRange",
         "requestBody": {
           "required": true,
@@ -3793,7 +3793,7 @@
                     "type": "array",
                     "items": {},
                     "description": "Call parameters",
-                    "default": ["0x1"]
+                    "default": [12345]
                   },
                   "id": {
                     "type": "integer",
@@ -3806,7 +3806,7 @@
                 "jsonrpc": "2.0",
                 "id": 1,
                 "method": "zks_getL1BatchBlockRange",
-                "params": ["0x1"]
+                "params": [12345]
               }
             }
           }
@@ -3877,7 +3877,7 @@
                     "type": "array",
                     "items": {},
                     "description": "Call parameters",
-                    "default": ["0x1"]
+                    "default": [1]
                   },
                   "id": {
                     "type": "integer",
@@ -3890,7 +3890,7 @@
                 "jsonrpc": "2.0",
                 "id": 1,
                 "method": "zks_getL1BatchDetails",
-                "params": ["0x1"]
+                "params": [1]
               }
             }
           }
@@ -3933,12 +3933,12 @@
         }
       }
     },
-    "/zks_getL1BatchNumber": {
+    "/zks_L1BatchNumber": {
       "post": {
         "tags": ["ZKSync API"],
-        "summary": "zks_getL1BatchNumber",
+        "summary": "zks_L1BatchNumber",
         "description": "Returns the latest L1 batch number",
-        "operationId": "zks_getL1BatchNumber",
+        "operationId": "zks_L1BatchNumber",
         "requestBody": {
           "required": true,
           "content": {
@@ -3954,7 +3954,7 @@
                   },
                   "method": {
                     "type": "string",
-                    "default": "zks_getL1BatchNumber",
+                    "default": "zks_L1BatchNumber",
                     "description": "The method to call"
                   },
                   "params": {
@@ -3973,7 +3973,7 @@
               "example": {
                 "jsonrpc": "2.0",
                 "id": 1,
-                "method": "zks_getL1BatchNumber",
+                "method": "zks_L1BatchNumber",
                 "params": []
               }
             }
@@ -4005,86 +4005,6 @@
                 "example": {
                   "jsonrpc": "2.0",
                   "result": "0x2b13",
-                  "id": 1
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/zks_getTokenPrice": {
-      "post": {
-        "tags": ["ZKSync API"],
-        "summary": "zks_getTokenPrice",
-        "description": "Returns the USD price of a token with the specified address",
-        "operationId": "zks_getTokenPrice",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": ["jsonrpc", "method", "id", "params"],
-                "properties": {
-                  "jsonrpc": {
-                    "type": "string",
-                    "default": "2.0",
-                    "description": "JSON-RPC version"
-                  },
-                  "method": {
-                    "type": "string",
-                    "default": "zks_getTokenPrice",
-                    "description": "The method to call"
-                  },
-                  "params": {
-                    "type": "array",
-                    "items": {},
-                    "description": "Call parameters",
-                    "default": ["0x000000000000000000000000000000000000800A"]
-                  },
-                  "id": {
-                    "type": "integer",
-                    "default": 1,
-                    "description": "Request identifier"
-                  }
-                }
-              },
-              "example": {
-                "jsonrpc": "2.0",
-                "id": 1,
-                "method": "zks_getTokenPrice",
-                "params": ["0x000000000000000000000000000000000000800A"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Returns the USD price of the specified token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "jsonrpc": {
-                      "type": "string",
-                      "example": "2.0"
-                    },
-                    "id": {
-                      "type": "integer",
-                      "example": 1
-                    },
-                    "result": {
-                      "type": "string",
-                      "description": "The USD price of the token",
-                      "example": "1890.94"
-                    }
-                  }
-                },
-                "example": {
-                  "jsonrpc": "2.0",
-                  "result": "1890.94",
                   "id": 1
                 }
               }
@@ -4177,7 +4097,7 @@
       "post": {
         "tags": ["ZKSync API"],
         "summary": "zks_getConfirmedTokens",
-        "description": "Returns list of tokens with pagination",
+        "description": "Lists confirmed tokens. Confirmed in the method name means any token bridged to Abstract via the official bridge. The tokens are returned in alphabetical order by their symbol. This means the token id is its position in an alphabetically sorted array of tokens.",
         "operationId": "zks_getConfirmedTokens",
         "requestBody": {
           "required": true,
@@ -4294,7 +4214,7 @@
       "post": {
         "tags": ["ZKSync API"],
         "summary": "zks_getAllAccountBalances",
-        "description": "Returns all balances for confirmed tokens given by an account address",
+        "description": "Gets all account balances for a given address. The method returns an object with token addresses as keys and their corresponding balances as values. Each key-value pair represents the balance of a specific token held by the account",
         "operationId": "zks_getAllAccountBalances",
         "requestBody": {
           "required": true,
@@ -4318,7 +4238,7 @@
                     "type": "array",
                     "items": {},
                     "description": "Call parameters",
-                    "default": ["0x1111111111111111111111111111111111111111"]
+                    "default": ["0x06639F064b82595F3BE7621F607F8e8726852fCf"]
                   },
                   "id": {
                     "type": "integer",
@@ -4407,7 +4327,7 @@
                     "items": {},
                     "description": "Call parameters",
                     "default": [
-                      "0x5e4243c644d2f1cd5a7ad6ef7b4bb233a3ed7eac71b7bd4fb71e2c62929a69ab"
+                      "0xe72d991deef96a0dd64a71ceea2006eef779ce220bb36e7fe5f503b1c24c7205"
                     ]
                   },
                   "id": {
@@ -4489,7 +4409,7 @@
                     "type": "array",
                     "items": {},
                     "description": "Call parameters",
-                    "default": ["0x1"]
+                    "default": [140599]
                   },
                   "id": {
                     "type": "integer",
@@ -4502,7 +4422,7 @@
                 "jsonrpc": "2.0",
                 "id": 1,
                 "method": "zks_getBlockDetails",
-                "params": ["0x1"]
+                "params": [140599]
               }
             }
           }
@@ -5156,7 +5076,7 @@
                     "description": "Parameters for retrieving raw block transactions",
                     "minItems": 1,
                     "maxItems": 1,
-                    "default": [30098049]
+                    "default": [7469801]
                   }
                 }
               },
@@ -5166,7 +5086,7 @@
                     "jsonrpc": "2.0",
                     "id": 1,
                     "method": "zks_getRawBlockTransactions",
-                    "params": [30098049]
+                    "params": [7469801]
                   }
                 }
               }
@@ -5271,7 +5191,7 @@
                     "minItems": 1,
                     "maxItems": 1,
                     "default": [
-                      "0x0100067d861e2f5717a12c3e869cfb657793b86bbb0caa05cc1421f16c5217bc"
+                      "0x3ff97eb2bc8a040d2e50863fb586a841f385293fa583a0e4c5ebe6e2f4cbb069"
                     ]
                   }
                 }
@@ -5283,7 +5203,7 @@
                     "id": 1,
                     "method": "zks_getBytecodeByHash",
                     "params": [
-                      "0x0100067d861e2f5717a12c3e869cfb657793b86bbb0caa05cc1421f16c5217bc"
+                      "0x3ff97eb2bc8a040d2e50863fb586a841f385293fa583a0e4c5ebe6e2f4cbb069"
                     ]
                   }
                 }
@@ -5674,6 +5594,102 @@
         }
       }
     },
+    "/zks_sendRawTransactionWithDetailedOutput": {
+      "post": {
+        "tags": ["ZKSync API"],
+        "summary": "zks_sendRawTransactionWithDetailedOutput",
+        "description": "Executes a transaction and returns its hash, storage logs, and events that would have been generated if the transaction had already been included in the block. The API has a similar behaviour to eth_sendRawTransaction but with some extra data returned from it. With this API Consumer apps can apply \"optimistic\" events in their applications instantly without having to wait for ZKsync block confirmation time. It's expected that the optimistic logs of two uncommitted transactions that modify the same state will not have causal relationships between each other.",
+        "operationId": "zks_sendRawTransactionWithDetailedOutput",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["jsonrpc", "method", "id", "params"],
+                "properties": {
+                  "jsonrpc": {
+                    "type": "string",
+                    "default": "2.0",
+                    "description": "JSON-RPC version"
+                  },
+                  "method": {
+                    "type": "string",
+                    "default": "zks_sendRawTransactionWithDetailedOutput",
+                    "description": "The method to call"
+                  },
+                  "params": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "The signed transaction",
+                    "default": ["0x..."]
+                  },
+                  "id": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Request identifier"
+                  }
+                }
+              },
+              "example": {
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "zks_sendRawTransactionWithDetailedOutput",
+                "params": ["0x...SignedTransaction..."]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns transaction hash, storage logs, and events",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendRawTransactionWithDetailedOutputResponse"
+                },
+                "example": {
+                  "jsonrpc": "2.0",
+                  "result": {
+                    "transactionHash": "0xd586a9381ac33a70d1c34704664209242ee90316878fc1695aa8e4cf553c8595",
+                    "storageLogs": [
+                      {
+                        "address": "0x000000000000000000000000000000000000800b",
+                        "key": "0x7",
+                        "writtenValue": "0x40000000000000000000000006641f961"
+                      }
+                    ],
+                    "events": [
+                      {
+                        "address": "0x000000000000000000000000000000000000800a",
+                        "topics": [
+                          "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                          "0x00000000000000000000000036615cf349d7f6344891b1e7ca7c72883f5dc049",
+                          "0x0000000000000000000000000000000000000000000000000000000000008001"
+                        ],
+                        "data": "0x00000000000000000000000000000000000000000000000000000b9b031bf400",
+                        "blockHash": null,
+                        "blockNumber": null,
+                        "l1BatchNumber": "0x4",
+                        "transactionHash": "0xd586a9381ac33a70d1c34704664209242ee90316878fc1695aa8e4cf553c8595",
+                        "transactionIndex": "0x0",
+                        "logIndex": null,
+                        "transactionLogIndex": null,
+                        "logType": null,
+                        "removed": false
+                      }
+                    ]
+                  },
+                  "id": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/eth_subscribe": {
       "post": {
         "tags": ["PubSub API"],
@@ -5829,6 +5845,9 @@
   },
   "components": {
     "schemas": {
+      "SendRawTransactionWithDetailedOutputResponse": {
+        "$ref": "#/x-definitions/SendRawTransactionWithDetailedOutputResponse"
+      },
       "ProtocolVersionResponse": {
         "$ref": "#/x-definitions/ProtocolVersionResponse"
       },
@@ -6479,6 +6498,107 @@
                       "type": "string"
                     },
                     "description": "Array of hashes that constitute the Merkle path"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "SendRawTransactionWithDetailedOutputResponse": {
+      "type": "object",
+      "properties": {
+        "jsonrpc": {
+          "type": "string",
+          "example": "2.0"
+        },
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "transactionHash": {
+              "type": "string",
+              "description": "Hash of the transaction"
+            },
+            "storageLogs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "description": "Address of the contract"
+                  },
+                  "key": {
+                    "type": "string",
+                    "description": "Storage key"
+                  },
+                  "writtenValue": {
+                    "type": "string",
+                    "description": "Value written to storage"
+                  }
+                }
+              }
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "description": "Address of the contract that emitted the event"
+                  },
+                  "topics": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of topics for the event"
+                  },
+                  "data": {
+                    "type": "string",
+                    "description": "Data for the event"
+                  },
+                  "blockHash": {
+                    "type": ["string", "null"],
+                    "description": "Hash of the block"
+                  },
+                  "blockNumber": {
+                    "type": ["string", "null"],
+                    "description": "Block number"
+                  },
+                  "l1BatchNumber": {
+                    "type": "string",
+                    "description": "L1 batch number"
+                  },
+                  "transactionHash": {
+                    "type": "string",
+                    "description": "Hash of the transaction"
+                  },
+                  "transactionIndex": {
+                    "type": "string",
+                    "description": "Index of the transaction"
+                  },
+                  "logIndex": {
+                    "type": ["string", "null"],
+                    "description": "Index of the log"
+                  },
+                  "transactionLogIndex": {
+                    "type": ["string", "null"],
+                    "description": "Index of the transaction log"
+                  },
+                  "logType": {
+                    "type": ["string", "null"],
+                    "description": "Type of the log"
+                  },
+                  "removed": {
+                    "type": "boolean",
+                    "description": "Whether the log was removed"
                   }
                 }
               }
