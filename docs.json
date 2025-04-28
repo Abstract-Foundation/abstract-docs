@@ -101,6 +101,7 @@
                 "group": "EVM Differences",
                 "pages": [
                   "how-abstract-works/evm-differences/overview",
+                  "how-abstract-works/evm-differences/evm-interpreter",
                   "how-abstract-works/evm-differences/best-practices",
                   "how-abstract-works/evm-differences/contract-deployment",
                   "how-abstract-works/evm-differences/evm-opcodes",
