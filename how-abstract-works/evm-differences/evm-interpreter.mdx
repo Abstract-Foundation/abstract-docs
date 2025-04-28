@@ -1,0 +1,72 @@
+---
+title: "EVM Interpreter"
+description: "Learn how to deploy EVM equivalent smart contracts on Abstract."
+---
+
+<Note>The EVM interpreter is currently only available on **testnet**.</Note>
+
+Abstract natively uses the [ZKsync VM](https://docs.zksync.io/zksync-protocol/vm) to execute smart contract instructions,
+however an **EVM bytecode interpreter** system is also available to enable the deployment of unmodified EVM bytecode,
+commonly referred to as "EVM equivalent" smart contracts.
+
+This enables smart contracts that rely on EVM logic (such as consistent address derivation)
+to be deployed on Abstract without modification. However, this approach is not recommended for most use cases
+due to comparatively higher gas fees.
+
+## How It Works
+
+There are two ways to deploy smart contracts on Abstract:
+
+- **ZKsync VM Bytecode**: Compile contracts into ZK-EVM bytecode using ZK specific tooling and deploy to Abstract. These contracts are executed natively by Abstract&rsquo;s ZKsync VM.
+  - Recommended for most use cases.
+- **EVM Bytecode**: Compile contracts into EVM bytecode using existing EVM tooling and deploy to Abstract.
+  - Contracts deployed this way are flagged as EVM bytecode and are executed via the EVM interpreter. During execution, the contract&rsquo;s EVM opcodes are translated into the ZKsync VM's instruction set and executed by the ZKsync VM.
+  - Gas fees are 150-400% higher than contracts deployed using native ZKsync VM bytecode due to the translation process.
+  - Recommended only for use cases that require specific EVM features not supported by the ZKsync VM (see [EVM differences](/how-abstract-works/evm-differences/overview)).
+
+<Frame>![EVM Interpreter](/images/evm-interpreter.png)</Frame>
+
+### Opcode Translation & Gas Fees
+
+The EVM interpreter functions as a translation layer that converts
+EVM opcodes into ZKsync VM operations at runtime as part of the smart contract execution process.
+
+As a consequence of this translation process, contracts deployed with EVM bytecode experience **increased gas fees of between 150-400%**
+compared to contracts deployed using the native ZKsync VM bytecode.
+
+### Execution Flow
+
+The code hash of smart contracts are stored in the [AccountCodeStorage](https://docs.abs.xyz/how-abstract-works/system-contracts/list-of-system-contracts#accountcodestorage)
+system contract, and upon deployment, are pre-fixed with either:
+
+- `0x01`: Flag for Native ZKsync VM bytecode.
+- `0x02`: Flag for EVM bytecode (i.e. EVM equivalent smart contracts).
+
+When a contract function is called, the following steps occur:
+
+<Steps>
+  <Step title="Check code hash prefix">
+    To determine the type of bytecode that this contract was deployed with,
+    first, a check is made to see if it is prefixed with `0x01` or `0x02`.
+  </Step>
+  <Step title="Translate & execute opcodes">
+    If the contract is native ZKsync VM bytecode (prefix `0x01`), this step is skipped.
+
+    Otherwise, the EVM interpreter interprets and executes opcodes in a loop; translating EVM opcodes into ZKsync VM instructions;
+    execution continues until completion, error, or out-of-ergs condition.
+
+  </Step>
+</Steps>
+
+### Limitations
+
+- `DELEGATECALL` between EVM and native ZKsync VM contracts will be reverted.
+- Calls to empty addresses in kernel space (address < 2^16) will fail.
+- `GASLIMIT` opcode returns the same fixed constant as ZKsync VM and should not be used.
+
+The following opcodes are not supported due to underlying limitations of ZKsync VM:
+
+- `CALLCODE`
+- `SELFDESTRUCT`
+- `BLOBHASH`
+- `BLOBBASEFEE`
