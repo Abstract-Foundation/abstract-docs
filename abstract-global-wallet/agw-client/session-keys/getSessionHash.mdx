@@ -1,0 +1,37 @@
+---
+title: "getSessionHash"
+description: "Function to get the hash of a session key."
+---
+
+Use the `getSessionHash` function to compute the hash of a session key configuration, useful for identifying a session, tracking its status, or preparing for session [revocation](/abstract-global-wallet/agw-client/session-keys/revokeSessions).
+
+## Usage
+
+```tsx
+import {
+  getSessionHash,
+  SessionConfig,
+} from "@abstract-foundation/agw-client/sessions";
+
+const sessionConfig: SessionConfig = {
+  // ... See createSession for more information on the SessionConfig object
+};
+
+// Get the hash of the session configuration
+const sessionHash = getSessionHash(sessionConfig);
+```
+
+## Parameters
+
+<ResponseField name="sessionConfig" type="SessionConfig" required>
+  The session configuration object to hash.
+
+See [createSession](/abstract-global-wallet/agw-client/session-keys/createSession) for more information on the `SessionConfig` object structure.
+
+</ResponseField>
+
+## Returns
+
+<ResponseField name="Hash" type="string">
+  The keccak256 hash of the encoded session configuration.
+</ResponseField>
