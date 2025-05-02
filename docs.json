@@ -192,6 +192,7 @@
               "abstract-global-wallet/agw-react/hooks/useCreateSession",
               "abstract-global-wallet/agw-client/session-keys/createSessionClient",
               "abstract-global-wallet/agw-client/session-keys/toSessionClient",
+              "abstract-global-wallet/agw-client/session-keys/getSessionHash",
               "abstract-global-wallet/agw-client/session-keys/getSessionStatus",
               "abstract-global-wallet/agw-client/session-keys/revokeSessions",
               "abstract-global-wallet/agw-react/hooks/useRevokeSessions"
