@@ -296,6 +296,10 @@
     {
       "source": "build-on-abstract/smart-contracts/foundry",
       "destination": "/build-on-abstract/smart-contracts/foundry/get-started"
+    },
+    {
+      "source": "/abstract-global-wallet/agw-react/integrating-with-walletconnect",
+      "destination": "/abstract-global-wallet/agw-react/integrating-with-reown"
     }
   ]
 }
