@@ -94,8 +94,9 @@ Update your `foundry.toml` file to include the following options:
 src = 'src'
 libs = ['lib']
 fallback_oz = true
-is_system = false # Note: NonceHolder and the ContractDeployer system contracts can only be called with a special is_system flag as true
-mode = "3"
+
+[profile.default.zksync]
+enable_eravm_extensions = true # Note: System contract calls (NonceHolder and ContractDeployer) can only be called with this set to true
 
 [etherscan]
 abstractTestnet = { chain = "11124", url = "", key = ""} # You can replace these values or leave them blank to override via CLI
@@ -104,7 +105,7 @@ abstractMainnet = { chain = "2741", url = "", key = ""} # You can replace these 
 
 <Note>
 To use [system contracts](/how-abstract-works/system-contracts/overview),
-set the `is_system` flag to **true**.
+set the `enable_eravm_extensions` flag in `[profile.default.zksync]` to **true**.
 
 </Note>
 
