@@ -1,0 +1,138 @@
+---
+title: "sendCalls"
+description: Function to send a batch of transactions in a single call using the connected Abstract Global Wallet.
+---
+
+Viem&rsquo;s [sendCalls](https://viem.sh/docs/actions/wallet/sendCalls) method following [EIP-5792](https://eips.ethereum.org/EIPS/eip-5792) can be used to sign and submit multiple transactions in a single call using the connected Abstract Global Wallet.
+
+## Usage
+
+<CodeGroup>
+
+```tsx Example.tsx
+import { useSendCalls } from "wagmi";
+import { encodeFunctionData, parseUnits } from "viem";
+import { useAbstractClient } from "@abstract-foundation/agw-react";
+
+export function SendCalls() {
+  const { data: abstractClient } = useAbstractClient();
+  const { sendCalls } = useSendCalls();
+
+  return (
+    <button
+      onClick={() => {
+        if (!abstractClient) return;
+
+        sendCalls({
+          calls: [
+            // 1 - Approval
+            {
+              to: TOKEN_ADDRESS,
+              data: encodeFunctionData({
+                abi: erc20Abi,
+                functionName: "approve",
+                args: [ROUTER_ADDRESS, parseUnits("100", 18)],
+              }),
+            },
+            // 2 - Swap
+            {
+              to: ROUTER_ADDRESS,
+              data: encodeFunctionData({
+                abi: routerAbi,
+                functionName: "swapExactTokensForETH",
+                args: [
+                  parseUnits("100", 18),
+                  BigInt(0),
+                  [TOKEN_ADDRESS, WETH_ADDRESS],
+                  abstractClient.account.address,
+                  BigInt(Math.floor(Date.now() / 1000) + 60 * 20),
+                ],
+              }),
+            },
+          ],
+        });
+      }}
+    >
+      Send Batch Calls
+    </button>
+  );
+}
+```
+
+```tsx config.ts
+import { parseAbi } from "viem";
+
+export const ROUTER_ADDRESS = "0x07551c0Daf6fCD9bc2A398357E5C92C139724Ef3";
+export const TOKEN_ADDRESS = "0xdDD0Fb7535A71CD50E4B8735C0c620D6D85d80d5";
+export const WETH_ADDRESS = "0x9EDCde0257F2386Ce177C3a7FCdd97787F0D841d";
+export const PAYMASTER_ADDRESS = "0x5407B5040dec3D339A9247f3654E59EEccbb6391";
+
+export const routerAbi = parseAbi([
+  "function swapExactTokensForETH(uint256,uint256,address[],address,uint256) external",
+]);
+
+export const erc20Abi = parseAbi([
+  "function approve(address,uint256) external",
+]);
+```
+
+</CodeGroup>
+
+## Parameters
+
+<ResponseField name="calls" type="Array<Call>">
+  An array of calls. Each call can include the following fields:
+
+  <Expandable title="Call Fields">
+    <ResponseField name="to" type="Address" required>
+      The recipient address of the call.
+    </ResponseField>
+
+    <ResponseField name="data" type="Hex | undefined" required>
+      Contract code or a hashed method call with encoded args.
+    </ResponseField>
+
+    <ResponseField name="abi" type="Abi | undefined">
+      Contract ABI used to encode function calls.
+    </ResponseField>
+
+    <ResponseField name="functionName" type="string | undefined">
+      Name of the function to call in the provided `abi`.
+    </ResponseField>
+
+    <ResponseField name="args" type="unknown[] | undefined">
+      Arguments to pass to `functionName`. Will be ABI-encoded into `data`.
+    </ResponseField>
+
+    <ResponseField name="dataSuffix" type="Hex | undefined">
+      Additional data appended to the end of the calldata (e.g. a domain tag).
+    </ResponseField>
+
+    <ResponseField name="value" type="bigint | undefined">
+      Value in wei sent with this call.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="atomicRequired" type="boolean | undefined">
+  When `true`, the bundle executes atomically — if any call reverts, the whole
+  bundle reverts.
+</ResponseField>
+
+<ResponseField name="capabilities" type="Capabilities | undefined">
+  Advanced features to enable for the bundle (gas sponsorship, access lists,
+  etc.).
+  <Expandable title="Capabilities Object">
+    <ResponseField
+      name="paymaster"
+      type="{ address: Address; data?: Hex } | undefined"
+    >
+      Gas sponsorship via the specified Paymaster contract.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Returns
+
+Returns a `Promise<Hex>` containing the bundle hash. Pass this hash to `wallet_getCallsStatus` to monitor execution status.

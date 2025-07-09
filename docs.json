@@ -177,7 +177,7 @@
               "abstract-global-wallet/agw-client/actions/deployContract",
               "abstract-global-wallet/agw-client/actions/signTransaction",
               "abstract-global-wallet/agw-client/actions/sendTransaction",
-              "abstract-global-wallet/agw-client/actions/sendTransactionBatch",
+              "abstract-global-wallet/agw-client/actions/sendCalls",
               "abstract-global-wallet/agw-client/actions/signMessage",
               "abstract-global-wallet/agw-client/actions/writeContract",
               "abstract-global-wallet/agw-react/hooks/useWriteContractSponsored"
@@ -301,6 +301,10 @@
     {
       "source": "/abstract-global-wallet/agw-react/integrating-with-walletconnect",
       "destination": "/abstract-global-wallet/agw-react/integrating-with-reown"
+    },
+    {
+      "source": "/abstract-global-wallet/agw-client/actions/sendTransactionBatch",
+      "destination": "/abstract-global-wallet/agw-client/actions/sendCalls"
     }
   ]
 }
