@@ -199,6 +199,12 @@
             ]
           },
           {
+            "group": "FIAT On-ramp",
+            "pages": [
+              "abstract-global-wallet/fiat-on-ramp/overview"
+            ]
+          },
+          {
             "group": "Utils",
             "pages": [
               "abstract-global-wallet/agw-client/getSmartAccountAddressFromInitialSigner",
