@@ -201,7 +201,13 @@
           {
             "group": "FIAT On-ramp",
             "pages": [
-              "abstract-global-wallet/fiat-on-ramp/overview"
+              "abstract-global-wallet/fiat-on-ramp/overview",
+              "abstract-global-wallet/fiat-on-ramp/config",
+              "abstract-global-wallet/fiat-on-ramp/currencies",
+              "abstract-global-wallet/fiat-on-ramp/payment-methods",
+              "abstract-global-wallet/fiat-on-ramp/quote",
+              "abstract-global-wallet/fiat-on-ramp/widget",
+              "abstract-global-wallet/fiat-on-ramp/transactions"
             ]
           },
           {

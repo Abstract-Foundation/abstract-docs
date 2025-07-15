@@ -1,5 +1,59 @@
 ---
 title: "FIAT On-ramp"
 sidebarTitle: "Overview"
-description: "Learn about FIAT on-ramp functionality with Abstract Global Wallet"
+description: "Learn how to allow user's to fund their Abstract Global Wallet with FIAT currencies."
 ---
+
+To provide a consumer-friendly onboarding experience to non-crypto-native users,
+Abstract supports a FIAT on-ramp powered by [Meld](https://www.meld.io/). 
+
+This enables users in over 200 countries to fund their Abstract Global Wallet using their local currency via a credit card, Apple Pay, or Google Pay.
+
+<CardGroup cols={2}>
+  <Card
+        title="FIAT On-ramp Demo Application"
+        icon="play"
+        href="TODO"
+    >
+        View a demo application that uses AGW and FIAT on-ramp to test the flow.
+    </Card>
+    <Card
+        title="AGW + FIAT On-ramp Example Repo"
+        icon="github"
+        href="https://github.com/Abstract-Foundation/examples/tree/main/agw-fiat-on-ramp"
+    >
+        Use our example repo to quickly get started with AGW and FIAT on-ramp.
+    </Card>
+</CardGroup>
+
+## How it works
+
+The FIAT on-ramp works by presenting user&rsquo;s with a **widget** that prompts the user for their payment details to fulfil a **quote**. The quote determines the amount, address, currency, and other details of the transaction.
+
+This flow can be broken down into three steps:
+
+<Steps>
+    <Step title="Collecting User Information">
+    To generate a **quote**, information about the user and their desired on-ramp transaction is required; including the user&rsquo;s country, wallet address, desired amount, etc. (see [/quote](/abstract-global-wallet/fiat-on-ramp/quote) for more details).
+
+    Present users with a form to collect the required information, making use of the below endpoints to localize and validate the user&rsquo;s input:
+
+    - [/config](/abstract-global-wallet/fiat-on-ramp/config) to get the user&rsquo;s country and local currency information.
+    - [/currencies](/abstract-global-wallet/fiat-on-ramp/currencies) to get the available currencies for the user&rsquo;s country.
+    - [/payment-methods](/abstract-global-wallet/fiat-on-ramp/payment-methods) to get the available payment methods for the user&rsquo;s country.
+    </Step>
+
+    <Step title="Fetching Quotes">
+    After collecting the required information from the user, call the [/quote endpoint](/abstract-global-wallet/fiat-on-ramp/quote) to get an array of quotes from providers that can fulfill the given request.
+
+    Choose *(or allow the user to choose)* the best quote for your application&rsquo;s needs.
+    </Step>
+    
+    <Step title="Fulfilling the Quote">
+    Provide your selected quote to the [/widget endpoint](/abstract-global-wallet/fiat-on-ramp/widget) to generate a widget URL that can be either opened directly or embedded in your application using an iframe.
+
+    The widget URL presents the user with a form to enter their payment details and complete the transaction. Use the [/transactions endpoint](/abstract-global-wallet/fiat-on-ramp/transactions) to track the status of their order using the session ID returned from the widget.
+    </Step>
+
+</Steps>
+

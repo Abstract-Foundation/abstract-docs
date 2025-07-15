@@ -1,0 +1,114 @@
+---
+title: "/currencies"
+api: "GET https://onramp.staging-portal.abs.xyz/currencies"
+description: "Return a list of fiat and crypto currencies for the provided country."
+---
+
+## Query Parameters
+
+<ParamField query="country" type="string" required>
+  The ISO 3166 2-digit country code
+</ParamField>
+
+## Response
+
+<ResponseField name="fiat" type="array" required>
+  Array of supported fiat currencies
+  <Expandable title="fiat">
+    <ResponseField name="currencyCode" type="string" required>
+      The code for this Fiat Currency
+    </ResponseField>
+    <ResponseField name="name" type="string" required>
+      The display name for this Fiat Currency
+    </ResponseField>
+    <ResponseField name="symbolImageUrl" type="string" required>
+      The URL to this Fiat Currency's symbol image
+    </ResponseField>
+    <ResponseField name="symbol" type="string" required>
+      The ASCII symbol for this Fiat Currency
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="crypto" type="array" required>
+  Array of supported crypto currencies
+  <Expandable title="crypto">
+    <ResponseField name="currencyCode" type="string" required>
+      The code for the Crypto Currency
+    </ResponseField>
+    <ResponseField name="name" type="string" required>
+      The display name for the Crypto Currency
+    </ResponseField>
+    <ResponseField name="chainCode" type="string" required>
+      The code for the chain the Crypto Currency is on
+    </ResponseField>
+    <ResponseField name="chainName" type="string" required>
+      The display name for the chain the Crypto Currency is on
+    </ResponseField>
+    <ResponseField name="chainId" type="string | null" required>
+      The id for the chain the Crypto Currency is on
+    </ResponseField>
+    <ResponseField name="contractAddress" type="string | null" required>
+      The contract address of the Crypto Currency
+    </ResponseField>
+    <ResponseField name="symbolImageUrl" type="string" required>
+      The URL to the Crypto Currency's symbol image
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://onramp.staging-portal.abs.xyz/currencies?country=US"
+```
+
+```javascript JavaScript
+const response = await fetch('https://onramp.staging-portal.abs.xyz/currencies?country=US');
+const currencies = await response.json();
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "fiat": [
+    {
+      "currencyCode": "USD",
+      "name": "US Dollar",
+      "symbolImageUrl": "https://images-currency.meld.io/fiat/USD/symbol.png",
+      "symbol": "$"
+    },
+    {
+      "currencyCode": "EUR",
+      "name": "Euro",
+      "symbolImageUrl": "https://images-currency.meld.io/fiat/EUR/symbol.png",
+      "symbol": "€"
+    }
+  ],
+  "crypto": [
+    {
+      "currencyCode": "ETH_BASE",
+      "name": "Ethereum",
+      "chainCode": "BASE",
+      "chainName": "Base",
+      "chainId": null,
+      "contractAddress": null,
+      "symbolImageUrl": "https://images-currency.meld.io/crypto/ETH_BASE/symbol.png"
+    },
+    {
+      "currencyCode": "USDC_BASE",
+      "name": "USD Coin",
+      "chainCode": "BASE",
+      "chainName": "Base",
+      "chainId": null,
+      "contractAddress": null,
+      "symbolImageUrl": "https://images-currency.meld.io/crypto/USDC_BASE/symbol.png"
+    }
+  ]
+}
+```
+
+</ResponseExample>
