@@ -4,29 +4,27 @@ api: "GET https://onramp.staging-portal.abs.xyz/transactions"
 description: "Get transaction status and history."
 ---
 
-Retrieve transaction status for onramp purchases. Use `/transactions/status` for a single transaction or `/transactions` for multiple transactions.
+Retrieve transaction status for onramp purchases.
 
-## Endpoints
+- `/transactions/status` for a single transaction
+- `/transactions` for multiple transactions
 
-### Get Single Transaction Status
+
+## Get Single Transaction Status
 
 **GET** `/transactions/status`
 
 Get the status of a single transaction using the session ID.
 
-#### Query Parameters
-
 <ParamField query="sessionId" type="string" required>
   The session ID from the widget redirect URL query parameters
 </ParamField>
 
-### Get Multiple Transactions
+## Get Multiple Transactions
 
 **GET** `/transactions`
 
-Get all transactions for a user or app.
-
-#### Query Parameters
+Get all transactions for a user or app. Provide either `walletAddress` or `referrer` (or both) to filter transactions.
 
 <ParamField query="walletAddress" type="string">
   The wallet address to get transactions for
@@ -35,10 +33,6 @@ Get all transactions for a user or app.
 <ParamField query="referrer" type="string">
   The name of the app to get transactions for
 </ParamField>
-
-<Info>
-  You must provide either `walletAddress` or `referrer` (or both) to filter transactions.
-</Info>
 
 ## Response
 
