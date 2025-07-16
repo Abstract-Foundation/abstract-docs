@@ -59,3 +59,30 @@ This flow can be broken down into three steps:
 
 Under the hood, funds are first loaded to a temporary deposit address on the [Base network](https://www.base.org/) before being bridged to the desired destination address on Abstract.
 
+
+## API Overview
+
+Abstract provides a simplified API to help you integrate the FIAT on-ramp into your application.
+
+### Base URLs
+
+It is recommended to use the staging environment for testing and development.
+
+| Staging | Production |
+|---------|------------|
+| `https://onramp.staging-portal.abs.xyz/` | `https://onramp.portal.abs.xyz/` |
+
+### Endpoints
+
+Below is a summary of the available endpoints.
+
+| Endpoint | Description |
+|----------|-------------|
+| [/config](/abstract-global-wallet/fiat-on-ramp/config) | Return a list of countries, purchase limits, and service providers available for on-ramp. |
+| [/currencies](/abstract-global-wallet/fiat-on-ramp/currencies) | Return a list of FIAT and crypto currencies for the provided country. |
+| [/payment-methods](/abstract-global-wallet/fiat-on-ramp/payment-methods) | Return a list of payment methods for the provided country. |
+| [/quote](/abstract-global-wallet/fiat-on-ramp/quote) | Generate quotes for purchasing cryptocurrency with FIAT currency. |
+| [/transactions](/abstract-global-wallet/fiat-on-ramp/transactions) | Get on-ramp transaction status and history. |
+| [/widget](/abstract-global-wallet/fiat-on-ramp/widget) | Create a session for buying crypto with FIAT currency. |
+
+
