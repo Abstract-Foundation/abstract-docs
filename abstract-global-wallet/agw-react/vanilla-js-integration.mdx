@@ -1,0 +1,248 @@
+---
+title: "Vanilla JS Integration"
+description: "Learn how to integrate Abstract Global Wallet with wagmi in any JavaScript framework."
+---
+
+Integrate AGW into any JavaScript application using `wagmi` with the steps below. This approach is framework-agnostic (React, Vue, Svelte, etc.) and uses `wagmi`'s core APIs for a native integration, giving you full control over your setup.
+
+### 1. Install Dependencies
+
+Install the required dependencies for AGW, `wagmi`, and the underlying Privy transport layer.
+
+<CodeGroup>
+
+```bash npm
+npm install @abstract-foundation/agw-client @abstract-foundation/chains @privy-io/cross-app-connect wagmi viem@2.x @tanstack/query-core
+```
+
+```bash yarn
+yarn add @abstract-foundation/agw-client @abstract-foundation/chains @privy-io/cross-app-connect wagmi viem@2.x @tanstack/query-core
+```
+
+```bash pnpm
+pnpm add @abstract-foundation/agw-client @abstract-foundation/chains @privy-io/cross-app-connect wagmi viem@2.x @tanstack/query-core
+```
+
+```bash bun
+bun add @abstract-foundation/agw-client @abstract-foundation/chains @privy-io/cross-app-connect wagmi viem@2.x @tanstack/query-core
+```
+
+</CodeGroup>
+
+### 2. Create the AGW Connector
+
+The core of a native integration is a custom `wagmi` connector. This file wraps the standard wallet provider with AGW's logic, which intercepts actions like `eth_sendTransaction` and routes them through the user's AGW smart contract wallet.
+
+Create a new file in your project, for example at `lib/connectors/abstractWalletConnector.ts`:
+
+```ts
+// lib/connectors/abstractWalletConnector.ts
+import {
+  transformEIP1193Provider,
+  validChains,
+} from '@abstract-foundation/agw-client';
+import { toPrivyWalletConnector } from '@privy-io/cross-app-connect/rainbow-kit';
+import type { CreateConnectorFn } from '@wagmi/core';
+import {
+  http,
+  type EIP1193EventMap,
+  type EIP1193RequestFn,
+  type EIP1474Methods,
+} from 'viem';
+
+const AGW_APP_ID = 'cm04asygd041fmry9zmcyn5o5';
+const ICON_URL = 'https://abstract-assets.abs.xyz/icons/light.png';
+
+export function abstractWalletConnector(): CreateConnectorFn<
+  {
+    on: <event extends keyof EIP1193EventMap>(
+      event: event,
+      listener: EIP1193EventMap[event],
+    ) => void;
+    removeListener: <event extends keyof EIP1193EventMap>(
+      event: event,
+      listener: EIP1193EventMap[event],
+    ) => void;
+    request: EIP1193RequestFn<EIP1474Methods>;
+  }
+> {
+  return (params) => {
+    const chains = [...params.chains];
+    let defaultChain = params.chains[0];
+    const validChainIds = Object.keys(validChains).map(Number).sort((a, b) => a - b);
+
+    for (const chainId of validChainIds) {
+      const chainIndex = chains.findIndex((chain) => chain.id === chainId);
+      if (chainIndex !== -1) {
+        const removedChains = chains.splice(chainIndex, 1);
+        defaultChain = removedChains[0] ?? defaultChain;
+        break;
+      }
+    }
+
+    const connector = toPrivyWalletConnector({
+      iconUrl: ICON_URL,
+      id: AGW_APP_ID,
+      name: 'Abstract',
+    })({
+      ...params,
+      chains: [defaultChain, ...chains],
+    });
+
+    const getAbstractProvider = async (
+      parameters?: { chainId?: number | undefined } | undefined,
+    ) => {
+      const chainId = parameters?.chainId ?? defaultChain.id;
+      const chain = params.chains.find((c) => c.id === chainId) ?? validChains[chainId];
+      if (!chain) { throw new Error(`Unsupported chain: ${chainId}`); }
+
+      const provider = await connector.getProvider({ chainId });
+      const transport = params.transports?.[chainId] ?? http();
+
+      return transformEIP1193Provider({
+        provider,
+        chain,
+        transport,
+        isPrivyCrossApp: true,
+      });
+    };
+
+    return {
+      ...connector,
+      getProvider: getAbstractProvider,
+      type: 'injected' as const,
+      id: 'xyz.abs.privy',
+      name: 'Abstract',
+      icon: ICON_URL,
+    };
+  };
+}
+```
+
+### 3. Add the Connector to your `wagmi` Config
+
+Import the custom connector and add it to your `wagmi` configuration. This makes it available to `wagmi`'s hooks.
+
+```ts
+// wagmi.ts
+import { http, createConfig } from '@wagmi/core';
+import { abstract, abstractTestnet } from '@abstract-foundation/chains';
+import { abstractWalletConnector } from './lib/connectors/abstractWalletConnector';
+
+export const config = createConfig({
+  chains: [abstract, abstractTestnet],
+  transports: {
+    [abstract.id]: http(),
+    [abstractTestnet.id]: http(),
+  },
+  connectors: [
+    abstractWalletConnector(),
+    // You can add other connectors here, like WalletConnect
+  ],
+});
+```
+
+<Tip>
+Your application should be wrapped in your framework's `wagmi` provider (e.g., `<WagmiProvider>` for React, `WagmiPlugin` for Vue) and a TanStack Query provider.
+</Tip>
+
+
+### 4. Login with AGW
+
+With the config set up, you can now prompt users to sign in. Use the standard `useConnect` hook from `wagmi` to find the AGW connector by its `id` (`xyz.abs.privy`) and trigger the connection flow.
+
+This example uses React-style hooks, but the logic is applicable to any framework.
+
+```tsx
+import { useConnect } from "wagmi";
+
+export default function SignIn() {
+  const { connect, connectors } = useConnect();
+
+  // Find the connector by the unique ID we set in the connector file.
+  const abstractConnector = connectors.find(
+    (c) => c.id === "xyz.abs.privy"
+  );
+
+  // The login function prompts the user to sign in with AGW.
+  const login = () => {
+    if (abstractConnector) {
+      connect({ connector: abstractConnector });
+    }
+  };
+
+  return <button onClick={login}>Connect with Abstract</button>;
+}
+```
+
+### 5. Use the Wallet
+
+Once connected, you can use standard `wagmi` hooks for blockchain reads and the `agw-client` for wallet actions and advanced features like gas sponsorship.
+
+<Tip>
+The `useAccount` hook will return two addresses in the `addresses` array:
+- `addresses[0]`: The user's AGW smart contract wallet address.
+- `addresses[1]`: The underlying signer's EOA (e.g., from their social login).
+</Tip>
+
+<CodeGroup>
+
+```tsx Abstract Client
+import { createAbstractClient } from "@abstract-foundation/agw-client";
+import { useAccount, useConnectorClient } from "wagmi";
+
+export default function SendTransactionButton() {
+  const { address } = useAccount(); // Gets the AGW address
+  const { data: walletClient } = useConnectorClient();
+
+  async function sendTransaction() {
+    if (!address || !walletClient) return;
+
+    // Create a vanilla Abstract Client instance
+    const client = createAbstractClient({ walletClient });
+
+    // Submit a transaction from the connected AGW smart contract wallet.
+    const hash = await client.sendTransaction({
+      to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
+      value: BigInt(1),
+    });
+    console.log("Transaction Hash:", hash);
+  }
+
+  return <button onClick={sendTransaction}>Send Transaction</button>;
+}
+```
+
+```tsx Wagmi Hooks
+import { useAccount, useSendTransaction, useBalance } from "wagmi";
+
+export default function AccountInfo() {
+  const { address, status } = useAccount();
+  const { data: balance } = useBalance({ address });
+  const { sendTransaction, isPending } = useSendTransaction();
+
+  if (status !== 'connected') {
+    return <p>Not connected</p>
+  }
+
+  return (
+    <div>
+      <p>AGW Address: {address}</p>
+      <p>Balance: {balance?.formatted} {balance?.symbol}</p>
+      <button
+        onClick={() =>
+          sendTransaction({
+            to: "0x273B3527BF5b607dE86F504fED49e1582dD2a1C6",
+            data: "0x69",
+          })
+        }
+        disabled={isPending}
+      >
+        {isPending ? "Sending..." : "Send Transaction with wagmi"}
+      </button>
+    </div>
+  );
+}
+```
+
+</CodeGroup>

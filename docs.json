@@ -153,6 +153,7 @@
             "group": "Library Integrations",
             "pages": [
               "abstract-global-wallet/agw-react/native-integration",
+              "abstract-global-wallet/agw-react/vanilla-js-integration",
               "abstract-global-wallet/agw-react/integrating-with-connectkit",
               "abstract-global-wallet/agw-react/integrating-with-dynamic",
               "abstract-global-wallet/agw-react/integrating-with-privy",
