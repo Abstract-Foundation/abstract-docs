@@ -1,0 +1,107 @@
+---
+title: "Using Crossmint"
+description: "Allow users to purchase on-chain items using FIAT currencies via Crossmint."
+---
+
+[Crossmint](https://www.crossmint.com/) enables checkout flows that let users buy on-chain items (like NFTs) using FIAT currency through traditional payment methods such as credit cards, Google Pay, and Apple Pay.
+
+<CardGroup cols={2}>
+  <Card title="AGW Crossmint Demo Application" icon="play" href="https://crossmint.demos.abs.xyz/">
+    View a demo application that uses AGW and Crossmint to test the flow.
+  </Card>
+  <Card title="AGW Crossmint Example Repo" icon="github" href="https://github.com/Abstract-Foundation/examples/tree/main/crossmint">
+    Use our example repo to quickly get started with AGW and Crossmint.
+  </Card>
+</CardGroup>
+
+## Integrating Crossmint
+
+<Steps>
+  <Step title="Create a Crossmint Token Collection">
+Create a [Crossmint Token Collection](https://docs.crossmint.com/payments/guides/create-collection) via the Crossmint Console:
+
+- [Crossmint Console](https://staging.crossmint.com/console): Abstract Mainnet
+- [Crossmint Staging Console](https://staging.crossmint.com/console): Abstract Testnet
+
+<Frame>
+    <img src="/images/crossmint-1-new-collection.jpg" alt="Crossmint New Collection" />
+</Frame>
+
+</Step>
+
+<Step title="Configure the Collection">
+    Create a new collection or import an existing one using the Crossmint Console. Follow the [Crossmint Guide](https://docs.crossmint.com/payments/guides/create-collection) for more details.
+
+<Frame>
+    <img src="/images/crossmint-2-collection-info.jpg" alt="Crossmint Collection Info" />
+</Frame>
+
+</Step>
+
+<Step title="Embed the Checkout Widget">
+Embed the [Crossmint Checkout Widget](https://docs.crossmint.com/payments/embedded/quickstarts/credit-card-nft) in your application using the following steps.
+
+Create and populate the following environment variables in your application:
+
+```bash
+NEXT_PUBLIC_CROSSMINT_API_KEY=your_crossmint_client_api_key  # From API Keys page
+NEXT_PUBLIC_CROSSMINT_COLLECTION_ID=your_collection_id  # From Collection details page
+```
+
+Wrap your application in the `CrossmintProvider` component:
+
+```tsx {14,16}
+"use client";
+
+import { AbstractWalletProvider } from "@abstract-foundation/agw-react";
+import { CrossmintProvider } from "@crossmint/client-sdk-react-ui";
+import { abstractTestnet } from "viem/chains";
+
+export default function AbstractWalletWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <AbstractWalletProvider chain={abstractTestnet}>
+        <CrossmintProvider apiKey={process.env.NEXT_PUBLIC_CROSSMINT_API_KEY}>
+          {children}
+        </CrossmintProvider>
+    </AbstractWalletProvider>
+  );
+}
+```
+
+Use the `CrossmintEmbeddedCheckout` component to present the checkout widget:
+
+```tsx
+<CrossmintEmbeddedCheckout
+    lineItems={{
+      collectionLocator: `crossmint:${process.env.NEXT_PUBLIC_CROSSMINT_COLLECTION_ID}`,
+      // Your price and quantity information
+      callData: {
+        totalPrice: "0.001",
+        quantity: 1,
+        to: address, // use the useAccount hook to get the user's address
+      },
+    }}
+    recipient={{
+      walletAddress: address, // Pre-populate the user's wallet address with the useAccount hook
+    }}
+    payment={{
+      crypto: { enabled: false }, // e.g. disable crypto payments
+      fiat: { enabled: true }, // e.g. enable fiat payments
+    }}
+/>
+```
+
+Test your integration using the card numbers below.
+
+<Accordion title="Test Card Numbers">
+  - Success: `4242 4242 4242 4242`
+  - Decline: `4000 0000 0000 0002`
+</Accordion>
+
+
+</Step>
+</Steps>
