@@ -1,0 +1,162 @@
+---
+title: "/quote"
+api: "GET https://onramp.staging-portal.abs.xyz/quote"
+description: "Generate quotes for purchasing cryptocurrency with FIAT currency."
+---
+
+## Query Parameters
+
+<ParamField query="country" type="string" required>
+  The ISO 3166 2-digit country code
+</ParamField>
+
+<ParamField query="destinationCurrency" type="string" required>
+  The code for the Crypto Currency (e.g., "ETH_BASE", "USDC_BASE")
+</ParamField>
+
+<ParamField query="sourceCurrency" type="string" required>
+  The code for the Fiat Currency (e.g., "USD", "CAD")
+</ParamField>
+
+<ParamField query="amount" type="string" required>
+  The amount (in source currency) to buy
+</ParamField>
+
+<ParamField query="paymentMethod" type="string" required>
+  The identifier for the Payment Method
+</ParamField>
+
+<ParamField query="walletAddress" type="string" required>
+  The wallet address for the user making this request (does not have to be AGW)
+</ParamField>
+
+## Response
+
+<ResponseField name="quotes" type="array" required>
+  Array of available quotes from different providers
+  <Expandable title="quotes">
+    <ResponseField name="transactionType" type="string" required>
+      Always "CRYPTO_PURCHASE"
+    </ResponseField>
+    <ResponseField name="sourceAmount" type="number" required>
+      Amount requested + fees
+    </ResponseField>
+    <ResponseField name="sourceAmountWithoutFees" type="number" required>
+      The fiat amount being used to buy crypto, excluding fees
+    </ResponseField>
+    <ResponseField name="fiatAmountWithoutFees" type="number" required>
+      The fiat amount exchanged when buying crypto, excluding fees
+    </ResponseField>
+    <ResponseField name="destinationAmountWithoutFees" type="number | null" required>
+      The fiat amount exchanged when selling crypto, excluding fees
+    </ResponseField>
+    <ResponseField name="sourceCurrencyCode" type="string" required>
+      Three-letter ISO currency code. Must be a supported currency
+    </ResponseField>
+    <ResponseField name="countryCode" type="string" required>
+      Two-letter country code
+    </ResponseField>
+    <ResponseField name="totalFee" type="number" required>
+      Total fees for the transaction
+    </ResponseField>
+    <ResponseField name="networkFee" type="number | null" required>
+      The network fee applied to a crypto transaction
+    </ResponseField>
+    <ResponseField name="transactionFee" type="number" required>
+      The fee amount charged by the service provider to process the purchase
+    </ResponseField>
+    <ResponseField name="destinationAmount" type="number" required>
+      Destination currency amount to be received for this quote
+    </ResponseField>
+    <ResponseField name="destinationCurrencyCode" type="string" required>
+      Code of currency being quoted
+    </ResponseField>
+    <ResponseField name="exchangeRate" type="number" required>
+      The exchange rate at the time the request is sent
+    </ResponseField>
+    <ResponseField name="paymentMethodType" type="string" required>
+      Payment Method Type used for this quote
+    </ResponseField>
+    <ResponseField name="customerScore" type="number" required>
+      A numerical score representing the expectation a Customer will convert
+    </ResponseField>
+    <ResponseField name="serviceProvider" type="string" required>
+      Service Provider used on this quote
+    </ResponseField>
+    <ResponseField name="institutionName" type="string | null" required>
+      The name of the institution or broker used for this quote, if present
+    </ResponseField>
+    <ResponseField name="lowKyc" type="boolean | null" required>
+      Indicates if the quote amount is below the provider's low KYC threshold
+    </ResponseField>
+    <ResponseField name="partnerFee" type="number" required>
+      The fee amount charged by the partner to process the purchase
+    </ResponseField>
+    <ResponseField name="walletAddress" type="string" required>
+      The wallet address for the user making this request
+    </ResponseField>
+    <ResponseField name="toAddress" type="string" required>
+      The deposit address on Base that will receive the crypto and bridge it to Abstract
+    </ResponseField>
+    <ResponseField name="relayFee" type="number" required>
+      The fee amount charged by Relay for the deposit address
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://onramp.staging-portal.abs.xyz/quote?country=US&destinationCurrency=USDC_BASE&sourceCurrency=USD&amount=100&paymentMethod=CREDIT_DEBIT_CARD&walletAddress=0xfc61f1b7701f6765ff548b3bca403cdaa723d260"
+```
+
+```javascript JavaScript
+const params = new URLSearchParams({
+  country: 'US',
+  destinationCurrency: 'USDC_BASE',
+  sourceCurrency: 'USD',
+  amount: '100',
+  paymentMethod: 'CREDIT_DEBIT_CARD',
+  walletAddress: '0xfc61f1b7701f6765ff548b3bca403cdaa723d260'
+});
+
+const response = await fetch(`https://onramp.staging-portal.abs.xyz/quote?${params}`);
+const quote = await response.json();
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "quotes": [
+    {
+      "transactionType": "CRYPTO_PURCHASE",
+      "sourceAmount": 100,
+      "sourceAmountWithoutFees": 93.3317,
+      "fiatAmountWithoutFees": 93.3317,
+      "destinationAmountWithoutFees": null,
+      "sourceCurrencyCode": "USD",
+      "countryCode": "US",
+      "totalFee": 6.68,
+      "networkFee": null,
+      "transactionFee": 5.5,
+      "destinationAmount": 68.017348,
+      "destinationCurrencyCode": "USDC_BASE",
+      "exchangeRate": 1.468,
+      "paymentMethodType": "CREDIT_DEBIT_CARD",
+      "customerScore": 20,
+      "serviceProvider": "TRANSAK",
+      "institutionName": null,
+      "lowKyc": null,
+      "partnerFee": 1,
+      "walletAddress": "0xfc61f1b7701f6765ff548b3bca403cdaa723d260",
+      "toAddress": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+      "relayFee": 0.18
+    }
+  ]
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,134 @@
+---
+title: "/widget"
+api: "POST https://onramp.staging-portal.abs.xyz/widget"
+description: "Create a session for buying crypto with FIAT currency."
+---
+
+Create a widget session for purchasing cryptocurrency. This generates a widget URL that users can use to complete their purchase.
+
+## Request Body
+
+<ParamField body="country" type="string" required>
+  The ISO 3166 2-digit country code
+</ParamField>
+
+<ParamField body="destinationCurrency" type="string" required>
+  The code for the Crypto Currency (e.g., "ETH_BASE", "USDC_BASE")
+</ParamField>
+
+<ParamField body="sourceCurrency" type="string" required>
+  The code for the Fiat Currency (e.g., "USD", "CAD")
+</ParamField>
+
+<ParamField body="amount" type="string" required>
+  The amount (in source currency) to buy
+</ParamField>
+
+<ParamField body="paymentMethod" type="string" required>
+  The identifier for the Payment Method
+</ParamField>
+
+<ParamField body="walletAddress" type="string" required>
+  The wallet address for the user making this request (does not have to be AGW)
+</ParamField>
+
+<ParamField body="toAddress" type="string" required>
+  The deposit address on Base returned in the quote
+</ParamField>
+
+<ParamField body="serviceProvider" type="string" required>
+  Service Provider to use for this session
+</ParamField>
+
+<ParamField body="redirectUrl" type="string">
+  URL to navigate back to when widget flow is complete
+</ParamField>
+
+<ParamField body="referrer" type="string">
+  The name of the app referring the user to the Onramp
+</ParamField>
+
+## Response
+
+<ResponseField name="id" type="string" required>
+  Session identifier
+</ResponseField>
+
+<ResponseField name="externalSessionId" type="string" required>
+  The name of the app referring the user to the Onramp (matches provided `referrer`)
+</ResponseField>
+
+<ResponseField name="externalCustomerId" type="string" required>
+  The wallet address for the user making this request (matches provided `walletAddress`)
+</ResponseField>
+
+<ResponseField name="customerId" type="string" required>
+  Meld generated unique identifier for your customer
+</ResponseField>
+
+<ResponseField name="widgetUrl" type="string" required>
+  The crypto widget URL where users complete their purchase
+</ResponseField>
+
+<ResponseField name="token" type="string" required>
+  The session token
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST "https://onramp.staging-portal.abs.xyz/widget" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "country": "US",
+    "destinationCurrency": "USDC_BASE",
+    "sourceCurrency": "USD",
+    "amount": "100",
+    "paymentMethod": "CREDIT_DEBIT_CARD",
+    "walletAddress": "0xfc61f1b7701f6765ff548b3bca403cdaa723d260",
+    "toAddress": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+    "serviceProvider": "TRANSAK",
+    "redirectUrl": "https://myapp.com/success",
+    "referrer": "MyApp"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://onramp.staging-portal.abs.xyz/widget', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    country: 'US',
+    destinationCurrency: 'USDC_BASE',
+    sourceCurrency: 'USD',
+    amount: '100',
+    paymentMethod: 'CREDIT_DEBIT_CARD',
+    walletAddress: '0xfc61f1b7701f6765ff548b3bca403cdaa723d260',
+    toAddress: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
+    serviceProvider: 'TRANSAK',
+    redirectUrl: 'https://myapp.com/success',
+    referrer: 'MyApp'
+  })
+});
+
+const widget = await response.json();
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "id": "WePzm7gRdUgis7VHQjMYYL",
+  "externalSessionId": "MyApp",
+  "externalCustomerId": "0xfc61f1b7701f6765ff548b3bca403cdaa723d260",
+  "customerId": "WeP9qpZzvBizvKhR8bGigL",
+  "widgetUrl": "https://sb.meldcrypto.com?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZWxkLmlvIiwiaWF0IjoxNzUxOTUwMDM5LCJzdWIiOiJjcnlwdG8iLCJleHAiOjE3NTE5NTE4MzksImFjY291bnRJZCI6IldlUUVGcDZyZVU3VFNOQWVOODZjdFUiLCJzZXNzaW9uSWQiOiJXZVB6bTdnUmRVZ2lzN1ZIUWpNWVlMIn0.xr6V09K4ZSwYUaiOlmGVJ_QgAiaHFx9OXKvJroLGNtE",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtZWxkLmlvIiwiaWF0IjoxNzUxOTUwMDM5LCJzdWIiOiJjcnlwdG8iLCJleHAiOjE3NTE5NTE4MzksImFjY291bnRJZCI6IldlUUVGcDZyZVU3VFNOQWVOODZjdFUiLCJzZXNzaW9uSWQiOiJXZVB6bTdnUmRVZ2lzN1ZIUWpNWVlMIn0.xr6V09K4ZSwYUaiOlmGVJ_QgAiaHFx9OXKvJroLGNtE"
+}
+```
+
+</ResponseExample>

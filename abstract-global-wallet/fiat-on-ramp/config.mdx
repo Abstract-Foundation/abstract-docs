@@ -1,0 +1,187 @@
+---
+title: "/config"
+api: "GET https://onramp.staging-portal.abs.xyz/config"
+description: "Return a list of countries, purchase limits, and service providers available for onramp."
+---
+
+## Response
+
+<ResponseField name="countries" type="array" required>
+  Array of supported countries with their regions and default currencies
+  <Expandable title="countries">
+    <ResponseField name="countryCode" type="string" required>
+      The ISO 3166 2-digit country code
+    </ResponseField>
+    <ResponseField name="name" type="string" required>
+      The display name for the Country
+    </ResponseField>
+    <ResponseField name="flagImageUrl" type="string" required>
+      The URL to the Country's flag image
+    </ResponseField>
+    <ResponseField name="regions" type="array | null">
+      The set of supported regions within the Country. If null, then all regions within the Country are supported
+      <Expandable title="regions">
+        <ResponseField name="regionCode" type="string" required>
+          The alphanumeric code (ISO 3166-2) for the Region
+        </ResponseField>
+        <ResponseField name="name" type="string" required>
+          The display name for the Region
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="defaultFiatCurrency" type="string" required>
+      The currency code for the default currency of this country
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="limits" type="array" required>
+  Array of purchase limits by currency
+  <Expandable title="limits">
+    <ResponseField name="currencyCode" type="string" required>
+      The currency code
+    </ResponseField>
+    <ResponseField name="defaultAmount" type="number" required>
+      The default purchase amount
+    </ResponseField>
+    <ResponseField name="minimumAmount" type="number" required>
+      The minimum purchase amount
+    </ResponseField>
+    <ResponseField name="maximumAmount" type="number" required>
+      The maximum purchase amount
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="serviceProviders" type="array" required>
+  Array of available service providers
+  <Expandable title="serviceProviders">
+    <ResponseField name="serviceProvider" type="string" required>
+      Service provider identifier
+    </ResponseField>
+    <ResponseField name="name" type="string" required>
+      Display name of the service provider
+    </ResponseField>
+    <ResponseField name="status" type="string" required>
+      Current status of the provider
+    </ResponseField>
+    <ResponseField name="categories" type="array" required>
+      Array of service categories
+    </ResponseField>
+    <ResponseField name="categoryStatuses" type="object" required>
+      Status of each category
+    </ResponseField>
+    <ResponseField name="websiteUrl" type="string" required>
+      Provider's website URL
+    </ResponseField>
+    <ResponseField name="customerSupportUrl" type="string" required>
+      Provider's customer support URL
+    </ResponseField>
+    <ResponseField name="logos" type="object" required>
+      Provider logos for different themes
+      <Expandable title="logos">
+        <ResponseField name="dark" type="string" required>
+          Dark theme logo URL
+        </ResponseField>
+        <ResponseField name="light" type="string" required>
+          Light theme logo URL
+        </ResponseField>
+        <ResponseField name="darkShort" type="string" required>
+          Dark theme short logo URL
+        </ResponseField>
+        <ResponseField name="lightShort" type="string" required>
+          Light theme short logo URL
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://onramp.staging-portal.abs.xyz/config"
+```
+
+```javascript JavaScript
+const response = await fetch('https://onramp.staging-portal.abs.xyz/config');
+const config = await response.json();
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "countries": [
+    {
+      "countryCode": "CA",
+      "name": "Canada",
+      "flagImageUrl": "https://images-country.meld.io/CA/flag.svg",
+      "regions": [
+        {
+          "regionCode": "CA-AB",
+          "name": "Alberta"
+        },
+        {
+          "regionCode": "CA-BC",
+          "name": "British Columbia"
+        }
+      ],
+      "defaultFiatCurrency": "CAD"
+    },
+    {
+      "countryCode": "US",
+      "name": "United States",
+      "flagImageUrl": "https://images-country.meld.io/US/flag.svg",
+      "regions": [
+        {
+          "regionCode": "US-CA",
+          "name": "California"
+        },
+        {
+          "regionCode": "US-NY",
+          "name": "New York"
+        }
+      ],
+      "defaultFiatCurrency": "USD"
+    }
+  ],
+  "limits": [
+    {
+      "currencyCode": "CAD",
+      "defaultAmount": 400,
+      "minimumAmount": 15.64,
+      "maximumAmount": 23303.6
+    },
+    {
+      "currencyCode": "USD",
+      "defaultAmount": 300,
+      "minimumAmount": 9.18,
+      "maximumAmount": 17094.78
+    }
+  ],
+  "serviceProviders": [
+    {
+      "serviceProvider": "TRANSAK",
+      "name": "Transak",
+      "status": "LIVE",
+      "categories": ["CRYPTO_ONRAMP"],
+      "categoryStatuses": {
+        "CRYPTO_ONRAMP": "LIVE"
+      },
+      "websiteUrl": "https://transak.com",
+      "customerSupportUrl": "",
+      "logos": {
+        "dark": "https://images-serviceprovider.meld.io/TRANSAK/logo_dark.png",
+        "light": "https://images-serviceprovider.meld.io/TRANSAK/logo_light.png",
+        "darkShort": "https://images-serviceprovider.meld.io/TRANSAK/short_logo_dark.png",
+        "lightShort": "https://images-serviceprovider.meld.io/TRANSAK/short_logo_light.png"
+      }
+    }
+  ]
+}
+```
+
+</ResponseExample>
