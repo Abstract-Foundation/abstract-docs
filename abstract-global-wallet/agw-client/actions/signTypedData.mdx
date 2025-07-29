@@ -1,0 +1,159 @@
+---
+title: "signTypedData"
+description: Function to sign structured data using the connected Abstract Global Wallet.
+---
+
+The [AbstractClient](/abstract-global-wallet/agw-client/createAbstractClient)
+includes a `signTypedData` method that can be used to sign structured data using the connected Abstract Global Wallet.
+The method follows the [EIP-712](https://eips.ethereum.org/EIPS/eip-712) standard for typed structured data hashing and signing.
+
+<Card
+  title="View Example Repository"
+  icon="github"
+  href="https://github.com/Abstract-Foundation/examples/tree/main/agw-signing-messages"
+>
+  View an example implementation of signing and verifying structured data with AGW in a
+  Next.js app.
+</Card>
+
+## Usage
+
+<CodeGroup>
+
+```tsx Signing (client-side)
+import { useAbstractClient } from "@abstract-foundation/agw-react";
+
+export default function SignTypedData() {
+  const { data: agwClient } = useAbstractClient();
+
+  async function signTypedData() {
+    if (!agwClient) return;
+
+    const signature = await agwClient.signTypedData({
+      domain: {
+        name: "Ether Mail",
+        version: "1",
+        chainId: 11124,
+        verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+      },
+      types: {
+        Person: [
+          { name: "name", type: "string" },
+          { name: "wallet", type: "address" },
+        ],
+        Mail: [
+          { name: "from", type: "Person" },
+          { name: "to", type: "Person" },
+          { name: "contents", type: "string" },
+        ],
+      },
+      primaryType: "Mail",
+      message: {
+        from: {
+          name: "Cow",
+          wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+        },
+        to: {
+          name: "Bob",
+          wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+        },
+        contents: "Hello, Bob!",
+      },
+    });
+  }
+
+  return <button onClick={signTypedData}>Sign message</button>;
+}
+```
+
+```tsx Verifying (server-side)
+import { createPublicClient, http } from "viem";
+import { abstractTestnet } from "viem/chains";
+
+// Create a public client to verify the typed data
+const publicClient = createPublicClient({
+  chain: abstractTestnet,
+  transport: http(),
+});
+
+// Verify the typed data signature
+const isValid = await publicClient.verifyTypedData({
+  address: walletAddress, // The AGW address you expect to have signed the data
+  domain: {
+    name: "Ether Mail",
+    version: "1",
+    chainId: 11124,
+    verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+  },
+  types: {
+    Person: [
+      { name: "name", type: "string" },
+      { name: "wallet", type: "address" },
+    ],
+    Mail: [
+      { name: "from", type: "Person" },
+      { name: "to", type: "Person" },
+      { name: "contents", type: "string" },
+    ],
+  },
+  primaryType: "Mail",
+  message: {
+    from: {
+      name: "Cow",
+      wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+    },
+    to: {
+      name: "Bob",
+      wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+    },
+    contents: "Hello, Bob!",
+  },
+  signature,
+});
+```
+
+</CodeGroup>
+
+<Note>
+  **Alternative**: You can also use Wagmi's [useSignTypedData](https://wagmi.sh/react/api/hooks/useSignTypedData) hook for signing typed data with any connected wallet, not just Abstract Global Wallet.
+</Note>
+
+## Parameters
+
+<ResponseField name="domain" type="TypedDataDomain" required>
+  The EIP-712 domain separator containing information about the signing domain.
+  
+  <Expandable title="Domain Properties">
+    <ResponseField name="name" type="string">
+      The user-readable name of the signing domain (e.g., dApp name).
+    </ResponseField>
+    <ResponseField name="version" type="string">
+      The current major version of the signing domain.
+    </ResponseField>
+    <ResponseField name="chainId" type="number">
+      The chain ID of the network (e.g., 11124 for Abstract testnet).
+    </ResponseField>
+    <ResponseField name="verifyingContract" type="Address">
+      The address of the contract that will verify the signature.
+    </ResponseField>
+    <ResponseField name="salt" type="Hex">
+      An optional disambiguating salt for the protocol.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="types" type="Record<string, TypedDataField[]>" required>
+  The type definitions for the structured data. Each type is defined as an array of fields with names and types.
+</ResponseField>
+
+<ResponseField name="primaryType" type="string" required>
+  The primary type to hash. Must be a key in the types object.
+</ResponseField>
+
+<ResponseField name="message" type="Record<string, any>" required>
+  The structured data to sign. Must conform to the structure defined in types[primaryType].
+</ResponseField>
+
+## Returns
+
+Returns a `Promise<Hex>` containing the signature of the structured data. 
