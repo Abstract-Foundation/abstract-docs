@@ -257,7 +257,7 @@
     }
   },
   "contextual": {
-    "options": ["copy", "view", "chatgpt", "claude"]
+    "options": ["copy", "chatgpt", "claude", "mcp", "cursor"]
   },
   "redirects": [
     {
