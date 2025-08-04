@@ -1,0 +1,144 @@
+---
+title: "/transactions"
+api: "GET https://onramp.staging-portal.abs.xyz/transactions"
+description: "Get on-ramp transaction status and history."
+---
+
+Retrieves transaction status for onramp purchases.
+
+- `/transactions/status` for a single transaction
+- `/transactions` for multiple transactions
+
+
+## Get Single Transaction Status
+
+**GET** `/transactions/status`
+
+Gets the status of a single transaction using the session ID.
+
+<ParamField query="sessionId" type="string" required>
+  The session ID from the widget redirect URL query parameters
+</ParamField>
+
+## Get Multiple Transactions
+
+**GET** `/transactions`
+
+Gets all transactions for a user or app. Provide either `walletAddress` or `referrer` (or both) to filter transactions.
+
+<ParamField query="walletAddress" type="string">
+  The wallet address to get transactions for
+</ParamField>
+
+<ParamField query="referrer" type="string">
+  The name of the app to get transactions for
+</ParamField>
+
+## Response
+
+The response format varies depending on the endpoint used. Both endpoints return transaction objects with status information.
+
+<ResponseField name="status" type="string">
+  Current status of the transaction (e.g., "PENDING", "COMPLETED", "FAILED")
+</ResponseField>
+
+<ResponseField name="amount" type="number">
+  Transaction amount in source currency
+</ResponseField>
+
+<ResponseField name="currency" type="string">
+  Source currency code
+</ResponseField>
+
+<ResponseField name="destinationAmount" type="number">
+  Amount received in destination currency
+</ResponseField>
+
+<ResponseField name="destinationCurrency" type="string">
+  Destination currency code
+</ResponseField>
+
+<ResponseField name="transactionHash" type="string">
+  Blockchain transaction hash (when available)
+</ResponseField>
+
+<ResponseField name="createdAt" type="string">
+  Transaction creation timestamp
+</ResponseField>
+
+<ResponseField name="updatedAt" type="string">
+  Last update timestamp
+</ResponseField>
+
+<RequestExample>
+
+```bash Single Transaction Status
+curl -X GET "https://onramp.staging-portal.abs.xyz/transactions/status?sessionId=WePzm7gRdUgis7VHQjMYYL"
+```
+
+```bash Multiple Transactions by Wallet
+curl -X GET "https://onramp.staging-portal.abs.xyz/transactions?walletAddress=0xfc61f1b7701f6765ff548b3bca403cdaa723d260"
+```
+
+```bash Multiple Transactions by App
+curl -X GET "https://onramp.staging-portal.abs.xyz/transactions?referrer=MyApp"
+```
+
+```javascript Single Transaction Status
+const response = await fetch(
+  'https://onramp.staging-portal.abs.xyz/transactions/status?sessionId=WePzm7gRdUgis7VHQjMYYL'
+);
+const transaction = await response.json();
+```
+
+```javascript Multiple Transactions
+const response = await fetch(
+  'https://onramp.staging-portal.abs.xyz/transactions?walletAddress=0xfc61f1b7701f6765ff548b3bca403cdaa723d260'
+);
+const transactions = await response.json();
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Single Transaction Response
+{
+  "sessionId": "WePzm7gRdUgis7VHQjMYYL",
+  "status": "COMPLETED",
+  "amount": 100,
+  "currency": "USD",
+  "destinationAmount": 68.017348,
+  "destinationCurrency": "USDC_BASE",
+  "transactionHash": "0x1234567890abcdef...",
+  "walletAddress": "0xfc61f1b7701f6765ff548b3bca403cdaa723d260",
+  "serviceProvider": "TRANSAK",
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T10:35:00Z"
+}
+```
+
+```json Multiple Transactions Response
+{
+  "transactions": [
+    {
+      "sessionId": "WePzm7gRdUgis7VHQjMYYL",
+      "status": "COMPLETED",
+      "amount": 100,
+      "currency": "USD",
+      "destinationAmount": 68.017348,
+      "destinationCurrency": "USDC_BASE",
+      "transactionHash": "0x1234567890abcdef...",
+      "walletAddress": "0xfc61f1b7701f6765ff548b3bca403cdaa723d260",
+      "serviceProvider": "TRANSAK",
+      "createdAt": "2024-01-15T10:30:00Z",
+      "updatedAt": "2024-01-15T10:35:00Z"
+    }
+  ],
+  "total": 1,
+  "page": 1,
+  "pageSize": 20
+}
+```
+
+</ResponseExample>

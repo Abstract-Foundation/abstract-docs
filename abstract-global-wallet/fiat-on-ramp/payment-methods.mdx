@@ -1,0 +1,90 @@
+---
+title: "/payment-methods"
+api: "GET https://onramp.staging-portal.abs.xyz/payment-methods"
+description: "Return a list of payment methods for the provided country."
+---
+
+## Query Parameters
+
+<ParamField query="country" type="string" required>
+  The ISO 3166 2-digit country code
+</ParamField>
+
+## Response
+
+<ResponseField name="paymentMethods" type="array" required>
+  Array of supported payment methods
+  <Expandable title="paymentMethods">
+    <ResponseField name="paymentMethod" type="string" required>
+      The identifier for the Payment Method
+    </ResponseField>
+    <ResponseField name="name" type="string" required>
+      The display name for the Payment Method
+    </ResponseField>
+    <ResponseField name="paymentType" type="string" required>
+      The type of Payment Method (`ACH`, `BANK_TRANSFER`, `CARD`, `LOCAL`, `MOBILE_WALLET`, `SEPA`)
+    </ResponseField>
+    <ResponseField name="logos" type="object" required>
+      Payment method logos for different themes
+      <Expandable title="logos">
+        <ResponseField name="light" type="string" required>
+          The light logo URL for the Payment Method
+        </ResponseField>
+        <ResponseField name="dark" type="string" required>
+          The dark logo URL for the Payment Method
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://onramp.staging-portal.abs.xyz/payment-methods?country=US"
+```
+
+```javascript JavaScript
+const response = await fetch('https://onramp.staging-portal.abs.xyz/payment-methods?country=US');
+const paymentMethods = await response.json();
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "paymentMethods": [
+    {
+      "paymentMethod": "CREDIT_DEBIT_CARD",
+      "name": "Credit & Debit Card",
+      "paymentType": "CARD",
+      "logos": {
+        "dark": "https://images-paymentMethod.meld.io/CREDIT_DEBIT_CARD/logo_dark.png",
+        "light": "https://images-paymentMethod.meld.io/CREDIT_DEBIT_CARD/logo_light.png"
+      }
+    },
+    {
+      "paymentMethod": "APPLE_PAY",
+      "name": "Apple Pay",
+      "paymentType": "MOBILE_WALLET",
+      "logos": {
+        "dark": "https://images-paymentMethod.meld.io/APPLE_PAY/logo_dark.png",
+        "light": "https://images-paymentMethod.meld.io/APPLE_PAY/logo_light.png"
+      }
+    },
+    {
+      "paymentMethod": "GOOGLE_PAY",
+      "name": "Google Pay",
+      "paymentType": "MOBILE_WALLET",
+      "logos": {
+        "dark": "https://images-paymentMethod.meld.io/GOOGLE_PAY/logo_dark.png",
+        "light": "https://images-paymentMethod.meld.io/GOOGLE_PAY/logo_light.png"
+      }
+    }
+  ]
+}
+```
+
+</ResponseExample>
