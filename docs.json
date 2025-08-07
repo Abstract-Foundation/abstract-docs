@@ -15,7 +15,11 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": ["overview", "what-is-abstract", "connect-to-abstract"]
+            "pages": [
+              "overview",
+              "what-is-abstract",
+              "connect-to-abstract"
+            ]
           },
           {
             "group": "Build on Abstract",
@@ -199,6 +203,12 @@
             ]
           },
           {
+            "group": "FIAT On-ramp",
+            "pages": [
+              "abstract-global-wallet/fiat-on-ramp/using-crossmint"
+            ]
+          },
+          {
             "group": "Utils",
             "pages": [
               "abstract-global-wallet/agw-client/getSmartAccountAddressFromInitialSigner",
@@ -236,7 +246,9 @@
         "groups": [
           {
             "group": "Portal",
-            "pages": ["portal/overview"]
+            "pages": [
+              "portal/overview"
+            ]
           }
         ]
       }
