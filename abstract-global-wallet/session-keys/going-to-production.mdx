@@ -59,32 +59,9 @@ await agwClient.createSession({
 });
 ```
 
-Below, we provide recommended approaches to implement secure session key signer storage.
+## Recommended Implementation
 
-### Privy Server Wallets
-
-[Privy Server Wallets](https://docs.privy.io/guide/server-wallets/) provide a secure way to create and store signer account(s) for session keys using trusted execution environments (TEEs); ensuring private keys can only ever be reassembled within a secure enclave and never exposed to perform any malicious actions.
-
-By using a Privy Server Wallet as the session key signer, attackers cannot compromise the TEE to access the signer account private key to perform any malicious actions.
-
-<Card
-  title="Example Repo: Session Key Signer with Privy Server Wallets"
-  icon="github"
-  href="https://github.com/Abstract-Foundation/examples/tree/main/server-wallets-session-keys"
->
-  View the example repository for a session key signer implementation using
-  Privy Server Wallets.
-</Card>
-
-### Unique Signer Accounts per Config
-
-If you want to store session signer accounts on the client, such as in the browser&rsquo;s [local storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) or [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API), you must create a new unique signer account for each session key to limit the impact of a compromised signer account.
-
-If an attacker gains access to a signer account by compromising the user&rsquo;s client, generating unique signer accounts isolates the attack to a single Abstract Global Wallet.
-
-Browser storage methods are vulnerable to Cross-site scripting (XSS) attacks, which can expose the signer account private key to attackers. It is recommended to first **encrypt** the signer account private key before storing it on the client.
-
-It is **not acceptable** to use a single signer account stored on the client for all session keys.
+Below is an example implementation of creating a unique signer account for each session key, and storing them encrypted in the browser's local storage.
 
 <Card
   title="Example Repo: Encrypted Unique Signer Keys in Local Storage"
