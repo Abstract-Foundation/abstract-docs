@@ -41,7 +41,7 @@ Some additional changes may be required in your contract. [Learn more in this se
 
 [EIP-712](https://eips.ethereum.org/EIPS/eip-712) transactions have a `gasPerPubdataByte`
 field that can be set to control the amount of gas that is charged for each byte of data sent to L1
-(see [transaction lifecycle](/how-abstract-works/architecture/transaction-lifecycle)). [Learn more ↗](https://docs.zksync.io/build/developer-reference/era-contracts/pubdata-post-4844).
+(see [transaction lifecycle](/how-abstract-works/architecture/transaction-lifecycle)). [Learn more ↗](https://docs.zksync.io/zksync-protocol/rollup/fee-model/how-we-charge-for-pubdata.
 
 When calculating how much gas is remaining using `gasleft()`, consider that the
 `gasPerPubdataByte` also needs to be accounted for.
