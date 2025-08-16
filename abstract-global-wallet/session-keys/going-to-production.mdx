@@ -48,7 +48,7 @@ or will be rejected with "Unconstrained token approval/transfer destination in c
 
 Session keys specify a **signer** account; an <Tooltip tip="Externally Owned Account, i.e. a public/private key pair.">EOA</Tooltip> that is permitted to perform the actions specified in the session configuration. Therefore, the private key of the signer(s) you create are **SENSITIVE VALUES**!
 
-Exposing the signer private key enables attackers to execute any of the actions specified in a session configuration for any AGW that has approved a session key with that signer&rsquo;s address.
+Exposing the signer's private key enables attackers to execute any of the actions specified in a session configuration for any AGW that has approved a session key with that signer&rsquo;s address.
 
 ```typescript
 await agwClient.createSession({
