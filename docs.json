@@ -8,6 +8,10 @@
     "dark": "#0D9373"
   },
   "favicon": "/favicon.svg",
+  "banner": {
+    "content": "Check out our new component library - [build.abs.xyz](https://build.abs.xyz)!",
+    "dismissible": true
+  },
   "navigation": {
     "tabs": [
       {
@@ -269,7 +273,13 @@
     }
   },
   "contextual": {
-    "options": ["copy", "chatgpt", "claude", "mcp", "cursor"]
+    "options": [
+      "copy",
+      "chatgpt",
+      "claude",
+      "mcp",
+      "cursor"
+    ]
   },
   "redirects": [
     {
