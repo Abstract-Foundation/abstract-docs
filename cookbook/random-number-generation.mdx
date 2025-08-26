@@ -22,41 +22,175 @@ Learn how to build apps on Abstract like [Gacha](https://gacha.game/?ref=Q3FMS2S
     forge install abstract-foundation/absmate
     ```
   </Step>
+  <Step title="Configure remappings">
+
+    Add the following to your `remappings.txt` file to use Absmate's contracts.
+
+    ```text title="remappings.txt"
+    absmate/=lib/absmate/
+    ```
+  </Step>
 </Steps>
 
-## 2. Implement the contract
+## 2. Create a game contract
 
-Create a contract that requests and receives random numbers by extending `VRNGConsumer`
+Create a contract that requests and receives random numbers by extending `VRNGConsumer`.
 
-```solidity
-import { VRNGConsumer } from "absmate/utils/vrng/VRNGConsumer.sol";
+```solidity title="src/CoinFlipGame.sol"
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.26;
+
+import {VRNGConsumer} from "absmate/src/utils/vrng/VRNGConsumer.sol";
 
 contract CoinFlipGame is VRNGConsumer {
-    // Map vRNG requestId to player address
     mapping(uint256 => address) public games;
-    
-    constructor() VRNGConsumer() {}
-    
-    // 1 - Initialize game and request random number from vRNG service
+
+    constructor(address vrngSystem) {
+        _setVRNG(vrngSystem); // Initialize VRNG system
+    }
+
+    // 1 - Request a random number from vRNG service
     function playGame() external returns (uint256 requestId) {
-        // Request randomness for this specific game
-        requestId = requestRandomNumberWithTraceId();
-        
-        // Store which player started this game
+        // Request randomness from vRNG service
+        requestId = _requestRandomNumber();
+
         games[requestId] = msg.sender;
-        
         return requestId;
     }
-    
-    // 2 - This callback is automatically called by vRNG service when random number is ready
-    function fulfillRandomNumber(
+
+    // 2 - Receive a random number from vRNG service in this callback
+    function _onRandomNumberFulfilled(
         uint256 requestId,
         uint256 randomNumber
     ) internal override {
-        // Use random number to determine outcome (even = win, odd = lose)
+        // Use random number to determine some game outcome logic.
         bool playerWon = (randomNumber % 2) == 0;
-        
-        // Handle win/loss logic here ...
     }
 }
 ```
+
+## 3. Test with mock contracts
+
+Test your game contract behaviour with Absmate's mock contracts.
+
+<Steps>
+  <Step title="Create a test contract">
+
+    Use the `MockVRNGSystem` contract to mock the VRNG system in your tests. 
+    
+    Pass its contract address to your game contract, by providing it to the `_setVRNG` function _(here we do it via a constructor argument to the `CoinFlipGame` contract)_.
+
+    ```solidity title="test/CoinFlipGameTest.t.sol"
+    // SPDX-License-Identifier: MIT
+    pragma solidity ^0.8.26;
+
+    import {Test} from "forge-std/Test.sol";
+    import {MockVRNGSystem} from "absmate/test/mocks/MockVRNGSystem.sol";
+    import {CoinFlipGame} from "../src/CoinFlipGame.sol";
+
+    contract CoinFlipGameTest is Test {
+        MockVRNGSystem mockVRNG;
+        CoinFlipGame game;
+
+        function setUp() public {
+            mockVRNG = new MockVRNGSystem(); // deploy mockVRNG
+            game = new CoinFlipGame(address(mockVRNG)); // call _setVRNG with mockVRNG address
+        }
+    }
+    ```
+  </Step>
+
+  <Step title="Test your contract with request/fulfill pattern mocks">
+
+    Mock the two-phase request/fulfill pattern:
+
+    1. Request a random number from the vRNG service.
+    2. Mock the callback function execution using `randomNumberCallback`.
+
+    ```solidity title="test/CoinFlipGameTest.t.sol"
+    function testCoinFlip() public {
+        address player = address(0x123);
+        
+        // Request randomness from vRNG service
+        vm.prank(player);
+        uint256 requestId = game.playGame();
+
+        // Simulate VRNG callback with controlled value
+        vm.prank(address(mockVRNG));
+        uint256 randomNumber = 2; // control the random number delivered
+        game.randomNumberCallback(requestId, randomNumber);
+        
+        // Verify some behaviour based on the random number delivered
+        assertEq(game.games(requestId), player);
+    }
+    ```
+  </Step>
+
+  <Step title="Run your tests">
+
+    Verify your contract behaves as expected.
+    See [Foundry testing](/build-on-abstract/smart-contracts/foundry/testing-contracts) for more details.
+
+    ```bash
+    forge test --zksync
+    ```
+  </Step>
+</Steps>
+
+## 4. Deploy your contract
+
+<Steps>
+  <Step title="Create a deploy script">
+
+  Create a deploy script to deploy your game contract with the [Proof of Play vRNG contract address](https://docs.proofofplay.com/services/vrng/about#supported-networks) based on the chain ID.
+
+  ```solidity title="script/DeployCoinFlipGame.s.sol"
+  // SPDX-License-Identifier: MIT
+  pragma solidity ^0.8.26;
+
+  import {Script} from "forge-std/Script.sol";
+  import {CoinFlipGame} from "../src/CoinFlipGame.sol";
+
+  contract DeployCoinFlipGame is Script {
+      function run() external {
+          uint256 chainId = block.chainid;
+          address vrngSystemAddress = _getProofOfPlayVRNGAddress(chainId);
+          require(vrngSystemAddress != address(0), "Unsupported chain");
+
+          vm.startBroadcast();
+          CoinFlipGame coinFlipGame = new CoinFlipGame(vrngSystemAddress);
+          vm.stopBroadcast();
+      }
+
+      function _getProofOfPlayVRNGAddress(
+          uint256 chainId
+      ) internal pure returns (address) {
+          return
+              chainId == 2741 // Abstract Mainnet
+                  ? 0xBDC8B6eb1840215A22fC1134046f595b7D42C2DE
+                  : chainId == 11124 // Abstract Testnet
+                      ? 0xC04ae87CDd258994614f7fFB8506e69B7Fd8CF1D
+                      : address(0);
+      }
+  }
+  ```
+  </Step>
+
+  <Step title="Run the deploy script">
+
+  Deploy your contract to Abstract using the deploy script.
+
+  ```bash
+  forge script script/DeployCoinFlipGame.s.sol:DeployCoinFlipGame \
+    --account myKeystore \
+    --rpc-url https://api.testnet.abs.xyz \
+    --chain 11124 \
+    --zksync \
+    --broadcast \
+    --verify \
+    --verifier etherscan \
+    --verifier-url https://api-sepolia.abscan.org/api \
+    --etherscan-api-key TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD
+  ```
+  </Step>
+</Steps>
