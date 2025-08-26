@@ -1,5 +1,62 @@
 ---
 title: "Random Number Generation"
-description: "Learn how to build a smart contract that uses verifiable randomness to determine the outcome of a function."
+description: "Learn how to build smart contracts that use randomness to determine outcomes."
 ---
 
+Learn how to build apps on Abstract like [Gacha](https://gacha.game/?ref=Q3FMS2SO), which use Proof of Play’s verifiable random number generator (vRNG) service to provide fair, on-chain randomness for outcomes.
+
+## 1. Foundry project setup
+
+<Steps>
+  <Step title="Create a Foundry project">
+    Create a Foundry project (or configure an existing one) following our [Foundry guide](/build-on-abstract/smart-contracts/foundry/get-started).
+
+        <Card title="Get Started with Foundry" icon="weight-hanging" href="/build-on-abstract/smart-contracts/foundry/get-started">
+            Learn how to install and configure foundry-zksync for Abstract.
+        </Card>
+  </Step>
+  <Step title="Install Absmate">
+    Install [Absmate](https://github.com/Abstract-Foundation/absmate); a collection of helpful utilities for building contracts on Abstract.
+
+    ```bash
+    forge install abstract-foundation/absmate
+    ```
+  </Step>
+</Steps>
+
+## 2. Implement the contract
+
+Create a contract that requests and receives random numbers by extending `VRNGConsumer`
+
+```solidity
+import { VRNGConsumer } from "absmate/utils/vrng/VRNGConsumer.sol";
+
+contract CoinFlipGame is VRNGConsumer {
+    // Map vRNG requestId to player address
+    mapping(uint256 => address) public games;
+    
+    constructor() VRNGConsumer() {}
+    
+    // 1 - Initialize game and request random number from vRNG service
+    function playGame() external returns (uint256 requestId) {
+        // Request randomness for this specific game
+        requestId = requestRandomNumberWithTraceId();
+        
+        // Store which player started this game
+        games[requestId] = msg.sender;
+        
+        return requestId;
+    }
+    
+    // 2 - This callback is automatically called by vRNG service when random number is ready
+    function fulfillRandomNumber(
+        uint256 requestId,
+        uint256 randomNumber
+    ) internal override {
+        // Use random number to determine outcome (even = win, odd = lose)
+        bool playerWon = (randomNumber % 2) == 0;
+        
+        // Handle win/loss logic here ...
+    }
+}
+```
