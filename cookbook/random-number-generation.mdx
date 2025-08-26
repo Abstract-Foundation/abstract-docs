@@ -46,7 +46,7 @@ contract CoinFlipGame is VRNGConsumer {
     mapping(uint256 => address) public games;
 
     constructor(address vrngSystem) {
-        _setVRNG(vrngSystem); // Initialize VRNG system
+        _setVRNG(vrngSystem); // Initialize vRNG system
     }
 
     // 1 - Request a random number from vRNG service
@@ -115,7 +115,7 @@ Test your game contract behaviour with Absmate's mock contracts.
         vm.prank(player);
         uint256 requestId = game.playGame();
 
-        // Simulate VRNG callback with controlled value
+        // Simulate vRNG callback with controlled value
         vm.prank(address(mockVRNG));
         uint256 randomNumber = 2; // control the random number delivered
         game.randomNumberCallback(requestId, randomNumber);
