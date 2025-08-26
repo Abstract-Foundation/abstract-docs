@@ -242,17 +242,6 @@
         ]
       },
       {
-        "tab": "Cookbook",
-        "groups": [
-          {
-            "group": "Cookbook",
-            "pages": [
-              "cookbook/random-number-generation"
-            ]
-          }
-        ]
-      },
-      {
         "tab": "API Reference",
         "openapi": "/api-reference/openapi.json"
       }
