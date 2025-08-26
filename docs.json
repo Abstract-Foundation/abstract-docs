@@ -244,17 +244,6 @@
       {
         "tab": "API Reference",
         "openapi": "/api-reference/openapi.json"
-      },
-      {
-        "tab": "Portal",
-        "groups": [
-          {
-            "group": "Portal",
-            "pages": [
-              "portal/overview"
-            ]
-          }
-        ]
       }
     ]
   },
