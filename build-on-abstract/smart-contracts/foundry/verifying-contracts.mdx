@@ -26,8 +26,8 @@ Verify an existing contract by running the following command:
 forge verify-contract 0x85717893A18F255285AB48d7bE245ddcD047dEAE \
     src/Counter.sol:Counter \
     --verifier etherscan \
-    --verifier-url https://api-sepolia.abscan.org/api \
-    --etherscan-api-key TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD \
+    --verifier-url https://api.etherscan.io/v2/api?chainid=11124 \
+    --etherscan-api-key <your-etherscan-api-key> \
     --zksync
 ```
 
@@ -35,8 +35,8 @@ forge verify-contract 0x85717893A18F255285AB48d7bE245ddcD047dEAE \
 forge verify-contract 0x85717893A18F255285AB48d7bE245ddcD047dEAE \
     src/Counter.sol:Counter \
     --verifier etherscan \
-    --verifier-url https://api.abscan.org/api \
-    --etherscan-api-key <your-abscan-api-key-here> \
+    --verifier-url https://api.etherscan.io/v2/api?chainid=2741 \
+    --etherscan-api-key <your-etherscan-api-key> \
     --zksync
 ```
 
