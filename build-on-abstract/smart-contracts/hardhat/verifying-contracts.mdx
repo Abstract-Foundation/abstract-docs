@@ -8,9 +8,9 @@ description: "Learn how to verify smart contracts on Abstract using Hardhat."
 
 <Steps>
 
-<Step title="Get an Abscan API key">
+<Step title="Get an Etherscan API key">
 
-Follow the [Abscan documentation](https://docs.abscan.org/getting-started/viewing-api-usage-statistics) to get an API key.
+Follow the [Abscan documentation](https://docs.etherscan.io/getting-started/viewing-api-usage-statistics) to get an API key.
 
 </Step>
 
@@ -18,7 +18,7 @@ Follow the [Abscan documentation](https://docs.abscan.org/getting-started/viewin
 
 Add the below `etherscan` configuration object to your Hardhat configuration file.
 
-Replace `<your-abscan-api-key-here>` with your Abscan API key from the previous step.
+Replace `<your-etherscan-api-key-here>` with your Etherscan API key from the previous step.
 
 ```typescript hardhat.config.ts {8}
 import { HardhatUserConfig } from "hardhat/config";
@@ -27,15 +27,15 @@ import "@matterlabs/hardhat-zksync";
 const config: HardhatUserConfig = {
   etherscan: {
     apiKey: {
-      abstractTestnet: "TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD",
-      abstractMainnet: "your-abscan-api-key-here",
+      abstractTestnet: "your-etherscan-api-key-here",
+      abstractMainnet: "your-etherscan-api-key-here",
     },
     customChains: [
       {
         network: "abstractTestnet",
         chainId: 11124,
         urls: {
-          apiURL: "https://api-sepolia.abscan.org/api",
+          apiURL: 'https://api.etherscan.io/v2/api',
           browserURL: "https://sepolia.abscan.org/",
         },
       },
@@ -43,7 +43,7 @@ const config: HardhatUserConfig = {
         network: "abstractMainnet",
         chainId: 2741,
         urls: {
-          apiURL: "https://api.abscan.org/api",
+          apiURL: 'https://api.etherscan.io/v2/api',
           browserURL: "https://abscan.org/",
         },
       },
