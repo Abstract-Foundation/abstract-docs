@@ -307,7 +307,7 @@
       "destination": "/build-on-abstract/smart-contracts/hardhat/get-started"
     },
     {
-      "source": "build-on-abstract/smart-contracts/foundry",
+      "source": "/build-on-abstract/smart-contracts/foundry",
       "destination": "/build-on-abstract/smart-contracts/foundry/get-started"
     },
     {
