@@ -16,13 +16,13 @@ To run the docs locally, follow the steps below:
 2. Install the dependencies:
 
    ```bash
-   npm install -g mintlify
+   npm i -g mint
    ```
 
 3. Start the development server:
 
    ```bash
-   mintlify dev
+   mint dev
    ```
 
 4. Open the browser and navigate to `http://localhost:3000`.
