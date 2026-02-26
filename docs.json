@@ -22,7 +22,8 @@
             "pages": [
               "overview",
               "what-is-abstract",
-              "connect-to-abstract"
+              "connect-to-abstract",
+              "ai-and-llms"
             ]
           },
           {
@@ -237,17 +238,6 @@
               "ecosystem/relayers",
               "ecosystem/rpc-providers",
               "ecosystem/token-distribution"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Cookbook",
-        "groups": [
-          {
-            "group": "Cookbook",
-            "pages": [
-              "cookbook/random-number-generation"
             ]
           }
         ]
