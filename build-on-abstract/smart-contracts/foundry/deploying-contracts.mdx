@@ -42,8 +42,8 @@ forge create src/Counter.sol:Counter \
     --zksync \
     --verify \
     --verifier etherscan \
-    --verifier-url https://api-sepolia.abscan.org/api \
-    --etherscan-api-key TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD
+    --verifier-url https://api.etherscan.io/v2/api?chainid=11124 \
+    --etherscan-api-key <your-etherscan-api-key>
 ```
 
 ```bash Mainnet
@@ -54,8 +54,8 @@ forge create src/Counter.sol:Counter \
     --zksync \
     --verify \
     --verifier etherscan \
-    --verifier-url https://api.abscan.org/api \
-    --etherscan-api-key <your-abscan-api-key>
+    --verifier-url https://api.etherscan.io/v2/api?chainid=2741 \
+    --etherscan-api-key <your-etherscan-api-key>
 ```
 
 </CodeGroup>
@@ -89,8 +89,8 @@ forge create src/Counter.sol:Counter \
     --constructor-args 1000000000000000000 0x9C073184e74Af6D10DF575e724DC4712D98976aC \
     --verify \
     --verifier etherscan \
-    --verifier-url https://api-sepolia.abscan.org/api \
-    --etherscan-api-key TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD
+    --verifier-url https://api.etherscan.io/v2/api?chainid=11124 \
+    --etherscan-api-key <your-etherscan-api-key>
 ```
 
 ```bash Mainnet
@@ -102,8 +102,8 @@ forge create src/Counter.sol:Counter \
     --constructor-args 1000000000000000000 0x9C073184e74Af6D10DF575e724DC4712D98976aC \
     --verify \
     --verifier etherscan \
-    --verifier-url https://api.abscan.org/api \
-    --etherscan-api-key <your-abscan-api-key>
+    --verifier-url https://api.etherscan.io/v2/api?chainid=2741 \
+    --etherscan-api-key <your-etherscan-api-key>
 ```
 
 </CodeGroup>
