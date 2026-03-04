@@ -22,8 +22,16 @@
             "pages": [
               "overview",
               "what-is-abstract",
-              "connect-to-abstract",
-              "ai-and-llms"
+              "connect-to-abstract"
+            ]
+          },
+          {
+            "group": "AI & LLMs",
+            "pages": [
+              "ai-and-llms/overview",
+              "ai-and-llms/llms-txt",
+              "ai-and-llms/llms-full-txt",
+              "ai-and-llms/skill-md"
             ]
           },
           {
@@ -307,6 +315,10 @@
     {
       "source": "/abstract-global-wallet/agw-client/actions/sendTransactionBatch",
       "destination": "/abstract-global-wallet/agw-client/actions/sendCalls"
+    },
+    {
+      "source": "/ai-and-llms",
+      "destination": "/ai-and-llms/overview"
     }
   ]
 }
