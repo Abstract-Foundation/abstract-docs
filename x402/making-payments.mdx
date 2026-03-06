@@ -1,0 +1,276 @@
+---
+title: "Making Payments"
+description: "Use the x402 client SDK to access payment-protected resources on Abstract."
+---
+
+This guide walks through building a client that can automatically pay for
+x402-protected resources on Abstract. The facilitator supports any
+[ERC-3009](https://eips.ethereum.org/EIPS/eip-3009)-capable token —
+the examples below use USDC.
+
+<Accordion title="Prerequisites">
+  - A wallet with USDC on Abstract ([mainnet](https://portal.abs.xyz) or [testnet](/tooling/faucets)).
+  - Node.js 18+, Go 1.21+, or Python 3.10+ installed.
+</Accordion>
+
+## 1. Install the client SDK
+
+<Tabs>
+  <Tab title="Fetch (TypeScript)">
+    ```bash
+    npm install @x402/fetch @x402/core @x402/evm viem
+    ```
+  </Tab>
+  <Tab title="Axios (TypeScript)">
+    ```bash
+    npm install @x402/axios @x402/core @x402/evm viem axios
+    ```
+  </Tab>
+  <Tab title="Go">
+    ```bash
+    go get github.com/coinbase/x402/go
+    ```
+  </Tab>
+  <Tab title="Python (httpx)">
+    ```bash
+    pip install "x402[httpx]"
+    ```
+  </Tab>
+  <Tab title="Python (requests)">
+    ```bash
+    pip install "x402[requests]"
+    ```
+  </Tab>
+</Tabs>
+
+## 2. Create a wallet signer
+
+The signer authorizes payment transactions from your wallet.
+
+<Tabs>
+  <Tab title="TypeScript (viem)">
+    ```typescript
+    import { privateKeyToAccount } from "viem/accounts";
+
+    const signer = privateKeyToAccount(
+      process.env.PRIVATE_KEY as `0x${string}`
+    );
+    ```
+  </Tab>
+  <Tab title="Go">
+    ```go
+    import (
+        evmsigners "github.com/coinbase/x402/go/signers/evm"
+    )
+
+    evmSigner, err := evmsigners.NewClientSignerFromPrivateKey(
+        os.Getenv("PRIVATE_KEY"),
+    )
+    if err != nil {
+        log.Fatal(err)
+    }
+    ```
+  </Tab>
+  <Tab title="Python">
+    ```python
+    import os
+    from eth_account import Account
+    from x402.mechanisms.evm import EthAccountSigner
+
+    account = Account.from_key(os.getenv("PRIVATE_KEY"))
+    signer = EthAccountSigner(account)
+    ```
+  </Tab>
+</Tabs>
+
+## 3. Make paid requests
+
+Wrap your HTTP client with x402 payment support. The wrapper automatically detects
+`402` responses, signs a payment with your wallet, and retries the request.
+
+<Tabs>
+  <Tab title="Fetch (TypeScript)">
+    ```typescript
+    import { wrapFetchWithPayment } from "@x402/fetch";
+    import { x402Client } from "@x402/core/client";
+    import { ExactEvmScheme } from "@x402/evm/exact/client";
+    import { privateKeyToAccount } from "viem/accounts";
+
+    const signer = privateKeyToAccount(
+      process.env.PRIVATE_KEY as `0x${string}`
+    );
+
+    const client = new x402Client();
+    client.register("eip155:*", new ExactEvmScheme(signer));
+
+    const fetchWithPayment = wrapFetchWithPayment(fetch, client);
+
+    const response = await fetchWithPayment(
+      "https://api.example.com/weather",
+      { method: "GET" },
+    );
+
+    const data = await response.json();
+    console.log("Response:", data);
+    ```
+  </Tab>
+  <Tab title="Axios (TypeScript)">
+    ```typescript
+    import { x402Client, wrapAxiosWithPayment } from "@x402/axios";
+    import { ExactEvmScheme } from "@x402/evm/exact/client";
+    import { privateKeyToAccount } from "viem/accounts";
+    import axios from "axios";
+
+    const signer = privateKeyToAccount(
+      process.env.PRIVATE_KEY as `0x${string}`
+    );
+
+    const client = new x402Client();
+    client.register("eip155:*", new ExactEvmScheme(signer));
+
+    const api = wrapAxiosWithPayment(
+      axios.create({ baseURL: "https://api.example.com" }),
+      client,
+    );
+
+    const response = await api.get("/weather");
+    console.log("Response:", response.data);
+    ```
+  </Tab>
+  <Tab title="Go">
+    ```go
+    package main
+
+    import (
+        "context"
+        "encoding/json"
+        "fmt"
+        "net/http"
+        "os"
+        "time"
+
+        x402 "github.com/coinbase/x402/go"
+        x402http "github.com/coinbase/x402/go/http"
+        evm "github.com/coinbase/x402/go/mechanisms/evm/exact/client"
+        evmsigners "github.com/coinbase/x402/go/signers/evm"
+    )
+
+    func main() {
+        evmSigner, _ := evmsigners.NewClientSignerFromPrivateKey(
+            os.Getenv("PRIVATE_KEY"),
+        )
+
+        x402Client := x402.Newx402Client().
+            Register("eip155:*", evm.NewExactEvmScheme(evmSigner))
+
+        httpClient := x402http.WrapHTTPClientWithPayment(
+            http.DefaultClient,
+            x402http.Newx402HTTPClient(x402Client),
+        )
+
+        ctx, cancel := context.WithTimeout(
+            context.Background(), 30*time.Second,
+        )
+        defer cancel()
+
+        req, _ := http.NewRequestWithContext(
+            ctx, "GET", "https://api.example.com/weather", nil,
+        )
+        resp, err := httpClient.Do(req)
+        if err != nil {
+            fmt.Printf("Request failed: %v\n", err)
+            return
+        }
+        defer resp.Body.Close()
+
+        var data map[string]interface{}
+        json.NewDecoder(resp.Body).Decode(&data)
+        fmt.Printf("Response: %+v\n", data)
+    }
+    ```
+  </Tab>
+  <Tab title="Python (httpx)">
+    ```python
+    import asyncio
+    import os
+    from eth_account import Account
+
+    from x402 import x402Client
+    from x402.http.clients import x402HttpxClient
+    from x402.mechanisms.evm import EthAccountSigner
+    from x402.mechanisms.evm.exact.register import register_exact_evm_client
+
+
+    async def main() -> None:
+        client = x402Client()
+        account = Account.from_key(os.getenv("PRIVATE_KEY"))
+        register_exact_evm_client(client, EthAccountSigner(account))
+
+        async with x402HttpxClient(client) as http:
+            response = await http.get("https://api.example.com/weather")
+            await response.aread()
+            print(f"Response: {response.text}")
+
+
+    asyncio.run(main())
+    ```
+  </Tab>
+  <Tab title="Python (requests)">
+    ```python
+    import os
+    from eth_account import Account
+
+    from x402 import x402ClientSync
+    from x402.http.clients import x402_requests
+    from x402.mechanisms.evm import EthAccountSigner
+    from x402.mechanisms.evm.exact.register import register_exact_evm_client
+
+
+    def main() -> None:
+        client = x402ClientSync()
+        account = Account.from_key(os.getenv("PRIVATE_KEY"))
+        register_exact_evm_client(client, EthAccountSigner(account))
+
+        with x402_requests(client) as session:
+            response = session.get("https://api.example.com/weather")
+            print(f"Response: {response.text}")
+
+
+    main()
+    ```
+  </Tab>
+</Tabs>
+
+## How it works under the hood
+
+The x402 client wrapper handles the full payment flow transparently:
+
+1. Your code makes a normal HTTP request.
+2. If the server responds with `402 Payment Required`, the wrapper reads the payment requirements from the response headers.
+3. The wrapper uses your registered scheme and signer to create a signed payment payload.
+4. The request is retried with the payment attached in a `PAYMENT-SIGNATURE` header.
+5. The server verifies the payment (via the facilitator) and returns the resource.
+
+From your code's perspective, the request looks like any other HTTP call — the payment happens automatically.
+
+## Error handling
+
+```typescript
+try {
+  const response = await fetchWithPayment(url, { method: "GET" });
+} catch (error) {
+  if (error.message.includes("No scheme registered")) {
+    console.error("Network not supported — register the appropriate scheme");
+  } else if (error.message.includes("Payment already attempted")) {
+    console.error("Payment failed on retry");
+  } else {
+    console.error("Request failed:", error);
+  }
+}
+```
+
+## Next steps
+
+- [Accepting Payments](/x402/accepting-payments) — add x402 payment middleware to your own API.
+- [x402 Documentation](https://docs.x402.org) — full protocol specification and advanced topics.
+- [x402 Examples](https://github.com/coinbase/x402/tree/main/examples) — complete working examples on GitHub.

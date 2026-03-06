@@ -1,0 +1,406 @@
+---
+title: "Accepting Payments"
+description: "Add x402 payment middleware to your server to charge for API access on Abstract."
+---
+
+This guide walks through adding x402 payment middleware to your server so that
+clients must pay to access your endpoints. The facilitator supports any
+[ERC-3009](https://eips.ethereum.org/EIPS/eip-3009)-capable token on Abstract —
+the examples below use USDC.
+
+<Accordion title="Prerequisites">
+  - A crypto wallet address to receive payments.
+  - An existing HTTP API built with Express, Next.js, Hono, Gin, FastAPI, or Flask.
+  - Node.js 18+, Go 1.21+, or Python 3.10+ installed.
+</Accordion>
+
+## 1. Install dependencies
+
+<Tabs>
+  <Tab title="Express">
+    ```bash
+    npm install @x402/express @x402/core @x402/evm
+    ```
+  </Tab>
+  <Tab title="Next.js">
+    ```bash
+    npm install @x402/next @x402/core @x402/evm
+    ```
+  </Tab>
+  <Tab title="Hono">
+    ```bash
+    npm install @x402/hono @x402/core @x402/evm
+    ```
+  </Tab>
+  <Tab title="Go">
+    ```bash
+    go get github.com/coinbase/x402/go
+    ```
+  </Tab>
+  <Tab title="FastAPI">
+    ```bash
+    pip install x402
+    ```
+  </Tab>
+  <Tab title="Flask">
+    ```bash
+    pip install x402
+    ```
+  </Tab>
+</Tabs>
+
+## 2. Add payment middleware
+
+Add the x402 payment middleware to your server. The middleware intercepts incoming requests,
+returns a `402 Payment Required` response if no payment is attached, and verifies/settles
+payments through Abstract's facilitator.
+
+Replace `0xYourWalletAddress` with the wallet address where you want to receive payments.
+
+<Tabs>
+  <Tab title="Express">
+    ```typescript
+    import express from "express";
+    import { paymentMiddleware, x402ResourceServer } from "@x402/express";
+    import { ExactEvmScheme } from "@x402/evm/exact/server";
+    import { HTTPFacilitatorClient } from "@x402/core/server";
+
+    const app = express();
+    const payTo = "0xYourWalletAddress";
+
+    const facilitatorClient = new HTTPFacilitatorClient({
+      url: "https://facilitator.x402.abs.xyz",
+    });
+
+    app.use(
+      paymentMiddleware(
+        {
+          "GET /weather": {
+            accepts: [
+              {
+                scheme: "exact",
+                price: "$0.001",
+                network: "eip155:2741",
+                payTo,
+              },
+            ],
+            description: "Weather data",
+            mimeType: "application/json",
+          },
+        },
+        new x402ResourceServer(facilitatorClient).register(
+          "eip155:*",
+          new ExactEvmScheme()
+        ),
+      ),
+    );
+
+    app.get("/weather", (req, res) => {
+      res.send({ weather: "sunny", temperature: 70 });
+    });
+
+    app.listen(4021, () => {
+      console.log("Server listening at http://localhost:4021");
+    });
+    ```
+  </Tab>
+  <Tab title="Next.js (Route Handler)">
+    First, create a shared server instance:
+
+    ```typescript
+    // lib/x402.ts
+    import { x402ResourceServer } from "@x402/core/server";
+    import { HTTPFacilitatorClient } from "@x402/core/server";
+    import { ExactEvmScheme } from "@x402/evm/exact/server";
+
+    export const payTo = "0xYourWalletAddress";
+
+    const facilitatorClient = new HTTPFacilitatorClient({
+      url: "https://facilitator.x402.abs.xyz",
+    });
+
+    export const server = new x402ResourceServer(facilitatorClient);
+    server.register("eip155:*", new ExactEvmScheme());
+    ```
+
+    Then wrap your route handler with `withX402`:
+
+    ```typescript
+    // app/api/weather/route.ts
+    import { NextRequest, NextResponse } from "next/server";
+    import { withX402 } from "@x402/next";
+    import { server, payTo } from "../../../lib/x402";
+
+    const handler = async (_: NextRequest) => {
+      return NextResponse.json(
+        { weather: "sunny", temperature: 72 },
+        { status: 200 },
+      );
+    };
+
+    export const GET = withX402(
+      handler,
+      {
+        accepts: [
+          {
+            scheme: "exact",
+            price: "$0.001",
+            network: "eip155:2741",
+            payTo,
+          },
+        ],
+        description: "Access to weather API",
+        mimeType: "application/json",
+      },
+      server,
+    );
+    ```
+  </Tab>
+  <Tab title="Hono">
+    ```typescript
+    import { Hono } from "hono";
+    import { serve } from "@hono/node-server";
+    import { paymentMiddleware, x402ResourceServer } from "@x402/hono";
+    import { ExactEvmScheme } from "@x402/evm/exact/server";
+    import { HTTPFacilitatorClient } from "@x402/core/server";
+
+    const app = new Hono();
+    const payTo = "0xYourWalletAddress";
+
+    const facilitatorClient = new HTTPFacilitatorClient({
+      url: "https://facilitator.x402.abs.xyz",
+    });
+
+    app.use(
+      paymentMiddleware(
+        {
+          "GET /weather": {
+            accepts: [
+              {
+                scheme: "exact",
+                price: "$0.001",
+                network: "eip155:2741",
+                payTo,
+              },
+            ],
+            description: "Weather data",
+            mimeType: "application/json",
+          },
+        },
+        new x402ResourceServer(facilitatorClient).register(
+          "eip155:*",
+          new ExactEvmScheme()
+        ),
+      ),
+    );
+
+    app.get("/weather", (c) => {
+      return c.json({ weather: "sunny", temperature: 70 });
+    });
+
+    serve({ fetch: app.fetch, port: 4021 });
+    ```
+  </Tab>
+  <Tab title="Go (Gin)">
+    ```go
+    package main
+
+    import (
+        "net/http"
+        "time"
+
+        x402 "github.com/coinbase/x402/go"
+        x402http "github.com/coinbase/x402/go/http"
+        ginmw "github.com/coinbase/x402/go/http/gin"
+        evm "github.com/coinbase/x402/go/mechanisms/evm/exact/server"
+        "github.com/gin-gonic/gin"
+    )
+
+    func main() {
+        payTo := "0xYourWalletAddress"
+
+        r := gin.Default()
+
+        facilitatorClient := x402http.NewHTTPFacilitatorClient(
+            &x402http.FacilitatorConfig{
+                URL: "https://facilitator.x402.abs.xyz",
+            },
+        )
+
+        r.Use(ginmw.X402Payment(ginmw.Config{
+            Routes: x402http.RoutesConfig{
+                "GET /weather": {
+                    Accepts: x402http.PaymentOptions{
+                        {
+                            Scheme:  "exact",
+                            Price:   "$0.001",
+                            Network: "eip155:2741",
+                            PayTo:   payTo,
+                        },
+                    },
+                    Description: "Get weather data",
+                    MimeType:    "application/json",
+                },
+            },
+            Facilitator: facilitatorClient,
+            Schemes: []ginmw.SchemeConfig{
+                {
+                    Network: x402.Network("eip155:*"),
+                    Server:  evm.NewExactEvmScheme(),
+                },
+            },
+            Timeout: 30 * time.Second,
+        }))
+
+        r.GET("/weather", func(c *gin.Context) {
+            c.JSON(http.StatusOK, gin.H{
+                "weather":     "sunny",
+                "temperature": 70,
+            })
+        })
+
+        r.Run(":4021")
+    }
+    ```
+  </Tab>
+  <Tab title="FastAPI">
+    ```python
+    from typing import Any
+
+    from fastapi import FastAPI
+
+    from x402.http import FacilitatorConfig, HTTPFacilitatorClient, PaymentOption
+    from x402.http.middleware.fastapi import PaymentMiddlewareASGI
+    from x402.http.types import RouteConfig
+    from x402.mechanisms.evm.exact import ExactEvmServerScheme
+    from x402.schemas import Network
+    from x402.server import x402ResourceServer
+
+    app = FastAPI()
+
+    pay_to = "0xYourWalletAddress"
+    NETWORK: Network = "eip155:2741"
+
+    facilitator = HTTPFacilitatorClient(
+        FacilitatorConfig(url="https://facilitator.x402.abs.xyz")
+    )
+
+    server = x402ResourceServer(facilitator)
+    server.register(NETWORK, ExactEvmServerScheme())
+
+    routes: dict[str, RouteConfig] = {
+        "GET /weather": RouteConfig(
+            accepts=[
+                PaymentOption(
+                    scheme="exact",
+                    pay_to=pay_to,
+                    price="$0.001",
+                    network=NETWORK,
+                ),
+            ],
+            mime_type="application/json",
+            description="Weather report",
+        ),
+    }
+
+    app.add_middleware(PaymentMiddlewareASGI, routes=routes, server=server)
+
+
+    @app.get("/weather")
+    async def get_weather() -> dict[str, Any]:
+        return {"weather": "sunny", "temperature": 70}
+
+
+    if __name__ == "__main__":
+        import uvicorn
+
+        uvicorn.run(app, host="0.0.0.0", port=4021)
+    ```
+  </Tab>
+  <Tab title="Flask">
+    ```python
+    from flask import Flask, jsonify
+
+    from x402.http import (
+        FacilitatorConfig,
+        HTTPFacilitatorClientSync,
+        PaymentOption,
+    )
+    from x402.http.middleware.flask import payment_middleware
+    from x402.http.types import RouteConfig
+    from x402.mechanisms.evm.exact import ExactEvmServerScheme
+    from x402.schemas import Network
+    from x402.server import x402ResourceServerSync
+
+    app = Flask(__name__)
+
+    pay_to = "0xYourWalletAddress"
+    NETWORK: Network = "eip155:2741"
+
+    facilitator = HTTPFacilitatorClientSync(
+        FacilitatorConfig(url="https://facilitator.x402.abs.xyz")
+    )
+
+    server = x402ResourceServerSync(facilitator)
+    server.register(NETWORK, ExactEvmServerScheme())
+
+    routes: dict[str, RouteConfig] = {
+        "GET /weather": RouteConfig(
+            accepts=[
+                PaymentOption(
+                    scheme="exact",
+                    pay_to=pay_to,
+                    price="$0.001",
+                    network=NETWORK,
+                ),
+            ],
+            mime_type="application/json",
+            description="Weather report",
+        ),
+    }
+
+    payment_middleware(app, routes=routes, server=server)
+
+
+    @app.route("/weather")
+    def get_weather():
+        return jsonify({"weather": "sunny", "temperature": 70})
+
+
+    if __name__ == "__main__":
+        app.run(host="0.0.0.0", port=4021)
+    ```
+  </Tab>
+</Tabs>
+
+## 3. Test your integration
+
+With your server running, send a request to the protected endpoint:
+
+```bash
+curl -i http://localhost:4021/weather
+```
+
+You should receive a `402 Payment Required` response with a `PAYMENT-REQUIRED` header containing the payment requirements. This confirms the middleware is working — clients using an [x402 client SDK](/x402/making-payments) will handle payment automatically.
+
+## Using testnet
+
+The examples above use Abstract mainnet (`eip155:2741`). To use Abstract testnet during development,
+change the network ID to `eip155:11124`:
+
+```typescript
+{
+  scheme: "exact",
+  price: "$0.001",
+  network: "eip155:11124",
+  payTo: "0xYourWalletAddress",
+}
+```
+
+The facilitator URL stays the same — `https://facilitator.x402.abs.xyz` supports both networks.
+
+## Next steps
+
+- [Making Payments](/x402/making-payments) — build a client that pays for x402-protected resources.
+- [x402 Documentation](https://docs.x402.org) — advanced topics like lifecycle hooks and Bazaar discovery.
+- [x402 Examples](https://github.com/coinbase/x402/tree/main/examples) — complete working examples on GitHub.
