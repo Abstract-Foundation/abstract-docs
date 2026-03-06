@@ -35,6 +35,14 @@
             ]
           },
           {
+            "group": "Payments (x402)",
+            "pages": [
+              "x402/overview",
+              "x402/accepting-payments",
+              "x402/making-payments"
+            ]
+          },
+          {
             "group": "Build on Abstract",
             "pages": [
               "build-on-abstract/getting-started",

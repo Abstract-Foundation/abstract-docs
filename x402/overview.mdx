@@ -1,0 +1,96 @@
+---
+title: "Payments (x402)"
+description: "Accept and make HTTP payments on Abstract using the x402 protocol."
+---
+
+[x402](https://x402.org) is an open payment standard that activates
+[HTTP 402 Payment Required](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/402) for practical use.
+It enables any HTTP resource — an API, webpage, or file server — to require payment before serving a response,
+without custom billing infrastructure or payment integrations.
+
+## How it works
+
+A typical x402 payment flow follows five steps:
+
+1. **Client requests a resource** — a standard HTTP request to a protected endpoint.
+2. **Server responds with 402** — the response includes payment requirements (price, network, token, recipient).
+3. **Client signs a payment** — using their wallet, the client creates a signed payment payload matching the requirements.
+4. **Client retries with payment** — the original request is resent with the signed payment in a header.
+5. **Facilitator verifies and settles** — the server (via the facilitator) verifies the signature and settles the payment on-chain.
+
+The client and server SDKs handle steps 2–5 automatically. From a developer's perspective, it is one line of middleware on the server and one wrapper function on the client.
+
+## Abstract's facilitator
+
+Abstract runs a public x402 facilitator that any developer can use to accept and make payments on Abstract:
+
+| | |
+| --- | --- |
+| **Facilitator URL** | `https://facilitator.x402.abs.xyz` |
+| **Service fees** | None |
+| **Gas fees** | Sponsored via paymaster — you pay nothing |
+| **Supported networks** | Abstract mainnet (`eip155:2741`), Abstract testnet (`eip155:11124`) |
+
+## Supported tokens
+
+The facilitator works with any [ERC-3009](https://eips.ethereum.org/EIPS/eip-3009)-capable token on Abstract.
+USDC is the recommended token and is used throughout these guides:
+
+| Network | Token | Address |
+| --- | --- | --- |
+| Mainnet (`eip155:2741`) | USDC | `0x84A71ccD554Cc1b02749b35d22F684CC8ec987e1` |
+| Testnet (`eip155:11124`) | USDC | `0xe4C7fBB0a626ed208021ccabA6Be1566905E2dFc` |
+
+## Key concepts
+
+| Term | Description |
+| --- | --- |
+| **Client** | The entity making a request and paying for access to a resource. |
+| **Server** | The HTTP server that provides the resource and requires payment. |
+| **Facilitator** | A service that verifies payment signatures and settles transactions on-chain. |
+| **Scheme** | The payment logic — Abstract uses `exact`, which transfers a fixed amount per request. |
+
+## Get started
+
+<CardGroup cols={2}>
+  <Card
+    title="Accepting Payments"
+    icon="server"
+    href="/x402/accepting-payments"
+  >
+    Add payment middleware to your API to charge for access on Abstract.
+  </Card>
+  <Card
+    title="Making Payments"
+    icon="credit-card"
+    href="/x402/making-payments"
+  >
+    Use the client SDK to access x402-protected resources on Abstract.
+  </Card>
+</CardGroup>
+
+## Resources
+
+<CardGroup cols={3}>
+  <Card
+    title="x402 Documentation"
+    icon="book"
+    href="https://docs.x402.org"
+  >
+    Full protocol documentation and specification.
+  </Card>
+  <Card
+    title="GitHub"
+    icon="github"
+    href="https://github.com/coinbase/x402"
+  >
+    Source code, SDKs, and examples.
+  </Card>
+  <Card
+    title="Discord"
+    icon="discord"
+    href="https://discord.gg/cdp"
+  >
+    Community support and discussion.
+  </Card>
+</CardGroup>
