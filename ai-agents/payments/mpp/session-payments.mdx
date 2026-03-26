@@ -1,0 +1,90 @@
+---
+title: "MPP Session Payments"
+description: "Use MPP session payments on Abstract for repeated micro-payments over HTTP."
+---
+
+Session payments use an escrow-backed channel on Abstract so the client can pay repeatedly with off-chain vouchers after one initial on-chain open.
+
+## Session lifecycle
+
+The client-side session flow has four main actions:
+
+- `open` to create the channel and sign the first voucher
+- `voucher` to increase the cumulative paid amount
+- `topUp` to add more deposit
+- `close` to finalize with a last voucher
+
+## 1. Install the package
+
+```bash
+npm install @abstract-foundation/mpp mppx viem zod
+```
+
+## 2. Create the client session method
+
+```typescript
+import { abstractSession } from "@abstract-foundation/mpp/client";
+import { privateKeyToAccount } from "viem/accounts";
+
+const session = abstractSession({
+  account: privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`),
+  deposit: "10",
+});
+```
+
+`deposit` is the default human-readable token amount to escrow unless the server challenge provides `suggestedDeposit`.
+
+## 3. Register the server session method
+
+```typescript
+import { Mppx } from "mppx/server";
+import { abstract } from "@abstract-foundation/mpp/server";
+import { privateKeyToAccount } from "viem/accounts";
+
+const serverAccount = privateKeyToAccount(
+  process.env.SERVER_PRIVATE_KEY as `0x${string}`
+);
+
+const mpp = Mppx.create({
+  methods: [
+    abstract.session({
+      account: serverAccount,
+      recipient: "0xYourWalletAddress",
+      amount: "0.001",
+      suggestedDeposit: "1",
+      unitType: "request",
+      testnet: true,
+    }),
+  ],
+  secretKey: process.env.MPP_SECRET_KEY!,
+});
+```
+
+## 4. Request shape
+
+Session requests can include:
+
+- `amount`
+- `currency`
+- `decimals`
+- `unitType`
+- optional `recipient`
+- optional `channelId`
+- optional `escrowContract`
+- optional `suggestedDeposit`
+- optional `minVoucherDelta`
+
+## 5. Operational guidance
+
+- pick a `suggestedDeposit` that supports several expected requests
+- settle when the open channel has accumulated enough value or when you need finality
+- use `topUp` instead of reopening when the remaining deposit is too low
+- expect cumulative amounts, not independent per-request signatures
+
+## When to use session mode
+
+Use session payments when:
+
+- your agent will call the same paid API repeatedly
+- per-request on-chain overhead is too high
+- you want the HTTP flow to stay fast after the initial channel open

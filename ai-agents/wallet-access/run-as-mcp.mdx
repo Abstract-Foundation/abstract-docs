@@ -1,0 +1,51 @@
+---
+title: "Run AGW as MCP"
+description: "Expose AGW CLI capabilities through the built-in MCP server."
+---
+
+AGW CLI ships with a built-in MCP server generated from the same command registry as the CLI.
+
+## Start the MCP server
+
+```bash
+agw-cli mcp serve --sanitize strict
+```
+
+## Generate config
+
+```bash
+agw-cli mcp-config
+agw-cli mcp-config --npx
+```
+
+Use the plain `mcp-config` output when `agw-cli` is already installed on the machine. Use `--npx` when you want an npx-based host configuration.
+
+## Good host fits
+
+- Claude Code
+- Codex-compatible MCP hosts
+- Gemini
+- other MCP-capable local agent hosts
+
+## What the MCP server exposes
+
+The MCP server inherits the CLI command surface, including:
+
+- wallet reads
+- transaction preview and execution
+- contract actions
+- app discovery
+- Portal queries
+
+## Recommended setup
+
+1. Complete [`Install and Authenticate`](/ai-agents/wallet-access/install-and-authenticate)
+2. Start `agw-cli mcp serve --sanitize strict`
+3. Paste the config snippet into your MCP host
+4. Test a read-only command before enabling write workflows
+
+## Write-safety model
+
+- reads can run directly
+- state-changing operations should be previewed first
+- execution requires explicit `--execute`

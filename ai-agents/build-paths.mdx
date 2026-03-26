@@ -1,0 +1,28 @@
+---
+title: "Build Paths"
+description: "Choose the right starting point for your Abstract agent workflow."
+---
+
+This section is organized around workflows, not frameworks.
+
+## I want my agent to pay for APIs
+
+- If you want straightforward pay-per-request billing with a public facilitator, start with [`x402`](/ai-agents/payments/x402/overview).
+- If you want HTTP-native payments with a choice between one-off charge and channel-based session payments, start with [`MPP`](/ai-agents/payments/mpp/overview).
+
+## I want to charge other agents
+
+- Use [`Accept x402 Payments`](/ai-agents/payments/x402/accepting-payments) if you want the simplest integration path today.
+- Use [`MPP Charge Payments`](/ai-agents/payments/mpp/charge-payments) for one-off signed authorizations.
+- Use [`MPP Session Payments`](/ai-agents/payments/mpp/session-payments) if clients will make repeated requests and you want lower per-request overhead.
+
+## I want an agent to control an AGW
+
+- Start with [`AGW CLI Overview`](/ai-agents/wallet-access/agw-cli-overview).
+- Then follow [`Install and Authenticate`](/ai-agents/wallet-access/install-and-authenticate).
+- If your host supports MCP, continue to [`Run AGW as MCP`](/ai-agents/wallet-access/run-as-mcp).
+
+## I want my coding agent to understand Abstract docs
+
+- Use [`Agent Resources`](/ai-agents/resources/overview) for docs MCP and machine-readable docs formats.
+- Use [`SKILL.MD`](/ai-agents/resources/skill-md) when the agent needs workflows, decision tables, and gotchas instead of raw page text.

@@ -26,23 +26,6 @@
             ]
           },
           {
-            "group": "AI & LLMs",
-            "pages": [
-              "ai-and-llms/overview",
-              "ai-and-llms/llms-txt",
-              "ai-and-llms/llms-full-txt",
-              "ai-and-llms/skill-md"
-            ]
-          },
-          {
-            "group": "Payments (x402)",
-            "pages": [
-              "x402/overview",
-              "x402/accepting-payments",
-              "x402/making-payments"
-            ]
-          },
-          {
             "group": "Build on Abstract",
             "pages": [
               "build-on-abstract/getting-started",
@@ -234,6 +217,49 @@
             "pages": [
               "abstract-global-wallet/agw-client/getSmartAccountAddressFromInitialSigner",
               "abstract-global-wallet/agw-client/transformEIP1193Provider"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "AI Agents",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "ai-agents/overview",
+              "ai-agents/build-paths"
+            ]
+          },
+          {
+            "group": "Payments",
+            "pages": [
+              "ai-agents/payments/x402/overview",
+              "ai-agents/payments/x402/accepting-payments",
+              "ai-agents/payments/x402/making-payments",
+              "ai-agents/payments/mpp/overview",
+              "ai-agents/payments/mpp/charge-payments",
+              "ai-agents/payments/mpp/session-payments"
+            ]
+          },
+          {
+            "group": "Wallet Access",
+            "pages": [
+              "ai-agents/wallet-access/agw-cli-overview",
+              "ai-agents/wallet-access/install-and-authenticate",
+              "ai-agents/wallet-access/run-as-mcp",
+              "ai-agents/wallet-access/wallet-reads-and-transactions",
+              "ai-agents/wallet-access/security-and-session-model"
+            ]
+          },
+          {
+            "group": "Resources",
+            "pages": [
+              "ai-agents/resources/overview",
+              "ai-agents/resources/llms-txt",
+              "ai-agents/resources/llms-full-txt",
+              "ai-agents/resources/skill-md",
+              "ai-agents/resources/contracts-and-endpoints"
             ]
           }
         ]

@@ -1,0 +1,75 @@
+---
+title: "MPP Charge Payments"
+description: "Use MPP charge payments on Abstract for one-off paid HTTP requests."
+---
+
+Charge payments are the simple MPP path: the client signs an ERC-3009 authorization and the server settles it on-chain.
+
+## 1. Install the package
+
+```bash
+npm install @abstract-foundation/mpp mppx viem zod
+```
+
+## 2. Register the server method
+
+The Abstract package exposes a server-side charge method under `@abstract-foundation/mpp/server`.
+
+```typescript
+import { Mppx } from "mppx/server";
+import { abstract } from "@abstract-foundation/mpp/server";
+import { privateKeyToAccount } from "viem/accounts";
+
+const serverAccount = privateKeyToAccount(
+  process.env.SERVER_PRIVATE_KEY as `0x${string}`
+);
+
+const mpp = Mppx.create({
+  methods: [
+    abstract.charge({
+      account: serverAccount,
+      recipient: "0xYourWalletAddress",
+      amount: "0.01",
+      testnet: true,
+    }),
+  ],
+  secretKey: process.env.MPP_SECRET_KEY!,
+});
+```
+
+## 3. Create the client method
+
+The client signs the authorization but does not broadcast a transaction directly.
+
+```typescript
+import { abstractCharge } from "@abstract-foundation/mpp/client";
+import { privateKeyToAccount } from "viem/accounts";
+
+const charge = abstractCharge({
+  account: privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`),
+});
+```
+
+## 4. What the request needs
+
+The charge request includes:
+
+- `amount`
+- `currency`
+- `decimals`
+- `recipient`
+- optional `chainId`
+
+On Abstract, the normal token path is USDC.e with 6 decimals.
+
+## 5. When to use charge mode
+
+Use charge mode when:
+
+- the client makes isolated requests
+- you want no channel lifecycle
+- the simplicity of one signature per request is acceptable
+
+## Next
+
+Move to [`Session Payments`](/ai-agents/payments/mpp/session-payments) if the same client will hit your API repeatedly.

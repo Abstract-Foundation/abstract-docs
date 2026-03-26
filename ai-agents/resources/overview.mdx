@@ -1,0 +1,37 @@
+---
+title: "Agent Resources"
+description: "Use docs MCP, llms.txt, llms-full.txt, and SKILL.MD to give coding agents the right Abstract context."
+---
+
+These resources help coding agents and AI tools understand Abstract documentation without manually pasting large amounts of context.
+
+<CardGroup cols={2}>
+  <Card title="Docs MCP" icon="plug" href="https://docs.abs.xyz/mcp">
+    Connect an MCP-capable tool directly to Abstract docs.
+  </Card>
+  <Card title="llms.txt" icon="list" href="/ai-agents/resources/llms-txt">
+    Use a lightweight index of the docs.
+  </Card>
+  <Card title="llms-full.txt" icon="book-open" href="/ai-agents/resources/llms-full-txt">
+    Use the full text of the docs in one file.
+  </Card>
+  <Card title="SKILL.MD" icon="robot" href="/ai-agents/resources/skill-md">
+    Use a cheat sheet optimized for coding-agent execution.
+  </Card>
+</CardGroup>
+
+## Markdown pages
+
+Append `.md` to any docs URL to get a clean Markdown version:
+
+- `https://docs.abs.xyz/overview.md`
+- `https://docs.abs.xyz/abstract-global-wallet/overview.md`
+
+## When to use which
+
+| Resource | Best for |
+| --- | --- |
+| **Docs MCP** | Tool-based retrieval from an MCP-capable host |
+| **llms.txt** | Discovery and routing |
+| **llms-full.txt** | Full-context ingestion |
+| **SKILL.MD** | Task completion, workflows, and decision support |

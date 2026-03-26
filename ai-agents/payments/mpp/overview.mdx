@@ -1,0 +1,67 @@
+---
+title: "MPP"
+description: "Use the Machine Payments Protocol on Abstract for charge payments and session-based micro-payments."
+---
+
+MPP is an HTTP-native payment protocol for paid APIs on Abstract.
+
+At a high level:
+
+- the server challenges a paid request
+- the client signs a payment credential
+- the request is retried with an authorization header
+- the server settles directly on-chain
+
+## Payment modes
+
+### Charge
+
+Use charge payments for one-off requests.
+
+- one signed authorization per request
+- built around ERC-3009 transfer authorization
+- no channel state to maintain
+
+### Session
+
+Use session payments when a client will make repeated requests.
+
+- open a channel once on-chain
+- send cumulative off-chain vouchers after that
+- settle when the server chooses
+
+## Why use MPP
+
+- one protocol for one-off and repeated machine payments
+- purpose-built for agentic HTTP flows
+- lower repeated-request overhead with session channels
+
+## MPP vs x402
+
+| | x402 | MPP |
+| --- | --- | --- |
+| **Best entry point** | Fastest existing path | Richer protocol surface |
+| **One-off payments** | Yes | Yes |
+| **Session micro-payments** | Not the core model | First-class |
+
+## Abstract package and endpoints
+
+| | |
+| --- | --- |
+| **Package** | `@abstract-foundation/mpp` |
+| **Demo** | `https://mpp.abs.xyz` |
+| **Repository** | `Abstract-Foundation/mpp-abstract` |
+| **Mainnet USDC.e** | `0x84A71ccD554Cc1b02749b35d22F684CC8ec987e1` |
+| **Testnet USDC.e** | `0xbd28Bd5A3Ef540d1582828CE2A1a657353008C61` |
+| **Escrow contract** | `0x29635C384f451a72ED2e2a312BCeb8b0bDC0923c` |
+
+## Get started
+
+<CardGroup cols={2}>
+  <Card title="Charge Payments" icon="credit-card" href="/ai-agents/payments/mpp/charge-payments">
+    Integrate one-off paid requests.
+  </Card>
+  <Card title="Session Payments" icon="activity" href="/ai-agents/payments/mpp/session-payments">
+    Open channels and settle cumulative vouchers for repeated requests.
+  </Card>
+</CardGroup>
