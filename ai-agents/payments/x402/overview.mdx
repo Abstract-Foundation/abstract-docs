@@ -1,0 +1,63 @@
+---
+title: "x402"
+description: "Accept and make HTTP payments on Abstract using the x402 protocol."
+---
+
+[x402](https://x402.org) is an open payment standard that activates [HTTP 402 Payment Required](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/402) for practical use.
+
+It lets agents and applications charge for API access with a standard HTTP flow:
+
+1. Client requests a paid resource
+2. Server responds with `402 Payment Required`
+3. Client signs a payment payload
+4. Client retries with payment attached
+5. A facilitator verifies and settles on-chain
+
+## When to use x402
+
+Use x402 when you want:
+
+- the simplest pay-per-request integration path
+- a public facilitator on Abstract
+- a clean split between client and server middleware
+
+Use [`MPP`](/ai-agents/payments/mpp/overview) instead when you want HTTP-native charge and session payment modes in one protocol, especially for repeated micro-payments.
+
+## Abstract facilitator
+
+Abstract runs a public x402 facilitator that any developer can use:
+
+| | |
+| --- | --- |
+| **Facilitator URL** | `https://facilitator.x402.abs.xyz` |
+| **Service fees** | None |
+| **Gas fees** | Sponsored via paymaster |
+| **Supported networks** | Abstract mainnet (`eip155:2741`), Abstract testnet (`eip155:11124`) |
+
+## Supported token
+
+The facilitator works with any [ERC-3009](https://eips.ethereum.org/EIPS/eip-3009)-capable token on Abstract. USDC is the recommended token:
+
+| Network | Token | Address |
+| --- | --- | --- |
+| Mainnet (`eip155:2741`) | USDC | `0x84A71ccD554Cc1b02749b35d22F684CC8ec987e1` |
+| Testnet (`eip155:11124`) | USDC | `0xe4C7fBB0a626ed208021ccabA6Be1566905E2dFc` |
+
+## x402 vs MPP
+
+| | x402 | MPP |
+| --- | --- | --- |
+| **Best for** | Fastest path to paid APIs | Charge plus session-based agent payments |
+| **Primary model** | 402 challenge + facilitator settlement | HTTP-native method negotiation |
+| **Repeated micro-payments** | Possible, but not the focus | First-class via session channels |
+
+## Get started
+
+<CardGroup cols={2}>
+  <Card title="Accept x402 Payments" icon="server" href="/ai-agents/payments/x402/accepting-payments">
+    Add payment middleware to your API.
+  </Card>
+  <Card title="Make x402 Payments" icon="credit-card" href="/ai-agents/payments/x402/making-payments">
+    Build a client that can pay x402-protected resources.
+  </Card>
+</CardGroup>

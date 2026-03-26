@@ -1,0 +1,49 @@
+---
+title: "Wallet Reads and Transactions"
+description: "Common AGW CLI workflows for balances, transactions, app discovery, and Portal data."
+---
+
+This page focuses on practical agent workflows rather than full command reference.
+
+## Read wallet identity and balances
+
+```bash
+agw-cli wallet address --json '{}'
+agw-cli wallet balances --json '{"fields":["native","tokens"]}'
+agw-cli wallet tokens list --json '{"pageSize":25,"fields":["items.symbol","items.value","nextCursor"]}'
+```
+
+## Preview before execution
+
+```bash
+agw-cli tx send --json '{"to":"0x...","data":"0x1234","value":"0"}' --dry-run
+```
+
+After review:
+
+```bash
+agw-cli tx send --json '{"to":"0x...","data":"0x1234","value":"0"}' --execute
+```
+
+## Sign messages and transactions
+
+```bash
+agw-cli tx sign-message --json '{"message":"hello"}'
+agw-cli tx sign-transaction --json '{"to":"0x...","value":"0"}'
+```
+
+## Discover apps and Portal data
+
+```bash
+agw-cli app list --json '{"pageSize":10,"fields":["items.id","items.name"]}'
+agw-cli portal user-profile get --json '{"address":"0x..."}'
+```
+
+## Use schema introspection
+
+```bash
+agw-cli schema list
+agw-cli schema get --json '{"command":"wallet balances"}'
+```
+
+This is useful when the caller is itself an agent and needs machine-readable input and output shapes.

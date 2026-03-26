@@ -1,0 +1,109 @@
+---
+title: "Accept x402 Payments"
+description: "Add x402 payment middleware to your server so agents and applications can pay for API access on Abstract."
+---
+
+This guide walks through adding x402 payment middleware to your server so clients must pay to access your endpoints.
+
+<Accordion title="Prerequisites">
+  - A wallet address to receive payments
+  - An existing HTTP API built with Express, Next.js, Hono, Gin, FastAPI, or Flask
+  - Node.js 18+, Go 1.21+, or Python 3.10+
+</Accordion>
+
+## 1. Install dependencies
+
+<Tabs>
+  <Tab title="Express">
+    ```bash
+    npm install @x402/express @x402/core @x402/evm
+    ```
+  </Tab>
+  <Tab title="Next.js">
+    ```bash
+    npm install @x402/next @x402/core @x402/evm
+    ```
+  </Tab>
+  <Tab title="Hono">
+    ```bash
+    npm install @x402/hono @x402/core @x402/evm
+    ```
+  </Tab>
+  <Tab title="Go">
+    ```bash
+    go get github.com/coinbase/x402/go
+    ```
+  </Tab>
+  <Tab title="Python">
+    ```bash
+    pip install x402
+    ```
+  </Tab>
+</Tabs>
+
+## 2. Add payment middleware
+
+Wrap your paid routes with x402 middleware and point it at the Abstract facilitator.
+
+```typescript
+import express from "express";
+import { paymentMiddleware, x402ResourceServer } from "@x402/express";
+import { ExactEvmScheme } from "@x402/evm/exact/server";
+import { HTTPFacilitatorClient } from "@x402/core/server";
+
+const app = express();
+const payTo = "0xYourWalletAddress";
+
+const facilitatorClient = new HTTPFacilitatorClient({
+  url: "https://facilitator.x402.abs.xyz",
+});
+
+app.use(
+  paymentMiddleware(
+    {
+      "GET /weather": {
+        accepts: [
+          {
+            scheme: "exact",
+            price: "$0.001",
+            network: "eip155:2741",
+            payTo,
+          },
+        ],
+        description: "Weather data",
+        mimeType: "application/json",
+      },
+    },
+    new x402ResourceServer(facilitatorClient).register(
+      "eip155:*",
+      new ExactEvmScheme()
+    ),
+  ),
+);
+
+app.get("/weather", (_req, res) => {
+  res.send({ weather: "sunny", temperature: 70 });
+});
+```
+
+## 3. Shape the paid resource
+
+For agent-facing APIs, define:
+
+- a stable route
+- a clear description
+- a deterministic response format
+- a price that is cheap enough for repeated automated use
+
+## 4. Test the flow
+
+The protected route should:
+
+1. return `402 Payment Required` when called without payment
+2. advertise the payment requirements in the response
+3. return `200` once the client retries with a valid payment
+
+## Next
+
+- Continue to [`Make x402 Payments`](/ai-agents/payments/x402/making-payments) to test a paying client
+- Compare with [`MPP`](/ai-agents/payments/mpp/overview) if you expect repeated micro-payments

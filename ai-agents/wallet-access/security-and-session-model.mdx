@@ -1,0 +1,36 @@
+---
+title: "Security and Session Model"
+description: "Understand how AGW CLI delegates wallet actions to an agent without exposing the wallet's private key."
+---
+
+AGW CLI uses a delegated signer model.
+
+The wallet's signing key stays managed by the AGW stack, while the CLI creates a local device authorization key for this machine and binds it through the companion approval flow.
+
+## High-level flow
+
+1. AGW CLI generates a local device key
+2. The companion app opens in the browser
+3. The user approves the signer and policy scope
+4. The session is saved locally
+5. Future requests are checked against the approved policy
+
+## Why this matters
+
+- the agent does not need the wallet's private key
+- permissions can be scoped by policy
+- state-changing actions stay preview-first
+
+## Local material
+
+The CLI stores local session material under the AGW home directory and uses restrictive file permissions for sensitive values.
+
+## Policy presets
+
+During onboarding, the signer is bound to a policy preset that constrains what the agent can do. Both the local CLI flow and the backing policy enforcement have to agree before a write action executes.
+
+## Related AGW docs
+
+- [`Abstract Global Wallet`](/abstract-global-wallet/overview)
+- [`Session keys`](/abstract-global-wallet/session-keys/overview)
+- [`Going to Production`](/abstract-global-wallet/session-keys/going-to-production)

@@ -1,0 +1,85 @@
+---
+title: "Make x402 Payments"
+description: "Use the x402 client SDK to access payment-protected resources on Abstract."
+---
+
+This guide walks through building a client that can automatically pay for x402-protected resources on Abstract.
+
+<Accordion title="Prerequisites">
+  - A wallet with USDC on Abstract mainnet or testnet
+  - Node.js 18+, Go 1.21+, or Python 3.10+
+</Accordion>
+
+## 1. Install the client SDK
+
+<Tabs>
+  <Tab title="Fetch">
+    ```bash
+    npm install @x402/fetch @x402/core @x402/evm viem
+    ```
+  </Tab>
+  <Tab title="Axios">
+    ```bash
+    npm install @x402/axios @x402/core @x402/evm viem axios
+    ```
+  </Tab>
+  <Tab title="Go">
+    ```bash
+    go get github.com/coinbase/x402/go
+    ```
+  </Tab>
+  <Tab title="Python">
+    ```bash
+    pip install "x402[httpx]"
+    ```
+  </Tab>
+</Tabs>
+
+## 2. Create a signer
+
+```typescript
+import { privateKeyToAccount } from "viem/accounts";
+
+const signer = privateKeyToAccount(
+  process.env.PRIVATE_KEY as `0x${string}`
+);
+```
+
+## 3. Wrap your HTTP client
+
+```typescript
+import { wrapFetchWithPayment } from "@x402/fetch";
+import { x402Client } from "@x402/core/client";
+import { ExactEvmScheme } from "@x402/evm/exact/client";
+import { privateKeyToAccount } from "viem/accounts";
+
+const signer = privateKeyToAccount(
+  process.env.PRIVATE_KEY as `0x${string}`
+);
+
+const client = new x402Client();
+client.register("eip155:*", new ExactEvmScheme(signer));
+
+const fetchWithPayment = wrapFetchWithPayment(fetch, client);
+
+const response = await fetchWithPayment(
+  "https://api.example.com/weather",
+  { method: "GET" },
+);
+
+const data = await response.json();
+console.log(data);
+```
+
+## 4. Agent runtime notes
+
+For an automated agent:
+
+- keep the signer scoped to the smallest viable balance
+- separate read-only and paid-request workflows
+- log payment receipts so you can reconcile usage later
+
+## Next
+
+- Continue to [`AGW CLI`](/ai-agents/wallet-access/agw-cli-overview) if the agent should use AGW instead of a raw private key
+- Compare with [`MPP`](/ai-agents/payments/mpp/overview) if your client will make repeated paid requests

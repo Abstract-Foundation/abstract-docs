@@ -1,0 +1,57 @@
+---
+title: "AGW CLI"
+description: "Use AGW CLI as an agent-first interface to Abstract Global Wallet."
+---
+
+AGW CLI is an agent-first CLI for Abstract Global Wallet.
+
+It gives an agent structured JSON input and output for wallet operations without exposing the wallet's private key to the agent runtime.
+
+## What it can do
+
+- read wallet address, balances, and token inventory
+- preview and execute transactions
+- sign messages and transactions
+- write to contracts and deploy contracts
+- discover apps on Abstract
+- query Abstract Portal data
+- serve the same capabilities over MCP
+
+## Why use it
+
+Use AGW CLI when you want:
+
+- a CLI-first or MCP-first wallet integration
+- preview-first writes with explicit execution
+- session-key-style delegation through a companion approval flow
+- schema introspection for agent tooling
+
+## Command groups
+
+| Group | Examples |
+| --- | --- |
+| `wallet` | `address`, `balances`, `tokens list` |
+| `tx` | `preview`, `send`, `calls`, `transfer-token` |
+| `contract` | `write`, `deploy` |
+| `auth` | `init`, `revoke` |
+| `session` | `status`, `doctor` |
+| `app` | `list`, `show` |
+| `portal` | `streams list`, `user-profile get` |
+| `mcp` | `serve` |
+
+## Relationship to AGW SDK docs
+
+This section covers the agent workflow. For direct app integration with AGW SDKs, use the [`Abstract Global Wallet`](/abstract-global-wallet/overview) docs.
+
+For the underlying session-key model, see [`Session keys`](/abstract-global-wallet/session-keys/overview).
+
+## Get started
+
+<CardGroup cols={2}>
+  <Card title="Install and Authenticate" icon="key" href="/ai-agents/wallet-access/install-and-authenticate">
+    Install AGW CLI and link it to a wallet.
+  </Card>
+  <Card title="Run AGW as MCP" icon="plug" href="/ai-agents/wallet-access/run-as-mcp">
+    Expose AGW capabilities to MCP-capable hosts.
+  </Card>
+</CardGroup>

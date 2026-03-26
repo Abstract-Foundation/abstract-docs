@@ -1,0 +1,46 @@
+---
+title: "Install and Authenticate"
+description: "Install AGW CLI, link it to an Abstract Global Wallet, and verify the session."
+---
+
+## 1. Install the CLI
+
+AGW CLI requires Node.js 18+ and npm 10+.
+
+```bash
+npm install -g @abstract-foundation/agw-cli
+agw-cli --version
+```
+
+## 2. Start authentication
+
+Run the init flow:
+
+```bash
+agw-cli auth init --json '{"chainId":2741}' --execute
+```
+
+This opens the companion app in your browser, where you connect an existing AGW or create a new one and approve the agent signer for this machine.
+
+## 3. Verify the session
+
+```bash
+agw-cli session doctor --json '{}'
+agw-cli session status --json '{"fields":["status","readiness","accountAddress","policyPreset"]}'
+```
+
+## 4. Install the AGW skills
+
+```bash
+npx skills add https://github.com/Abstract-Foundation/agw-cli/tree/main/packages/agw-cli/skills -y
+```
+
+## What you get
+
+- a local device authorization key
+- a linked AGW session for this machine
+- policy-scoped permissions enforced through the companion flow
+
+## Next
+
+Continue to [`Run AGW as MCP`](/ai-agents/wallet-access/run-as-mcp) if your host supports MCP.

@@ -1,0 +1,79 @@
+---
+title: "AI Agents"
+description: "Build agents on Abstract that can pay for services, control wallets, and use docs-native tooling."
+---
+
+Build AI agents on Abstract that can pay for APIs, accept payments from other agents, and operate through Abstract Global Wallet.
+
+Abstract's agent stack has four main pieces:
+
+- `x402` for pay-per-request HTTP payments
+- `MPP` for HTTP-native charge and session payments
+- `AGW CLI` and `MCP` for agent wallet access
+- `llms.txt`, `llms-full.txt`, `SKILL.MD`, and docs MCP for coding-agent context
+
+## What you can build
+
+- An agent that pays for premium APIs on demand
+- A paid API that charges other agents per request
+- A wallet-enabled operator that reads balances, previews transactions, and executes approved actions
+- A coding agent that understands Abstract docs and uses the right SDKs and network settings
+
+## Choose your path
+
+<CardGroup cols={2}>
+  <Card title="Payments" icon="credit-card" href="/ai-agents/payments/x402/overview">
+    Start with x402 or MPP if your agent needs to pay or get paid.
+  </Card>
+  <Card title="Wallet Access" icon="wallet" href="/ai-agents/wallet-access/agw-cli-overview">
+    Start with AGW CLI if your agent needs controlled wallet access.
+  </Card>
+  <Card title="Build Paths" icon="route" href="/ai-agents/build-paths">
+    Pick the shortest route based on the workflow you actually need.
+  </Card>
+  <Card title="Agent Resources" icon="robot" href="/ai-agents/resources/overview">
+    Use docs MCP, llms.txt, and SKILL.MD to give coding agents Abstract context.
+  </Card>
+</CardGroup>
+
+## How the pieces fit together
+
+1. Choose a payment model:
+   `x402` for simple 402-based pay-per-request flows, or `MPP` for HTTP-native charge and session payments.
+2. Choose a wallet path:
+   `AGW CLI` if the agent should operate through Abstract Global Wallet with preview-first writes and policy-scoped permissions.
+3. Add docs-native context:
+   point coding agents at the docs MCP endpoint or the machine-readable documentation files.
+
+## Payments for agents
+
+<CardGroup cols={2}>
+  <Card title="x402" icon="bolt" href="/ai-agents/payments/x402/overview">
+    Accept and make HTTP payments on Abstract using the public facilitator.
+  </Card>
+  <Card title="MPP" icon="coins" href="/ai-agents/payments/mpp/overview">
+    Use charge payments for one-off requests or session payments for repeated micro-payments.
+  </Card>
+</CardGroup>
+
+## Wallet access for agents
+
+<CardGroup cols={2}>
+  <Card title="AGW CLI Overview" icon="terminal" href="/ai-agents/wallet-access/agw-cli-overview">
+    Understand the command surface, delegated signer model, and MCP support.
+  </Card>
+  <Card title="Run AGW as MCP" icon="plug" href="/ai-agents/wallet-access/run-as-mcp">
+    Expose wallet, transaction, app, and Portal actions to MCP-capable hosts.
+  </Card>
+</CardGroup>
+
+## Resources for coding agents
+
+<CardGroup cols={2}>
+  <Card title="Agent Resources" icon="book-open" href="/ai-agents/resources/overview">
+    Start here for docs MCP, llms.txt, llms-full.txt, and SKILL.MD.
+  </Card>
+  <Card title="Contracts and Endpoints" icon="book" href="/ai-agents/resources/contracts-and-endpoints">
+    Keep the key chain IDs, token addresses, facilitators, and agent endpoints in one place.
+  </Card>
+</CardGroup>
