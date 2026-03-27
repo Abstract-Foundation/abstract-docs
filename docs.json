@@ -234,12 +234,22 @@
           {
             "group": "Payments",
             "pages": [
-              "ai-agents/payments/x402/overview",
-              "ai-agents/payments/x402/accepting-payments",
-              "ai-agents/payments/x402/making-payments",
-              "ai-agents/payments/mpp/overview",
-              "ai-agents/payments/mpp/charge-payments",
-              "ai-agents/payments/mpp/session-payments"
+              {
+                "group": "x402",
+                "pages": [
+                  "ai-agents/payments/x402/overview",
+                  "ai-agents/payments/x402/accepting-payments",
+                  "ai-agents/payments/x402/making-payments"
+                ]
+              },
+              {
+                "group": "MPP",
+                "pages": [
+                  "ai-agents/payments/mpp/overview",
+                  "ai-agents/payments/mpp/charge-payments",
+                  "ai-agents/payments/mpp/session-payments"
+                ]
+              }
             ]
           },
           {
