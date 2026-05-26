@@ -4520,9 +4520,12 @@
                 "example": {
                   "jsonrpc": "2.0",
                   "result": {
-                    "l1Erc20DefaultBridge": "0x927ddfcc55164a59e0f33918d13a2a210aa4ee65",
-                    "l2Erc20DefaultBridge": "0x0000000000000000000000000000000000008006",
+                    "l1Erc20DefaultBridge": "0x57891966931eb4bb6fb81430e6ce0a03aabde063",
+                    "l1SharedDefaultBridge": "0x8829ad80e425c646dab305381ff105169feece56",
                     "l1WethBridge": "0x0000000000000000000000000000000000000000",
+                    "l2Erc20DefaultBridge": "0x0000000000000000000000000000000000010003",
+                    "l2LegacySharedBridge": "0x954ba8223a6bfec1cc3867139243a02ba0bc66e4",
+                    "l2SharedDefaultBridge": "0x0000000000000000000000000000000000010003",
                     "l2WethBridge": "0x0000000000000000000000000000000000000000"
                   },
                   "id": 1
