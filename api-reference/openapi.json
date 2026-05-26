@@ -6165,16 +6165,31 @@
             "l1Erc20DefaultBridge": {
               "type": "string",
               "description": "L1 ERC20 default bridge address",
-              "example": "0x927ddfcc55164a59e0f33918d13a2a210aa4ee65"
+              "example": "0x57891966931eb4bb6fb81430e6ce0a03aabde063"
             },
-            "l2Erc20DefaultBridge": {
+            "l1SharedDefaultBridge": {
               "type": "string",
-              "description": "L2 ERC20 default bridge address",
-              "example": "0x0000000000000000000000000000000000008006"
+              "description": "L1 shared default bridge address",
+              "example": "0x8829ad80e425c646dab305381ff105169feece56"
             },
             "l1WethBridge": {
               "type": "string",
               "description": "L1 WETH bridge address",
+              "example": "0x0000000000000000000000000000000000000000"
+            },
+            "l2Erc20DefaultBridge": {
+              "type": "string",
+              "description": "L2 ERC20 default bridge address",
+              "example": "0x0000000000000000000000000000000000000000"
+            },
+            "l2LegacySharedBridge": {
+              "type": "string",
+              "description": "L2 legacy shared bridge address",
+              "example": "0x954ba8223a6bfec1cc3867139243a02ba0bc66e4"
+            },
+            "l2LegacySharedBridge": {
+              "type": "string",
+              "description": "L2 Shared default bridge address",
               "example": "0x0000000000000000000000000000000000000000"
             },
             "l2WethBridge": {
