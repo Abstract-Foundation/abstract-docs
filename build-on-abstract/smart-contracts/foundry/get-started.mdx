@@ -99,7 +99,7 @@ fallback_oz = true
 enable_eravm_extensions = true # Note: System contract calls (NonceHolder and ContractDeployer) can only be called with this set to true
 
 [etherscan]
-abstractTestnet = { chain = "11124", url = "https://api-sepolia.abscan.org/api", key = "TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD"}
+abstractTestnet = { chain = "11124", url = "https://api.etherscan.io/v2/api?chainid=11124", key = ""}
 abstractMainnet = { chain = "2741", url = "", key = ""} # You can replace these values or leave them blank to override via CLI
 ```
 
@@ -187,8 +187,8 @@ forge create src/Counter.sol:Counter \
     --zksync \
     --verify \
     --verifier etherscan \
-    --verifier-url https://api-sepolia.abscan.org/api \
-    --etherscan-api-key TACK2D1RGYX9U7MC31SZWWQ7FCWRYQ96AD \
+    --verifier-url https://api.etherscan.io/v2/api?chainid=11124 \
+    --etherscan-api-key <your-etherscan-api-key> \
     --broadcast
 ```
 
@@ -200,8 +200,8 @@ forge create src/Counter.sol:Counter \
     --zksync \
     --verify \
     --verifier etherscan \
-    --verifier-url https://api.abscan.org/api \
-    --etherscan-api-key <your-abscan-api-key> \
+    --verifier-url https://api.etherscan.io/v2/api?chainid=2741 \
+    --etherscan-api-key <your-etherscan-api-key> \
     --broadcast
 ```
 
