@@ -6180,17 +6180,17 @@
             "l2Erc20DefaultBridge": {
               "type": "string",
               "description": "L2 ERC20 default bridge address",
-              "example": "0x0000000000000000000000000000000000000000"
+              "example": "0x0000000000000000000000000000000000010003"
             },
             "l2LegacySharedBridge": {
               "type": "string",
               "description": "L2 legacy shared bridge address",
               "example": "0x954ba8223a6bfec1cc3867139243a02ba0bc66e4"
             },
-            "l2LegacySharedBridge": {
+            "l2SharedDefaultBridge": {
               "type": "string",
-              "description": "L2 Shared default bridge address",
-              "example": "0x0000000000000000000000000000000000000000"
+              "description": "L2 shared default bridge address",
+              "example": "0x0000000000000000000000000000000000010003"
             },
             "l2WethBridge": {
               "type": "string",
