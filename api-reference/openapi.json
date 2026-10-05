@@ -6187,7 +6187,7 @@
               "description": "L2 legacy shared bridge address",
               "example": "0x954ba8223a6bfec1cc3867139243a02ba0bc66e4"
             },
-            "l2LegacySharedBridge": {
+            "l2SharedDefaultBridge": {
               "type": "string",
               "description": "L2 Shared default bridge address",
               "example": "0x0000000000000000000000000000000000000000"

@@ -9,8 +9,8 @@
   },
   "favicon": "/favicon.svg",
   "banner": {
-    "content": "Check out our new component library - [build.abs.xyz](https://build.abs.xyz)!",
-    "dismissible": true
+    "content": "Abstract Chain is shutting down. Start migrating your assets. [Migrate](https://migrate.abs.xyz)",
+    "dismissible": false
   },
   "navigation": {
     "tabs": [

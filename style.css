@@ -1,0 +1,85 @@
+/*
+ * Chain-shutdown band. Restyles Mintlify's built-in banner (docs.json →
+ * banner) to the Figma spec: brand-green strip, dark copy, white "Migrate"
+ * pill with an arrow. Desktop (Figma 15812:97179): 40px, copy and pill
+ * centred 16px apart. Mobile (Figma 15812:97150): 16px padding, copy wraps
+ * on the left, pill on the right.
+ *
+ * Mintlify paints the banner text with layered `!important` utilities, which
+ * outrank unlayered `!important`, so ink is set via -webkit-text-fill-color.
+ */
+#banner {
+  padding: 8px 16px;
+  background: #19e783;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 500;
+  letter-spacing: -0.12px;
+}
+
+#banner,
+#banner * {
+  -webkit-text-fill-color: #181818;
+}
+
+#banner > div {
+  width: 100%;
+  margin: 0;
+}
+
+#banner p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+#banner a {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 100px;
+  background: #fff;
+  text-decoration: none !important;
+  white-space: nowrap;
+  box-shadow:
+    0 6px 10px -4px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  transition:
+    background-color 0.2s ease,
+    -webkit-text-fill-color 0.2s ease;
+}
+
+#banner a::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background-color: #181818;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M5.75 3C5.33579 3 5 3.33579 5 3.75C5 4.16421 5.33579 4.5 5.75 4.5H10.4393L3.21967 11.7197C2.92678 12.0126 2.92678 12.4874 3.21967 12.7803C3.51256 13.0732 3.98744 13.0732 4.28033 12.7803L11.5 5.56066V10.25C11.5 10.6642 11.8358 11 12.25 11C12.6642 11 13 10.6642 13 10.25V3.75C13 3.33579 12.6642 3 12.25 3H5.75Z'/%3E%3C/svg%3E")
+    center / 16px 16px no-repeat;
+  transition: background-color 0.2s ease;
+}
+
+#banner a:hover {
+  background: #181818;
+  -webkit-text-fill-color: #fff;
+}
+
+#banner a:hover::after {
+  background-color: #fff;
+}
+
+@media (max-width: 1023px) {
+  #banner {
+    padding: 16px;
+  }
+
+  #banner p {
+    justify-content: space-between;
+    gap: 8px;
+    text-align: left;
+  }
+}
