@@ -15,10 +15,13 @@ import { useRevokeSessions } from "@abstract-foundation/agw-react";
 
 ```tsx
 import { useRevokeSessions } from "@abstract-foundation/agw-react";
-import type { SessionConfig } from "@abstract-foundation/agw-client/sessions";
+import { getSessionHash, type SessionConfig } from "@abstract-foundation/agw-client/sessions";
 
 export default function RevokeSessionExample() {
   const { revokeSessionsAsync } = useRevokeSessions();
+
+  const existingSessionConfig = {} as SessionConfig;
+  const anotherSessionConfig = {} as SessionConfig;
 
   async function handleRevokeSession() {
     // Revoke a single session using its configuration
@@ -26,16 +29,18 @@ export default function RevokeSessionExample() {
       sessions: existingSessionConfig,
     });
 
-    // Revoke a single session using its creation transaction hash
+    // Revoke a single session using its hash
+    const sessionHash = getSessionHash(existingSessionConfig);
+
     await revokeSessionsAsync({
-      sessions: "0x1234...", 
+      sessions: sessionHash,
     });
 
     // Revoke multiple sessions
     await revokeSessionsAsync({
       sessions: [
         existingSessionConfig,
-        "0x1234...",
+        sessionHash,
         anotherSessionConfig
       ],
     });
@@ -53,8 +58,8 @@ export default function RevokeSessionExample() {
   The session(s) to revoke. Can be provided as an array of:
 
 - Session configuration objects
-- Transaction hashes of when the sessions were created
-- A mix of both session configs and transaction hashes
+- Session hashes returned by `getSessionHash(sessionConfig)`
+- A mix of both session configs and session hashes
 
 </ResponseField>
 
